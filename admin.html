@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Admin Perpustakaan Digital</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -22,103 +21,104 @@ body{
     color:#1e293b;
 }
 
-/* =========================
-   LOGIN
-========================= */
-
-#loginPage{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    background:
-        linear-gradient(rgba(15,23,42,.72),rgba(15,23,42,.72)),
-        linear-gradient(135deg,#2563eb,#0f172a);
-}
-
-.login-box{
-    width:100%;
-    max-width:420px;
-    background:white;
-    border-radius:20px;
-    padding:32px;
-    box-shadow:0 20px 60px rgba(0,0,0,.25);
-}
-
-.login-icon{
-    width:75px;
-    height:75px;
-    margin:0 auto 18px;
-    border-radius:50%;
-    background:#2563eb;
+.header{
+    background:#0f172a;
     color:white;
+    padding:18px 25px;
     display:flex;
-    justify-content:center;
+    justify-content:space-between;
     align-items:center;
-    font-size:35px;
+    gap:15px;
 }
 
-.login-box h1{
-    text-align:center;
-    font-size:24px;
-    margin-bottom:7px;
+.header h1{
+    font-size:22px;
 }
 
-.login-box .subtitle{
-    text-align:center;
-    color:#64748b;
-    margin-bottom:25px;
-    font-size:14px;
+.header p{
+    color:#cbd5e1;
+    font-size:13px;
+    margin-top:5px;
 }
 
-.form-group{
-    margin-bottom:16px;
-}
-
-.form-group label{
-    display:block;
-    font-weight:bold;
-    margin-bottom:7px;
-    font-size:14px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea{
+.container{
     width:100%;
-    padding:12px 13px;
-    border:1px solid #cbd5e1;
-    border-radius:10px;
-    font-size:14px;
-    outline:none;
+    max-width:1250px;
+    margin:auto;
+    padding:25px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.stat{
     background:white;
+    border-radius:15px;
+    padding:22px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+    display:flex;
+    align-items:center;
+    gap:15px;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus{
-    border-color:#2563eb;
-    box-shadow:0 0 0 3px rgba(37,99,235,.1);
+.stat-icon{
+    width:55px;
+    height:55px;
+    border-radius:13px;
+    background:#dbeafe;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:27px;
 }
 
-textarea{
-    min-height:80px;
-    resize:vertical;
+.stat h2{
+    font-size:27px;
+}
+
+.stat p{
+    color:#64748b;
+    font-size:13px;
+    margin-top:3px;
+}
+
+.panel{
+    background:white;
+    border-radius:15px;
+    padding:22px;
+    margin-bottom:25px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+}
+
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.panel-header h2{
+    font-size:19px;
+}
+
+.actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
 }
 
 .btn{
     border:none;
-    border-radius:10px;
-    padding:11px 16px;
+    border-radius:9px;
+    padding:10px 15px;
     cursor:pointer;
     font-weight:bold;
-    font-size:14px;
-    transition:.2s;
-}
-
-.btn:hover{
-    transform:translateY(-1px);
+    font-size:13px;
 }
 
 .btn-primary{
@@ -151,200 +151,83 @@ textarea{
     color:#1e293b;
 }
 
-.btn-full{
+.search{
     width:100%;
-}
-
-.error{
-    display:none;
-    background:#fee2e2;
-    color:#b91c1c;
-    padding:11px;
-    border-radius:9px;
-    margin-bottom:15px;
+    max-width:450px;
+    padding:12px 14px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    outline:none;
     font-size:14px;
 }
 
-.success{
-    display:none;
-    background:#dcfce7;
-    color:#166534;
-    padding:11px;
-    border-radius:9px;
-    margin-bottom:15px;
-    font-size:14px;
+.search:focus{
+    border-color:#2563eb;
 }
 
-/* =========================
-   ADMIN
-========================= */
-
-#adminPage{
-    display:none;
-    min-height:100vh;
-}
-
-.header{
-    background:#0f172a;
-    color:white;
-    padding:18px 25px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-    position:sticky;
-    top:0;
-    z-index:100;
-}
-
-.header-left h1{
-    font-size:22px;
-}
-
-.header-left p{
-    color:#cbd5e1;
-    font-size:13px;
-    margin-top:4px;
-}
-
-.header-right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.admin-name{
-    background:#1e293b;
-    padding:9px 13px;
-    border-radius:9px;
-    font-size:13px;
-}
-
-.container{
-    width:100%;
-    max-width:1250px;
-    margin:auto;
-    padding:25px;
-}
-
-/* =========================
-   STATISTICS
-========================= */
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:18px;
-    margin-bottom:25px;
-}
-
-.stat-card{
-    background:white;
-    border-radius:15px;
-    padding:22px;
-    box-shadow:0 3px 15px rgba(0,0,0,.06);
-    display:flex;
-    align-items:center;
-    gap:16px;
-}
-
-.stat-icon{
-    width:55px;
-    height:55px;
-    border-radius:13px;
-    background:#dbeafe;
-    color:#2563eb;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:26px;
-}
-
-.stat-card h3{
-    font-size:26px;
-}
-
-.stat-card p{
-    color:#64748b;
-    font-size:13px;
-    margin-top:3px;
-}
-
-/* =========================
-   PANEL
-========================= */
-
-.panel{
-    background:white;
-    border-radius:15px;
-    padding:22px;
-    margin-bottom:25px;
-    box-shadow:0 3px 15px rgba(0,0,0,.06);
-}
-
-.panel-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-    margin-bottom:20px;
-}
-
-.panel-header h2{
-    font-size:19px;
-}
-
-.panel-actions{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-/* =========================
-   FORM BUKU
-========================= */
-
-#formBukuPanel{
+#formPanel{
     display:none;
 }
 
 .form-grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:1fr 1fr;
     gap:15px;
 }
 
-.form-grid .full{
+.form-group{
+    margin-bottom:5px;
+}
+
+.form-group.full{
     grid-column:1/-1;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    font-size:13px;
+    margin-bottom:7px;
+}
+
+input,select{
+    width:100%;
+    padding:12px;
+    border:1px solid #cbd5e1;
+    border-radius:9px;
+    outline:none;
+    font-size:14px;
+    background:white;
+}
+
+input:focus,select:focus{
+    border-color:#2563eb;
 }
 
 .form-buttons{
     display:flex;
     justify-content:flex-end;
     gap:10px;
-    margin-top:8px;
+    margin-top:18px;
 }
 
-/* =========================
-   SEARCH
-========================= */
-
-.search-box{
-    width:100%;
-    max-width:400px;
+.message{
     padding:11px 13px;
-    border:1px solid #cbd5e1;
-    border-radius:10px;
-    outline:none;
+    border-radius:9px;
+    margin-bottom:15px;
+    display:none;
+    font-size:14px;
 }
 
-.search-box:focus{
-    border-color:#2563eb;
+.error{
+    background:#fee2e2;
+    color:#991b1b;
 }
 
-/* =========================
-   TABLE
-========================= */
+.success{
+    background:#dcfce7;
+    color:#166534;
+}
 
 .table-wrap{
     overflow-x:auto;
@@ -353,11 +236,10 @@ textarea{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:900px;
+    min-width:950px;
 }
 
-th,
-td{
+th,td{
     padding:12px;
     border-bottom:1px solid #e2e8f0;
     text-align:left;
@@ -374,11 +256,11 @@ th{
     width:55px;
     height:70px;
     border-radius:7px;
-    overflow:hidden;
     background:#e2e8f0;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
+    overflow:hidden;
     font-size:25px;
 }
 
@@ -391,71 +273,24 @@ th{
 .action-buttons{
     display:flex;
     gap:6px;
-    flex-wrap:wrap;
 }
 
 .action-buttons .btn{
-    padding:7px 10px;
+    padding:7px 9px;
     font-size:12px;
 }
 
-/* =========================
-   EMPTY
-========================= */
-
 .empty{
     text-align:center;
-    padding:40px 20px;
+    padding:40px 15px;
     color:#64748b;
 }
 
-.empty-icon{
-    font-size:45px;
-    margin-bottom:10px;
-}
-
-/* =========================
-   MODAL KONFIRMASI
-========================= */
-
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.55);
-    z-index:500;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
-
-.modal-box{
-    width:100%;
-    max-width:420px;
-    background:white;
-    border-radius:16px;
-    padding:25px;
-}
-
-.modal-box h3{
-    margin-bottom:10px;
-}
-
-.modal-box p{
+.loading{
+    text-align:center;
+    padding:30px;
     color:#64748b;
-    line-height:1.5;
-    margin-bottom:20px;
 }
-
-.modal-buttons{
-    display:flex;
-    justify-content:flex-end;
-    gap:10px;
-}
-
-/* =========================
-   FOOTER
-========================= */
 
 footer{
     text-align:center;
@@ -464,10 +299,6 @@ footer{
     font-size:13px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-
 @media(max-width:800px){
 
     .header{
@@ -475,16 +306,7 @@ footer{
         align-items:flex-start;
     }
 
-    .header-right{
-        width:100%;
-        justify-content:space-between;
-    }
-
     .stats{
-        grid-template-columns:1fr;
-    }
-
-    .form-grid{
         grid-template-columns:1fr;
     }
 
@@ -492,8 +314,12 @@ footer{
         padding:15px;
     }
 
-    .panel{
-        padding:16px;
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
     }
 
     .panel-header{
@@ -501,566 +327,359 @@ footer{
         align-items:flex-start;
     }
 
-    .search-box{
-        max-width:none;
-    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- =====================================================
-     LOGIN ADMIN
-===================================================== -->
+<header class="header">
 
-<section id="loginPage">
-
-    <div class="login-box">
-
-        <div class="login-icon">
-            🔐
-        </div>
-
-        <h1>Admin Perpustakaan</h1>
-
-        <p class="subtitle">
-            Perpustakaan Digital SMP Negeri 3 Sibolga
-        </p>
-
-        <div id="loginError" class="error"></div>
-
-        <form id="loginForm">
-
-            <div class="form-group">
-                <label>Email Admin</label>
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="Masukkan email admin"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Masukkan password"
-                    required
-                >
-            </div>
-
-            <button
-                type="submit"
-                class="btn btn-primary btn-full"
-                id="loginButton"
-            >
-                🔑 Masuk sebagai Admin
-            </button>
-
-        </form>
-
+    <div>
+        <h1>📚 Admin Perpustakaan</h1>
+        <p>Perpustakaan Digital SMP Negeri 3 Sibolga</p>
     </div>
 
-</section>
-
-
-<!-- =====================================================
-     ADMIN PAGE
-===================================================== -->
-
-<section id="adminPage">
-
-    <header class="header">
-
-        <div class="header-left">
-            <h1>📚 Dashboard Admin</h1>
-            <p>
-                Perpustakaan Digital SMP Negeri 3 Sibolga
-            </p>
-        </div>
-
-        <div class="header-right">
-
-            <div class="admin-name" id="adminName">
-                Admin
-            </div>
-
-            <button
-                class="btn btn-danger"
-                onclick="logout()"
-            >
-                Keluar
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <main class="container">
-
-        <!-- =========================
-             STATISTIK
-        ========================== -->
-
-        <section class="stats">
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    📚
-                </div>
-
-                <div>
-                    <h3 id="jumlahBuku">0</h3>
-                    <p>Total Judul Buku</p>
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    📦
-                </div>
-
-                <div>
-                    <h3 id="jumlahStok">0</h3>
-                    <p>Total Stok Buku</p>
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    🏷️
-                </div>
-
-                <div>
-                    <h3 id="jumlahKategori">0</h3>
-                    <p>Kategori Buku</p>
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             KELOLA BUKU
-        ========================== -->
-
-        <section class="panel">
-
-            <div class="panel-header">
-
-                <div>
-                    <h2>📚 Kelola Buku</h2>
-                </div>
-
-                <div class="panel-actions">
-
-                    <button
-                        class="btn btn-primary"
-                        onclick="bukaFormTambah()"
-                    >
-                        ➕ Tambah Buku
-                    </button>
-
-                    <button
-                        class="btn btn-secondary"
-                        onclick="loadBuku()"
-                    >
-                        🔄 Refresh
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <input
-                type="text"
-                id="searchBuku"
-                class="search-box"
-                placeholder="🔎 Cari judul, penulis, kategori..."
-                oninput="tampilkanBuku()"
-            >
-
-        </section>
-
-
-        <!-- =========================
-             FORM BUKU
-        ========================== -->
-
-        <section
-            class="panel"
-            id="formBukuPanel"
+    <div>
+        <button
+            class="btn btn-secondary"
+            onclick="kembaliPerpustakaan()"
         >
+            🏠 Perpustakaan
+        </button>
+    </div>
 
-            <div class="panel-header">
+</header>
 
-                <h2 id="formTitle">
-                    ➕ Tambah Buku
-                </h2>
 
-                <button
-                    class="btn btn-light"
-                    onclick="tutupForm()"
-                >
-                    ✕ Tutup
-                </button>
+<main class="container">
 
+    <!-- STATISTIK -->
+
+    <section class="stats">
+
+        <div class="stat">
+            <div class="stat-icon">📚</div>
+            <div>
+                <h2 id="totalBuku">0</h2>
+                <p>Total Buku</p>
             </div>
-
-
-            <div id="formError" class="error"></div>
-
-            <div id="formSuccess" class="success"></div>
-
-
-            <form id="bukuForm">
-
-                <input
-                    type="hidden"
-                    id="bukuId"
-                >
-
-
-                <div class="form-grid">
-
-                    <div class="form-group">
-
-                        <label>
-                            Judul Buku *
-                        </label>
-
-                        <input
-                            type="text"
-                            id="judul"
-                            placeholder="Contoh: Laskar Pelangi"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Penulis
-                        </label>
-
-                        <input
-                            type="text"
-                            id="penulis"
-                            placeholder="Nama penulis"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Penerbit
-                        </label>
-
-                        <input
-                            type="text"
-                            id="penerbit"
-                            placeholder="Nama penerbit"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Tahun Terbit
-                        </label>
-
-                        <input
-                            type="number"
-                            id="tahun"
-                            placeholder="Contoh: 2005"
-                            min="0"
-                            max="2100"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Kategori
-                        </label>
-
-                        <select id="kategori">
-
-                            <option value="">
-                                -- Pilih Kategori --
-                            </option>
-
-                            <option value="Novel">
-                                Novel
-                            </option>
-
-                            <option value="Cerpen">
-                                Cerpen
-                            </option>
-
-                            <option value="Cerita Rakyat">
-                                Cerita Rakyat
-                            </option>
-
-                            <option value="Fiksi Lainnya">
-                                Fiksi Lainnya
-                            </option>
-
-                            <option value="Nonfiksi">
-                                Nonfiksi
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Stok
-                        </label>
-
-                        <input
-                            type="number"
-                            id="stok"
-                            value="1"
-                            min="0"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label>
-                            🖼️ URL Cover Buku
-                        </label>
-
-                        <input
-                            type="url"
-                            id="gambar_url"
-                            placeholder="https://contoh.com/cover-buku.jpg"
-                        >
-
-                        <small style="color:#64748b;">
-                            Masukkan alamat gambar cover yang dapat diakses publik.
-                        </small>
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label>
-                            📄 URL File PDF Buku
-                        </label>
-
-                        <input
-                            type="url"
-                            id="file_url"
-                            placeholder="https://..."
-                        >
-
-                        <small style="color:#64748b;">
-                            Masukkan URL PDF buku.
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-buttons">
-
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        onclick="tutupForm()"
-                    >
-                        Batal
-                    </button>
-
-                    <button
-                        type="submit"
-                        class="btn btn-success"
-                    >
-                        💾 Simpan Buku
-                    </button>
-
-                </div>
-
-            </form>
-
-        </section>
-
-
-        <!-- =========================
-             DAFTAR BUKU
-        ========================== -->
-
-        <section class="panel">
-
-            <div class="panel-header">
-
-                <h2>
-                    📖 Daftar Buku
-                </h2>
-
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">📦</div>
+            <div>
+                <h2 id="totalStok">0</h2>
+                <p>Total Stok</p>
             </div>
+        </div>
 
-
-            <div id="loading" class="empty">
-
-                <div class="empty-icon">
-                    ⏳
-                </div>
-
-                Memuat data buku...
-
+        <div class="stat">
+            <div class="stat-icon">🏷️</div>
+            <div>
+                <h2 id="totalKategori">0</h2>
+                <p>Total Kategori</p>
             </div>
+        </div>
+
+    </section>
 
 
-            <div
-                id="tableContainer"
-                class="table-wrap"
-                style="display:none;"
-            >
+    <!-- DAFTAR BUKU -->
 
-                <table>
+    <section class="panel">
 
-                    <thead>
+        <div class="panel-header">
 
-                        <tr>
+            <h2>📖 Kelola Buku</h2>
 
-                            <th>No</th>
-
-                            <th>Cover</th>
-
-                            <th>Judul</th>
-
-                            <th>Penulis</th>
-
-                            <th>Penerbit</th>
-
-                            <th>Tahun</th>
-
-                            <th>Kategori</th>
-
-                            <th>Stok</th>
-
-                            <th>Aksi</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="tabelBuku">
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-            <div
-                id="emptyData"
-                class="empty"
-                style="display:none;"
-            >
-
-                <div class="empty-icon">
-                    📚
-                </div>
-
-                <p>
-                    Belum ada buku.
-                </p>
-
-                <br>
+            <div class="actions">
 
                 <button
                     class="btn btn-primary"
-                    onclick="bukaFormTambah()"
+                    onclick="bukaTambah()"
                 >
-                    ➕ Tambah Buku Pertama
+                    ➕ Tambah Buku
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="loadBuku()"
+                >
+                    🔄 Refresh
                 </button>
 
             </div>
 
-        </section>
+        </div>
 
-    </main>
+        <input
+            type="text"
+            id="search"
+            class="search"
+            placeholder="🔎 Cari judul, penulis, penerbit, kategori..."
+            oninput="tampilkanBuku()"
+        >
+
+    </section>
 
 
-    <footer>
-        Dibuat oleh Mr. Rahmat Batubara, S.T.P.
-    </footer>
+    <!-- FORM -->
 
-</section>
+    <section
+        class="panel"
+        id="formPanel"
+    >
 
+        <div class="panel-header">
 
-<!-- =====================================================
-     MODAL HAPUS
-===================================================== -->
-
-<div
-    class="modal"
-    id="deleteModal"
->
-
-    <div class="modal-box">
-
-        <h3>
-            🗑️ Hapus Buku?
-        </h3>
-
-        <p id="deleteText">
-            Apakah Anda yakin ingin menghapus buku ini?
-        </p>
-
-        <div class="modal-buttons">
+            <h2 id="formTitle">
+                ➕ Tambah Buku
+            </h2>
 
             <button
-                class="btn btn-secondary"
-                onclick="tutupModal()"
+                class="btn btn-light"
+                onclick="tutupForm()"
             >
-                Batal
-            </button>
-
-            <button
-                class="btn btn-danger"
-                onclick="konfirmasiHapus()"
-            >
-                Ya, Hapus
+                ✕ Tutup
             </button>
 
         </div>
 
-    </div>
 
-</div>
+        <div
+            id="errorMessage"
+            class="message error"
+        ></div>
+
+        <div
+            id="successMessage"
+            class="message success"
+        ></div>
+
+
+        <form id="bukuForm">
+
+            <input
+                type="hidden"
+                id="bukuId"
+            >
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Judul Buku *</label>
+
+                    <input
+                        type="text"
+                        id="judul"
+                        required
+                        placeholder="Contoh: Laskar Pelangi"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Penulis</label>
+
+                    <input
+                        type="text"
+                        id="penulis"
+                        placeholder="Nama penulis"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Penerbit</label>
+
+                    <input
+                        type="text"
+                        id="penerbit"
+                        placeholder="Nama penerbit"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Tahun Terbit</label>
+
+                    <input
+                        type="number"
+                        id="tahun"
+                        placeholder="Contoh: 2005"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Kategori</label>
+
+                    <select id="kategori">
+
+                        <option value="">
+                            Pilih Kategori
+                        </option>
+
+                        <option value="Novel">
+                            Novel
+                        </option>
+
+                        <option value="Cerpen">
+                            Cerpen
+                        </option>
+
+                        <option value="Cerita Rakyat">
+                            Cerita Rakyat
+                        </option>
+
+                        <option value="Fiksi Lainnya">
+                            Fiksi Lainnya
+                        </option>
+
+                        <option value="Nonfiksi">
+                            Nonfiksi
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Stok</label>
+
+                    <input
+                        type="number"
+                        id="stok"
+                        min="0"
+                        value="1"
+                    >
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>🖼️ URL Cover Buku</label>
+
+                    <input
+                        type="url"
+                        id="gambar_url"
+                        placeholder="https://..."
+                    >
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>📄 URL PDF Buku</label>
+
+                    <input
+                        type="url"
+                        id="file_url"
+                        placeholder="https://..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="tutupForm()"
+                >
+                    Batal
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                >
+                    💾 Simpan Buku
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- TABEL -->
+
+    <section class="panel">
+
+        <div id="loading" class="loading">
+            ⏳ Memuat buku...
+        </div>
+
+        <div
+            id="tableWrap"
+            class="table-wrap"
+            style="display:none;"
+        >
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Cover</th>
+                        <th>Judul</th>
+                        <th>Penulis</th>
+                        <th>Penerbit</th>
+                        <th>Tahun</th>
+                        <th>Kategori</th>
+                        <th>Stok</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabelBuku"></tbody>
+
+            </table>
+
+        </div>
+
+
+        <div
+            id="empty"
+            class="empty"
+            style="display:none;"
+        >
+
+            <div style="font-size:45px;">
+                📚
+            </div>
+
+            <p>Belum ada buku.</p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    Dibuat oleh Mr. Rahmat Batubara, S.T.P.
+</footer>
 
 
 <script>
@@ -1083,185 +702,10 @@ const db =
 
 
 /* =====================================================
-   VARIABEL
+   DATA
 ===================================================== */
 
 let semuaBuku = [];
-
-let bukuYangAkanDihapus = null;
-
-let adminProfile = null;
-
-
-/* =====================================================
-   CEK LOGIN SUPABASE
-===================================================== */
-
-async function cekAdmin(){
-
-    const {
-        data:{
-            session
-        }
-    } = await db.auth.getSession();
-
-
-    if(!session){
-
-        tampilkanLogin();
-
-        return;
-
-    }
-
-
-    await cekProfileAdmin(session.user);
-
-}
-
-
-/* =====================================================
-   CEK PROFILE ADMIN
-===================================================== */
-
-async function cekProfileAdmin(user){
-
-    const {
-        data,
-        error
-    } = await db
-        .from("profiles")
-        .select("id,nama,role")
-        .eq("id",user.id)
-        .maybeSingle();
-
-
-    if(error){
-
-        console.error(error);
-
-        tampilkanLogin();
-
-        tampilkanLoginError(
-            "Gagal memeriksa profil admin."
-        );
-
-        return;
-
-    }
-
-
-    if(!data || data.role !== "admin"){
-
-        await db.auth.signOut();
-
-        tampilkanLogin();
-
-        tampilkanLoginError(
-            "Akun ini bukan akun administrator."
-        );
-
-        return;
-
-    }
-
-
-    adminProfile = data;
-
-
-    document.getElementById("adminName").textContent =
-        data.nama || user.email || "Administrator";
-
-
-    document.getElementById("loginPage").style.display =
-        "none";
-
-    document.getElementById("adminPage").style.display =
-        "block";
-
-
-    loadBuku();
-
-}
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
-document
-.getElementById("loginForm")
-.addEventListener(
-    "submit",
-    async function(e){
-
-        e.preventDefault();
-
-
-        const email =
-            document
-            .getElementById("email")
-            .value
-            .trim();
-
-
-        const password =
-            document
-            .getElementById("password")
-            .value;
-
-
-        const button =
-            document.getElementById("loginButton");
-
-
-        button.disabled = true;
-
-        button.textContent =
-            "⏳ Memeriksa...";
-
-
-        hideLoginError();
-
-
-        const {
-            data,
-            error
-        } = await db.auth.signInWithPassword({
-            email,
-            password
-        });
-
-
-        if(error){
-
-            console.error(error);
-
-            button.disabled = false;
-
-            button.textContent =
-                "🔑 Masuk sebagai Admin";
-
-
-            tampilkanLoginError(
-                "Email atau password admin salah."
-            );
-
-            return;
-
-        }
-
-
-        await cekProfileAdmin(data.user);
-
-
-        button.disabled = false;
-
-        button.textContent =
-            "🔑 Masuk sebagai Admin";
-
-    }
-);
 
 
 /* =====================================================
@@ -1273,10 +717,10 @@ async function loadBuku(){
     document.getElementById("loading").style.display =
         "block";
 
-    document.getElementById("tableContainer").style.display =
+    document.getElementById("tableWrap").style.display =
         "none";
 
-    document.getElementById("emptyData").style.display =
+    document.getElementById("empty").style.display =
         "none";
 
 
@@ -1299,10 +743,12 @@ async function loadBuku(){
 
         console.error(error);
 
-        alert(
-            "Gagal mengambil data buku: " +
-            error.message
-        );
+        document.getElementById("empty").style.display =
+            "block";
+
+        document.getElementById("empty").innerHTML =
+            "❌ Gagal mengambil data buku.<br><br>" +
+            escapeHTML(error.message);
 
         return;
 
@@ -1310,7 +756,6 @@ async function loadBuku(){
 
 
     semuaBuku = data || [];
-
 
     updateStatistik();
 
@@ -1325,11 +770,11 @@ async function loadBuku(){
 
 function updateStatistik(){
 
-    document.getElementById("jumlahBuku").textContent =
+    document.getElementById("totalBuku").textContent =
         semuaBuku.length;
 
 
-    const totalStok =
+    const stok =
         semuaBuku.reduce(
             (total,buku) =>
                 total + (Number(buku.stok) || 0),
@@ -1337,8 +782,8 @@ function updateStatistik(){
         );
 
 
-    document.getElementById("jumlahStok").textContent =
-        totalStok;
+    document.getElementById("totalStok").textContent =
+        stok;
 
 
     const kategori =
@@ -1349,7 +794,7 @@ function updateStatistik(){
         );
 
 
-    document.getElementById("jumlahKategori").textContent =
+    document.getElementById("totalKategori").textContent =
         kategori.size;
 
 }
@@ -1367,10 +812,10 @@ function tampilkanBuku(){
 
     const keyword =
         document
-        .getElementById("searchBuku")
+        .getElementById("search")
         .value
-        .trim()
-        .toLowerCase();
+        .toLowerCase()
+        .trim();
 
 
     const hasil =
@@ -1400,29 +845,22 @@ function tampilkanBuku(){
 
     if(hasil.length === 0){
 
-        document
-        .getElementById("tableContainer")
-        .style.display = "none";
+        document.getElementById("tableWrap").style.display =
+            "none";
 
-
-        document
-        .getElementById("emptyData")
-        .style.display = "block";
-
+        document.getElementById("empty").style.display =
+            "block";
 
         return;
 
     }
 
 
-    document
-    .getElementById("tableContainer")
-    .style.display = "block";
+    document.getElementById("tableWrap").style.display =
+        "block";
 
-
-    document
-    .getElementById("emptyData")
-    .style.display = "none";
+    document.getElementById("empty").style.display =
+        "none";
 
 
     hasil.forEach(
@@ -1432,33 +870,38 @@ function tampilkanBuku(){
                 document.createElement("tr");
 
 
-            const cover =
-                buku.gambar_url
-                ? `
+            let coverHTML =
+                `
+                <div class="cover">
+                    📖
+                </div>
+                `;
+
+
+            if(buku.gambar_url){
+
+                coverHTML =
+                    `
                     <div class="cover">
                         <img
                             src="${escapeHTML(buku.gambar_url)}"
-                            alt="Cover"
-                            onerror="this.style.display='none';this.parentElement.innerHTML='📖';"
+                            alt="Cover buku"
+                            onerror="
+                                this.style.display='none';
+                                this.parentElement.innerHTML='📖';
+                            "
                         >
                     </div>
-                `
-                : `
-                    <div class="cover">
-                        📖
-                    </div>
-                `;
+                    `;
+
+            }
 
 
             tr.innerHTML = `
 
-                <td>
-                    ${index + 1}
-                </td>
+                <td>${index + 1}</td>
 
-                <td>
-                    ${cover}
-                </td>
+                <td>${coverHTML}</td>
 
                 <td>
                     <strong>
@@ -1494,14 +937,14 @@ function tampilkanBuku(){
                             class="btn btn-warning"
                             onclick="editBuku(${buku.id})"
                         >
-                            ✏️ Edit
+                            ✏️
                         </button>
 
                         <button
                             class="btn btn-danger"
                             onclick="hapusBuku(${buku.id})"
                         >
-                            🗑️ Hapus
+                            🗑️
                         </button>
 
                     </div>
@@ -1520,12 +963,12 @@ function tampilkanBuku(){
 
 
 /* =====================================================
-   FORM TAMBAH
+   TAMBAH
 ===================================================== */
 
-function bukaFormTambah(){
+function bukaTambah(){
 
-    document.getElementById("formBukuPanel").style.display =
+    document.getElementById("formPanel").style.display =
         "block";
 
 
@@ -1544,7 +987,7 @@ function bukaFormTambah(){
         "1";
 
 
-    hideFormMessages();
+    hapusPesan();
 
 
     window.scrollTo({
@@ -1556,22 +999,7 @@ function bukaFormTambah(){
 
 
 /* =====================================================
-   TUTUP FORM
-===================================================== */
-
-function tutupForm(){
-
-    document.getElementById("formBukuPanel").style.display =
-        "none";
-
-
-    document.getElementById("bukuForm").reset();
-
-}
-
-
-/* =====================================================
-   EDIT BUKU
+   EDIT
 ===================================================== */
 
 function editBuku(id){
@@ -1584,14 +1012,14 @@ function editBuku(id){
 
     if(!buku){
 
-        alert("Data buku tidak ditemukan.");
+        alert("Buku tidak ditemukan.");
 
         return;
 
     }
 
 
-    document.getElementById("formBukuPanel").style.display =
+    document.getElementById("formPanel").style.display =
         "block";
 
 
@@ -1635,7 +1063,7 @@ function editBuku(id){
         buku.file_url || "";
 
 
-    hideFormMessages();
+    hapusPesan();
 
 
     window.scrollTo({
@@ -1647,7 +1075,7 @@ function editBuku(id){
 
 
 /* =====================================================
-   SIMPAN BUKU
+   SIMPAN
 ===================================================== */
 
 document
@@ -1659,71 +1087,47 @@ document
         e.preventDefault();
 
 
-        hideFormMessages();
+        hapusPesan();
 
 
         const id =
-            document
-            .getElementById("bukuId")
-            .value;
+            document.getElementById("bukuId").value;
 
 
-        const judul =
-            document
-            .getElementById("judul")
-            .value
-            .trim();
+        const dataBuku = {
+
+            judul:
+                document.getElementById("judul").value.trim(),
+
+            penulis:
+                document.getElementById("penulis").value.trim() || null,
+
+            penerbit:
+                document.getElementById("penerbit").value.trim() || null,
+
+            tahun_terbit:
+                document.getElementById("tahun").value
+                ? Number(document.getElementById("tahun").value)
+                : null,
+
+            kategori:
+                document.getElementById("kategori").value || null,
+
+            stok:
+                Number(document.getElementById("stok").value) || 0,
+
+            gambar_url:
+                document.getElementById("gambar_url").value.trim() || null,
+
+            file_url:
+                document.getElementById("file_url").value.trim() || null
+
+        };
 
 
-        const penulis =
-            document
-            .getElementById("penulis")
-            .value
-            .trim();
+        if(!dataBuku.judul){
 
-
-        const penerbit =
-            document
-            .getElementById("penerbit")
-            .value
-            .trim();
-
-
-        const tahun =
-            document
-            .getElementById("tahun")
-            .value;
-
-
-        const kategori =
-            document
-            .getElementById("kategori")
-            .value;
-
-
-        const stok =
-            document
-            .getElementById("stok")
-            .value;
-
-
-        const gambar_url =
-            document
-            .getElementById("gambar_url")
-            .value
-            .trim();
-
-
-        const file_url =
-            document
-            .getElementById("file_url")
-            .value
-            .trim();
-
-
-        if(!judul){
-
-            tampilkanFormError(
+            tampilkanError(
                 "Judul buku wajib diisi."
             );
 
@@ -1732,42 +1136,12 @@ document
         }
 
 
-        const dataBuku = {
-
-            judul:judul,
-
-            penulis:
-                penulis || null,
-
-            penerbit:
-                penerbit || null,
-
-            tahun_terbit:
-                tahun
-                ? Number(tahun)
-                : null,
-
-            kategori:
-                kategori || null,
-
-            stok:
-                Number(stok) || 0,
-
-            gambar_url:
-                gambar_url || null,
-
-            file_url:
-                file_url || null
-
-        };
-
-
-        let result;
+        let hasil;
 
 
         if(id){
 
-            result =
+            hasil =
                 await db
                 .from("buku")
                 .update(dataBuku)
@@ -1775,7 +1149,7 @@ document
 
         }else{
 
-            result =
+            hasil =
                 await db
                 .from("buku")
                 .insert([dataBuku]);
@@ -1783,13 +1157,13 @@ document
         }
 
 
-        if(result.error){
+        if(hasil.error){
 
-            console.error(result.error);
+            console.error(hasil.error);
 
-            tampilkanFormError(
+            tampilkanError(
                 "Gagal menyimpan buku: " +
-                result.error.message
+                hasil.error.message
             );
 
             return;
@@ -1797,7 +1171,7 @@ document
         }
 
 
-        tampilkanFormSuccess(
+        tampilkanSuccess(
             id
             ? "Buku berhasil diperbarui."
             : "Buku berhasil ditambahkan."
@@ -1809,11 +1183,9 @@ document
 
         setTimeout(
             () => {
-
                 tutupForm();
-
             },
-            800
+            700
         );
 
     }
@@ -1821,10 +1193,10 @@ document
 
 
 /* =====================================================
-   HAPUS BUKU
+   HAPUS
 ===================================================== */
 
-function hapusBuku(id){
+async function hapusBuku(id){
 
     const buku =
         semuaBuku.find(
@@ -1839,35 +1211,17 @@ function hapusBuku(id){
     }
 
 
-    bukuYangAkanDihapus =
-        buku;
+    const yakin =
+        confirm(
+            `Hapus buku "${buku.judul}"?`
+        );
 
 
-    document.getElementById("deleteText").textContent =
-        `Apakah Anda yakin ingin menghapus buku "${buku.judul}"?`;
-
-
-    document.getElementById("deleteModal").style.display =
-        "flex";
-
-}
-
-
-/* =====================================================
-   KONFIRMASI HAPUS
-===================================================== */
-
-async function konfirmasiHapus(){
-
-    if(!bukuYangAkanDihapus){
+    if(!yakin){
 
         return;
 
     }
-
-
-    const id =
-        bukuYangAkanDihapus.id;
 
 
     const {
@@ -1880,10 +1234,8 @@ async function konfirmasiHapus(){
 
     if(error){
 
-        console.error(error);
-
         alert(
-            "Gagal menghapus buku: " +
+            "Gagal menghapus buku:\n" +
             error.message
         );
 
@@ -1892,120 +1244,63 @@ async function konfirmasiHapus(){
     }
 
 
-    tutupModal();
-
-
-    bukuYangAkanDihapus =
-        null;
-
-
     await loadBuku();
 
 }
 
 
 /* =====================================================
-   TUTUP MODAL
+   TUTUP FORM
 ===================================================== */
 
-function tutupModal(){
+function tutupForm(){
 
-    document.getElementById("deleteModal").style.display =
+    document.getElementById("formPanel").style.display =
         "none";
+
+    document.getElementById("bukuForm").reset();
 
 }
 
 
 /* =====================================================
-   LOGOUT
+   PESAN
 ===================================================== */
 
-async function logout(){
+function tampilkanError(pesan){
 
-    await db.auth.signOut();
+    const el =
+        document.getElementById("errorMessage");
 
-    localStorage.removeItem(
-        "pojok_baca_anggota"
-    );
-
-
-    document.getElementById("adminPage").style.display =
-        "none";
-
-
-    document.getElementById("loginPage").style.display =
-        "flex";
-
-
-    document.getElementById("loginForm").reset();
-
-}
-
-
-/* =====================================================
-   LOGIN ERROR
-===================================================== */
-
-function tampilkanLoginError(pesan){
-
-    const box =
-        document.getElementById("loginError");
-
-    box.textContent =
+    el.textContent =
         pesan;
 
-    box.style.display =
+    el.style.display =
         "block";
 
 }
 
 
-function hideLoginError(){
+function tampilkanSuccess(pesan){
 
-    document.getElementById("loginError").style.display =
-        "none";
+    const el =
+        document.getElementById("successMessage");
 
-}
-
-
-/* =====================================================
-   FORM ERROR / SUCCESS
-===================================================== */
-
-function tampilkanFormError(pesan){
-
-    const box =
-        document.getElementById("formError");
-
-    box.textContent =
+    el.textContent =
         pesan;
 
-    box.style.display =
+    el.style.display =
         "block";
 
 }
 
 
-function tampilkanFormSuccess(pesan){
+function hapusPesan(){
 
-    const box =
-        document.getElementById("formSuccess");
-
-    box.textContent =
-        pesan;
-
-    box.style.display =
-        "block";
-
-}
-
-
-function hideFormMessages(){
-
-    document.getElementById("formError").style.display =
+    document.getElementById("errorMessage").style.display =
         "none";
 
-    document.getElementById("formSuccess").style.display =
+    document.getElementById("successMessage").style.display =
         "none";
 
 }
@@ -2028,42 +1323,22 @@ function escapeHTML(value){
 
 
 /* =====================================================
-   START
+   KEMBALI
 ===================================================== */
 
-cekAdmin();
+function kembaliPerpustakaan(){
 
-
-/* =====================================================
-   SESSION CHANGE
-===================================================== */
-
-db.auth.onAuthStateChange(
-    async (event,session) => {
-
-        if(event === "SIGNED_OUT"){
-
-            tampilkanLogin();
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   TAMPILKAN LOGIN
-===================================================== */
-
-function tampilkanLogin(){
-
-    document.getElementById("loginPage").style.display =
-        "flex";
-
-    document.getElementById("adminPage").style.display =
-        "none";
+    window.location.href =
+        "index.html";
 
 }
+
+
+/* =====================================================
+   MULAI
+===================================================== */
+
+loadBuku();
 
 </script>
 
