@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,91 +9,109 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
 }
 
+html,
 body{
+    width:100%;
+    min-height:100%;
     font-family:Arial,Helvetica,sans-serif;
-    background:#0f172a;
-    color:white;
-    min-height:100vh;
+    background:#111827;
+    color:#fff;
 }
 
-/* =========================
-   HEADER
-========================= */
+body{
+    overflow-x:hidden;
+}
 
-header{
-    background:linear-gradient(
-        135deg,
-        #1d4ed8,
-        #2563eb,
-        #3b82f6
-    );
-    padding:15px;
-    box-shadow:0 4px 15px rgba(0,0,0,.3);
+button{
+    font-family:inherit;
+}
+
+.header{
+    background:#1f2937;
+    border-bottom:1px solid #374151;
+    padding:12px 16px;
+    position:sticky;
+    top:0;
+    z-index:100;
 }
 
 .header-inner{
     max-width:1200px;
     margin:auto;
-}
-
-.top-row{
     display:flex;
-    justify-content:space-between;
     align-items:center;
-    gap:15px;
-    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:12px;
 }
 
-.book-title{
+.title-area{
+    min-width:0;
+}
+
+.title{
     font-size:20px;
-    font-weight:bold;
+    font-weight:700;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .book-info{
-    margin-top:5px;
+    color:#cbd5e1;
     font-size:13px;
-    opacity:.9;
+    margin-top:3px;
 }
 
-.header-buttons{
+.top-buttons{
     display:flex;
-    gap:8px;
+    gap:7px;
     flex-wrap:wrap;
+    justify-content:flex-end;
 }
 
-.header-btn{
-    border:none;
-    padding:9px 13px;
+.btn{
+    border:0;
     border-radius:8px;
+    padding:9px 13px;
     cursor:pointer;
-    font-weight:bold;
-    color:#1e293b;
-    background:white;
-}
-
-.header-btn:hover{
-    background:#e2e8f0;
-}
-
-.finish-btn{
-    background:#16a34a;
+    font-weight:600;
     color:white;
+    background:#374151;
 }
 
-.finish-btn:hover{
+.btn:hover{
+    background:#4b5563;
+}
+
+.btn-primary{
+    background:#2563eb;
+}
+
+.btn-primary:hover{
+    background:#1d4ed8;
+}
+
+.btn-success{
+    background:#16a34a;
+}
+
+.btn-success:hover{
     background:#15803d;
 }
 
-/* =========================
-   PDF AREA
-========================= */
+.btn-danger{
+    background:#dc2626;
+}
+
+.btn-danger:hover{
+    background:#b91c1c;
+}
 
 .reader{
     max-width:1200px;
@@ -102,45 +119,154 @@ header{
     padding:15px;
 }
 
-.pdf-container{
-    background:#334155;
+.status-bar{
+    background:#1f2937;
+    border:1px solid #374151;
+    border-radius:10px;
+    padding:10px 12px;
+    margin-bottom:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.status-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.timer-box{
+    background:#0f172a;
+    border:1px solid #475569;
+    padding:7px 11px;
+    border-radius:8px;
+    font-weight:700;
+}
+
+.activity{
+    font-size:13px;
+    color:#cbd5e1;
+}
+
+.activity.active{
+    color:#86efac;
+}
+
+.activity.paused{
+    color:#fbbf24;
+}
+
+.pdf-area{
+    background:#374151;
     border-radius:12px;
-    min-height:70vh;
-    padding:20px;
-    overflow:auto;
+    min-height:calc(100vh - 190px);
+    padding:15px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.pdf-toolbar{
+    width:100%;
+    max-width:1000px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    flex-wrap:wrap;
+
+    margin-bottom:12px;
+}
+
+.pdf-toolbar button{
+    background:#111827;
+    color:white;
+    border:1px solid #4b5563;
+    border-radius:7px;
+    padding:7px 11px;
+    cursor:pointer;
+}
+
+.pdf-toolbar button:hover{
+    background:#1f2937;
+}
+
+.page-info{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:#111827;
+    padding:5px 8px;
+    border-radius:7px;
+}
+
+.page-input{
+    width:55px;
+    padding:6px;
+    border-radius:5px;
+    border:1px solid #64748b;
+    background:#fff;
+    color:#111827;
     text-align:center;
-    box-shadow:0 5px 20px rgba(0,0,0,.3);
+    font-weight:bold;
+}
+
+.zoom-info{
+    min-width:60px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.canvas-wrapper{
+    width:100%;
+    max-width:1000px;
+
+    background:#52525b;
+    border-radius:8px;
+    padding:10px;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+
+    overflow:auto;
+
+    min-height:400px;
+    touch-action:pan-y;
 }
 
 #pdfCanvas{
     display:block;
-    margin:0 auto;
-    background:white;
-    box-shadow:0 5px 20px rgba(0,0,0,.4);
+    background:#fff;
+    box-shadow:0 5px 20px rgba(0,0,0,.35);
+    max-width:none;
 }
 
-/* =========================
-   LOADING
-========================= */
-
 .loading{
-    min-height:60vh;
+    min-height:400px;
+    width:100%;
     display:flex;
-    flex-direction:column;
     justify-content:center;
     align-items:center;
+    flex-direction:column;
+    gap:12px;
     color:#cbd5e1;
-    text-align:center;
 }
 
 .spinner{
-    width:45px;
-    height:45px;
+    width:42px;
+    height:42px;
     border:4px solid #475569;
     border-top-color:#60a5fa;
     border-radius:50%;
     animation:spin 1s linear infinite;
-    margin-bottom:15px;
 }
 
 @keyframes spin{
@@ -149,377 +275,314 @@ header{
     }
 }
 
-/* =========================
-   CONTROLS
-========================= */
-
-.controls{
-    margin-top:15px;
-    background:#1e293b;
-    border-radius:12px;
-    padding:12px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
-    flex-wrap:wrap;
-}
-
-.control-btn{
-    border:none;
-    background:#334155;
-    color:white;
-    padding:9px 13px;
-    border-radius:7px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.control-btn:hover{
-    background:#475569;
-}
-
-.control-btn:disabled{
-    opacity:.4;
-    cursor:not-allowed;
-}
-
-.page-input{
-    width:65px;
-    padding:9px;
-    border:none;
-    border-radius:7px;
-    text-align:center;
-    font-weight:bold;
-}
-
-.page-info{
-    color:#cbd5e1;
-    font-size:14px;
-    padding:0 5px;
-}
-
-/* =========================
-   TIMER
-========================= */
-
-.timer-box{
-    margin-top:12px;
-    background:#1e293b;
-    border-radius:10px;
-    padding:12px;
-    text-align:center;
-    color:#cbd5e1;
-}
-
-.timer{
-    font-size:22px;
-    font-weight:bold;
-    color:#60a5fa;
-    margin-top:4px;
-}
-
-/* =========================
-   ERROR
-========================= */
-
 .error-box{
-    max-width:700px;
-    margin:40px auto;
-    background:white;
-    color:#1e293b;
-    border-radius:15px;
-    padding:30px;
-    text-align:center;
-}
-
-.error-icon{
-    font-size:55px;
-    margin-bottom:15px;
-}
-
-.error-box h2{
-    color:#dc2626;
-    margin-bottom:10px;
-}
-
-.error-box p{
-    color:#64748b;
+    display:none;
+    width:100%;
+    max-width:800px;
+    background:#450a0a;
+    border:1px solid #ef4444;
+    color:#fecaca;
+    padding:15px;
+    border-radius:10px;
     line-height:1.6;
 }
 
-.error-detail{
-    margin-top:15px;
-    padding:12px;
-    background:#f1f5f9;
-    border-radius:8px;
-    font-size:12px;
-    word-break:break-word;
-    text-align:left;
+.bottom-controls{
+    width:100%;
+    max-width:1000px;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:12px;
+    flex-wrap:wrap;
 }
 
-.back-btn{
-    margin-top:20px;
-    border:none;
-    background:#2563eb;
-    color:white;
-    padding:11px 20px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.drive-btn{
-    margin-top:10px;
-    border:none;
-    background:#16a34a;
-    color:white;
-    padding:11px 20px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
+.footer{
     text-align:center;
-    padding:25px 15px;
     color:#94a3b8;
-    font-size:13px;
+    font-size:12px;
+    padding:20px 10px 30px;
 }
 
-/* =========================
-   MOBILE
-========================= */
+.fullscreen-note{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#111827;
+    z-index:1000;
 
-@media(max-width:600px){
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+}
 
-    .book-title{
+.start-card{
+    width:min(500px,100%);
+    background:#1f2937;
+    border:1px solid #475569;
+    border-radius:16px;
+    padding:30px 24px;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+
+.start-icon{
+    font-size:55px;
+    margin-bottom:12px;
+}
+
+.start-card h2{
+    margin-bottom:10px;
+}
+
+.start-card p{
+    color:#cbd5e1;
+    line-height:1.6;
+    margin-bottom:20px;
+}
+
+.start-card .btn{
+    width:100%;
+    font-size:16px;
+    padding:13px;
+}
+
+.reader.hidden{
+    display:none;
+}
+
+@media(max-width:700px){
+
+    .header-inner{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .top-buttons{
+        width:100%;
+        justify-content:flex-start;
+    }
+
+    .title{
         font-size:17px;
     }
 
-    .pdf-container{
+    .reader{
         padding:8px;
     }
 
-    .controls{
-        padding:10px 5px;
+    .pdf-area{
+        padding:7px;
+        min-height:calc(100vh - 170px);
     }
 
-    .control-btn{
-        padding:8px 10px;
-        font-size:12px;
+    .canvas-wrapper{
+        padding:5px;
     }
 
-    .page-input{
-        width:55px;
+    .status-bar{
+        padding:8px;
     }
-
 }
-
 </style>
-
 </head>
 
 <body>
 
-<header>
-
+<header class="header">
     <div class="header-inner">
 
-        <div class="top-row">
-
-            <div>
-
-                <div
-                    class="book-title"
-                    id="bookTitle"
-                >
-                    📖 Memuat buku...
-                </div>
-
-                <div
-                    class="book-info"
-                    id="bookInfo"
-                >
-                    Memuat informasi buku...
-                </div>
-
+        <div class="title-area">
+            <div class="title" id="judulBuku">
+                Memuat buku...
             </div>
 
-            <div class="header-buttons">
-
-                <button
-                    class="header-btn"
-                    onclick="kembaliKeKatalog()"
-                >
-                    ← Katalog
-                </button>
-
-                <button
-                    class="header-btn finish-btn"
-                    onclick="selesaiMembaca()"
-                >
-                    ✓ Selesai Membaca
-                </button>
-
+            <div class="book-info" id="infoBuku">
+                Pojok Baca Digital — SMP Negeri 3 Sibolga
             </div>
+        </div>
+
+        <div class="top-buttons">
+
+            <button class="btn" onclick="kembaliKatalog()">
+                📚 Katalog
+            </button>
+
+            <button class="btn btn-success" onclick="selesaiMembaca()">
+                ✅ Selesai Membaca
+            </button>
 
         </div>
 
     </div>
-
 </header>
 
 
-<main class="reader">
+<div id="startScreen" class="fullscreen-note">
 
-    <div
-        id="loading"
-        class="loading"
-    >
+    <div class="start-card">
 
-        <div class="spinner"></div>
+        <div class="start-icon">📖</div>
+
+        <h2 id="startTitle">
+            Siap Membaca
+        </h2>
+
+        <p>
+            Tekan tombol di bawah untuk mulai membaca.
+            Pembaca buku akan dibuka dalam mode fullscreen.
+        </p>
+
+        <button class="btn btn-primary"
+                onclick="mulaiPembaca()">
+            📖 Mulai Membaca
+        </button>
+
+    </div>
+
+</div>
+
+
+<main id="reader" class="reader hidden">
+
+    <div class="status-bar">
+
+        <div class="status-left">
+
+            <div class="timer-box">
+                ⏱️ Waktu:
+                <span id="timer">
+                    00:00
+                </span>
+            </div>
+
+            <div id="activityStatus"
+                 class="activity paused">
+                ⏸ Menunggu aktivitas
+            </div>
+
+        </div>
 
         <div>
-            Memuat buku...
+            <span id="pageStatus">
+                Halaman 0 / 0
+            </span>
         </div>
 
     </div>
 
 
-    <div
-        id="readerContent"
-        style="display:none;"
-    >
+    <section class="pdf-area">
 
-        <div
-            class="pdf-container"
-            id="pdfContainer"
-        >
+        <div class="pdf-toolbar">
 
-            <canvas
-                id="pdfCanvas"
-            ></canvas>
-
-        </div>
-
-
-        <div class="controls">
-
-            <button
-                class="control-btn"
-                id="prevBtn"
-                onclick="halamanSebelumnya()"
-            >
-                ◀ Sebelumnya
+            <button onclick="halamanSebelumnya()">
+                ◀
             </button>
 
+            <div class="page-info">
 
-            <span class="page-info">
-                Halaman
-            </span>
+                <input
+                    id="pageInput"
+                    class="page-input"
+                    type="number"
+                    min="1"
+                    value="1"
+                    onchange="lompatHalaman()"
+                >
 
+                <span>
+                    /
+                </span>
 
-            <input
-                type="number"
-                id="pageInput"
-                class="page-input"
-                min="1"
-                value="1"
-                onchange="lompatHalaman()"
-            >
+                <span id="totalPages">
+                    0
+                </span>
 
+            </div>
 
-            <span
-                class="page-info"
-                id="pageTotal"
-            >
-                / -
-            </span>
-
-
-            <button
-                class="control-btn"
-                id="nextBtn"
-                onclick="halamanBerikutnya()"
-            >
-                Berikutnya ▶
+            <button onclick="halamanBerikutnya()">
+                ▶
             </button>
 
-
-            <button
-                class="control-btn"
-                onclick="zoomKeluar()"
-            >
-                − Zoom
+            <button onclick="zoomKeluar()">
+                −
             </button>
 
+            <div id="zoomInfo"
+                 class="zoom-info">
+                100%
+            </div>
 
-            <button
-                class="control-btn"
-                onclick="zoomMasuk()"
-            >
-                ＋ Zoom
+            <button onclick="zoomMasuk()">
+                +
             </button>
 
-
-            <button
-                class="control-btn"
-                onclick="fitLebar()"
-            >
+            <button onclick="fitWidth()">
                 ↔ Fit
             </button>
 
-
-            <button
-                class="control-btn"
-                onclick="fullscreen()"
-            >
+            <button onclick="fullscreen()">
                 ⛶ Fullscreen
             </button>
 
         </div>
 
 
-        <div class="timer-box">
+        <div id="loading"
+             class="loading">
 
-            ⏱️ Waktu membaca
+            <div class="spinner"></div>
 
-            <div
-                class="timer"
-                id="timer"
-            >
-                00:00:00
+            <div>
+                Memuat buku...
             </div>
 
         </div>
 
+
+        <div id="errorBox"
+             class="error-box">
+        </div>
+
+
+        <div id="canvasWrapper"
+             class="canvas-wrapper"
+             style="display:none;">
+
+            <canvas id="pdfCanvas"></canvas>
+
+        </div>
+
+
+        <div class="bottom-controls">
+
+            <button class="btn"
+                    onclick="halamanSebelumnya()">
+                ◀ Halaman Sebelumnya
+            </button>
+
+            <button class="btn btn-primary"
+                    onclick="halamanBerikutnya()">
+                Halaman Berikutnya ▶
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <div class="footer">
+        Dibuat oleh Mr. Rahmat Batubara, S.T.P.
     </div>
 
 </main>
 
 
-<footer>
-    Dibuat oleh Mr. Rahmat Batubara, S.T.P.
-</footer>
-
-
 <script type="module">
-
-/* =========================================================
-   PDF.JS
-========================================================= */
 
 import * as pdfjsLib
 from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs";
-
-
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
 
 
 /* =========================================================
@@ -527,391 +590,144 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 ========================================================= */
 
 const SUPABASE_URL =
-"https://veffzxxrsjfgupynryog.supabase.co";
+    "https://veffzxxrsjfgupynryog.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_2HoFz3ZTlrOX_DTGsIW3og_7cHS0LLG";
+    "sb_publishable_2HoFz3ZTlrOX_DTGsIW3og_7cHS0LLG";
+
+const db =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
-let db;
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+const anggotaRaw =
+    localStorage.getItem("pojok_baca_anggota");
+
+if(!anggotaRaw){
+
+    alert(
+        "Silakan login terlebih dahulu."
+    );
+
+    window.location.href =
+        "login.html";
+
+    throw new Error(
+        "Siswa belum login."
+    );
+}
+
+let anggota;
 
 try{
 
-    if(
-        !window.supabase ||
-        !window.supabase.createClient
-    ){
-
-        throw new Error(
-            "Library Supabase tidak berhasil dimuat."
-        );
-
-    }
-
-
-    db =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
+    anggota =
+        JSON.parse(anggotaRaw);
 
 }catch(error){
 
-    console.error(error);
+    localStorage.removeItem(
+        "pojok_baca_anggota"
+    );
 
-    document.getElementById(
-        "loading"
-    ).innerHTML = `
-
-        <div class="error-box">
-
-            <div class="error-icon">⚠️</div>
-
-            <h2>Koneksi sistem bermasalah</h2>
-
-            <p>
-                Supabase tidak dapat dimuat.
-                Periksa koneksi internet kemudian coba lagi.
-            </p>
-
-            <div class="error-detail">
-                ${escapeHTML(error.message)}
-            </div>
-
-            <button
-                class="back-btn"
-                onclick="kembaliKeKatalog()"
-            >
-                ← Kembali ke Katalog
-            </button>
-
-        </div>
-
-    `;
+    window.location.href =
+        "login.html";
 
     throw error;
 }
 
 
+if(!anggota || !anggota.id){
+
+    localStorage.removeItem(
+        "pojok_baca_anggota"
+    );
+
+    window.location.href =
+        "login.html";
+
+    throw new Error(
+        "Data siswa tidak valid."
+    );
+}
+
+
 /* =========================================================
-   VARIABEL
+   DATA BUKU
 ========================================================= */
 
-let anggota = null;
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const bukuId =
+    params.get("id");
+
+
+if(!bukuId){
+
+    tampilError(
+        "ID buku tidak ditemukan."
+    );
+
+    throw new Error(
+        "ID buku kosong."
+    );
+}
+
+
 let buku = null;
+
+
+/* =========================================================
+   PDF
+========================================================= */
+
 let pdfDoc = null;
 let halamanSekarang = 1;
-let totalHalaman = 0;
-let zoom = 1;
+
+let scale = 1;
+
+let rendering = false;
+let pendingPage = null;
+
+
+/* =========================================================
+   RIWAYAT
+========================================================= */
+
 let riwayatId = null;
+
 let mulaiWaktu = null;
+
+let totalDetik = 0;
+
 let timerInterval = null;
-let waktuAktif = 0;
-let sedangAktif = true;
+
+let sedangAktif = false;
+
+let inactivityTimer = null;
+
+const BATAS_TIDAK_AKTIF =
+    2 * 60 * 1000;
 
 
 /* =========================================================
-   ESCAPE HTML
+   AMBIL BUKU
 ========================================================= */
 
-function escapeHTML(value){
-
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================================================
-   CEK LOGIN
-========================================================= */
-
-function cekLogin(){
-
-    const data =
-        localStorage.getItem(
-            "pojok_baca_anggota"
-        );
-
-
-    if(!data){
-
-        window.location.replace(
-            "login.html"
-        );
-
-        return false;
-    }
-
-
-    try{
-
-        anggota =
-            JSON.parse(data);
-
-
-        if(
-            !anggota ||
-            !anggota.id
-        ){
-
-            throw new Error(
-                "Data login siswa tidak valid."
-            );
-
-        }
-
-
-        return true;
-
-    }catch(error){
-
-        console.error(error);
-
-
-        localStorage.removeItem(
-            "pojok_baca_anggota"
-        );
-
-
-        window.location.replace(
-            "login.html"
-        );
-
-
-        return false;
-
-    }
-
-}
-
-
-/* =========================================================
-   AMBIL ID BUKU
-========================================================= */
-
-function ambilIdBuku(){
-
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-
-    return params.get("id");
-
-}
-
-
-/* =========================================================
-   CEK GOOGLE DRIVE
-========================================================= */
-
-function adalahGoogleDrive(url){
-
-    if(!url){
-        return false;
-    }
-
-    return (
-        url.includes("drive.google.com") ||
-        url.includes("docs.google.com")
-    );
-
-}
-
-
-/* =========================================================
-   AMBIL ID FILE GOOGLE DRIVE
-========================================================= */
-
-function ambilIdGoogleDrive(url){
-
-    if(!url){
-        return null;
-    }
-
-
-    let hasil =
-        url.match(
-            /\/file\/d\/([^\/]+)/
-        );
-
-
-    if(hasil && hasil[1]){
-        return hasil[1];
-    }
-
-
-    hasil =
-        url.match(
-            /[?&]id=([^&]+)/
-        );
-
-
-    if(hasil && hasil[1]){
-        return hasil[1];
-    }
-
-
-    return null;
-
-}
-
-
-/* =========================================================
-   BUAT URL GOOGLE DRIVE
-========================================================= */
-
-function buatUrlGoogleDrive(id){
-
-    return [
-        `https://drive.google.com/uc?export=download&id=${encodeURIComponent(id)}`,
-        `https://drive.google.com/uc?id=${encodeURIComponent(id)}&export=download`
-    ];
-
-}
-
-
-/* =========================================================
-   URL ASLI DRIVE UNTUK TOMBOL
-========================================================= */
-
-function urlDriveAsli(url){
-
-    const id =
-        ambilIdGoogleDrive(url);
-
-
-    if(id){
-
-        return `https://drive.google.com/file/d/${id}/view`;
-
-    }
-
-
-    return url;
-
-}
-
-
-/* =========================================================
-   TAMPILKAN ERROR
-========================================================= */
-
-function tampilkanError(
-    pesan,
-    tampilkanDrive = false
-){
-
-    const driveUrl =
-        buku && buku.file_url
-            ? urlDriveAsli(buku.file_url)
-            : "";
-
-
-    document.getElementById(
-        "loading"
-    ).innerHTML = `
-
-        <div class="error-box">
-
-            <div class="error-icon">
-                ⚠️
-            </div>
-
-            <h2>
-                Buku tidak dapat dibuka
-            </h2>
-
-            <p>
-                ${escapeHTML(pesan)}
-            </p>
-
-            ${
-                tampilkanDrive && driveUrl
-                ?
-                `
-                <button
-                    class="drive-btn"
-                    onclick="bukaGoogleDrive()"
-                >
-                    📖 Buka PDF
-                </button>
-                `
-                :
-                ""
-            }
-
-            <button
-                class="back-btn"
-                onclick="kembaliKeKatalog()"
-            >
-                ← Kembali ke Katalog
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   BUKA GOOGLE DRIVE
-========================================================= */
-
-window.bukaGoogleDrive =
-function(){
-
-    if(
-        !buku ||
-        !buku.file_url
-    ){
-
-        return;
-    }
-
-
-    const url =
-        urlDriveAsli(
-            buku.file_url
-        );
-
-
-    window.open(
-        url,
-        "_blank",
-        "noopener,noreferrer"
-    );
-
-};
-
-
-/* =========================================================
-   AMBIL DATA BUKU
-========================================================= */
-
-async function loadBuku(){
-
-    const id =
-        ambilIdBuku();
-
-
-    if(!id){
-
-        tampilkanError(
-            "ID buku tidak ditemukan pada alamat halaman."
-        );
-
-        return;
-
-    }
-
+async function ambilBuku(){
 
     try{
 
@@ -920,311 +736,301 @@ async function loadBuku(){
             error
         } = await db
             .from("buku")
-            .select(`
-                id,
-                judul,
-                penulis,
-                penerbit,
-                tahun_terbit,
-                kategori,
-                stok,
-                gambar_url,
-                file_url
-            `)
-            .eq("id",id)
+            .select("*")
+            .eq("id", bukuId)
             .maybeSingle();
 
 
         if(error){
 
             throw error;
-
         }
 
 
         if(!data){
 
             throw new Error(
-                "Data buku tidak ditemukan di database."
+                "Buku tidak ditemukan di database."
             );
-
         }
 
 
-        buku =
-            data;
+        buku = data;
 
 
         document.getElementById(
-            "bookTitle"
+            "judulBuku"
         ).textContent =
-            "📖 " +
-            (
-                buku.judul ||
-                "Tanpa Judul"
-            );
+            buku.judul || "Tanpa Judul";
 
 
         document.getElementById(
-            "bookInfo"
+            "infoBuku"
         ).textContent =
-            "👤 " +
-            (
-                buku.penulis ||
-                "-"
-            ) +
-            "  •  📚 " +
-            (
-                buku.kategori ||
-                "Umum"
-            );
-
-
-        if(!buku.file_url){
-
-            throw new Error(
-                "File PDF buku belum tersedia. Admin harus mengisi file_url terlebih dahulu."
-            );
-
-        }
+            [
+                buku.penulis || "",
+                buku.penerbit || "",
+                buku.tahun_terbit || ""
+            ]
+            .filter(Boolean)
+            .join(" • ");
 
 
         document.getElementById(
-            "loading"
-        ).style.display =
-            "none";
-
-
-        document.getElementById(
-            "readerContent"
-        ).style.display =
-            "block";
-
-
-        await bukaPDF(
-            buku.file_url
-        );
-
-
-        await mulaiMembaca();
+            "startTitle"
+        ).textContent =
+            buku.judul || "Siap Membaca";
 
 
     }catch(error){
 
-        console.error(
-            "Gagal membuka buku:",
-            error
+        console.error(error);
+
+        tampilError(
+            "Buku gagal dimuat: " +
+            error.message
         );
+    }
+}
 
 
-        document.getElementById(
-            "readerContent"
-        ).style.display =
-            "none";
+/* =========================================================
+   URL GOOGLE DRIVE
+========================================================= */
 
+function ambilDriveId(url){
 
-        tampilkanError(
-            error.message ||
-            "Terjadi kesalahan saat membuka buku.",
-            adalahGoogleDrive(
-                buku?.file_url
-            )
-        );
-
+    if(!url){
+        return null;
     }
 
+    let match =
+        url.match(
+            /\/file\/d\/([^/]+)/
+        );
+
+    if(match){
+        return match[1];
+    }
+
+    match =
+        url.match(
+            /[?&]id=([^&]+)/
+        );
+
+    if(match){
+        return match[1];
+    }
+
+    return null;
 }
+
+
+function buatUrlPdf(url){
+
+    if(!url){
+        return null;
+    }
+
+    const driveId =
+        ambilDriveId(url);
+
+    if(driveId){
+
+        return (
+            "https://drive.google.com/uc" +
+            "?export=download&id=" +
+            encodeURIComponent(driveId)
+        );
+    }
+
+    return url;
+}
+
+
+/* =========================================================
+   MULAI PEMBACA
+========================================================= */
+
+window.mulaiPembaca =
+async function(){
+
+    document.getElementById(
+        "startScreen"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "reader"
+    ).classList.remove("hidden");
+
+
+    /*
+       Fullscreen dijalankan dari klik tombol
+       sehingga browser mengizinkannya.
+    */
+
+    try{
+
+        if(
+            !document.fullscreenElement &&
+            document.documentElement.requestFullscreen
+        ){
+
+            await document.documentElement
+                .requestFullscreen();
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Fullscreen tidak tersedia:",
+            error
+        );
+    }
+
+
+    await bukaBuku();
+
+
+    await mulaiRiwayat();
+
+
+    aktifkanPembaca();
+
+
+    resetInactivity();
+};
 
 
 /* =========================================================
    BUKA PDF
 ========================================================= */
 
-async function bukaPDF(url){
+async function bukaBuku(){
 
-    /*
-       Jika URL bukan Google Drive,
-       langsung gunakan PDF.js.
-    */
+    if(!buku){
 
-    if(
-        !adalahGoogleDrive(url)
-    ){
-
-        try{
-
-            await bukaPDFDenganPdfJS(
-                url
-            );
-
-            return;
-
-        }catch(error){
-
-            console.error(
-                "PDF biasa gagal:",
-                error
-            );
-
-            throw new Error(
-                "PDF tidak dapat dibuka. Pastikan URL file PDF benar dan dapat diakses publik."
-            );
-
-        }
-
+        return;
     }
 
 
-    /*
-       Google Drive:
-       ambil ID file kemudian coba
-       URL download.
-    */
+    if(!buku.file_url){
 
-    const fileId =
-        ambilIdGoogleDrive(url);
-
-
-    if(!fileId){
-
-        throw new Error(
-            "ID file Google Drive tidak dapat ditemukan dari file_url."
+        tampilError(
+            "File PDF buku belum memiliki file_url."
         );
 
+        return;
     }
 
 
-    const urls =
-        buatUrlGoogleDrive(
-            fileId
+    tampilLoading(true);
+
+
+    try{
+
+        const url =
+            buatUrlPdf(
+                buku.file_url
+            );
+
+
+        console.log(
+            "Memuat PDF:",
+            url
         );
 
 
-    let errorTerakhir = null;
+        pdfDoc =
+            await pdfjsLib
+                .getDocument({
+                    url:url,
+                    withCredentials:false
+                })
+                .promise;
 
 
-    for(
-        const pdfUrl of urls
-    ){
-
-        try{
-
-            console.log(
-                "Mencoba membuka PDF:",
-                pdfUrl
-            );
+        document.getElementById(
+            "totalPages"
+        ).textContent =
+            pdfDoc.numPages;
 
 
-            await bukaPDFDenganPdfJS(
-                pdfUrl
-            );
+        document.getElementById(
+            "pageInput"
+        ).max =
+            pdfDoc.numPages;
 
 
-            return;
-
-        }catch(error){
-
-            console.error(
-                "Percobaan PDF gagal:",
-                error
-            );
+        document.getElementById(
+            "canvasWrapper"
+        ).style.display =
+            "flex";
 
 
-            errorTerakhir =
-                error;
+        tampilLoading(false);
 
-        }
+
+        await renderPage(
+            1
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "PDF ERROR:",
+            error
+        );
+
+
+        tampilLoading(false);
+
+
+        tampilError(
+            "PDF tidak dapat ditampilkan.<br><br>" +
+
+            "Kemungkinan file Google Drive belum " +
+            "dapat diakses oleh pembaca PDF.<br><br>" +
+
+            "Anda masih dapat membuka file PDF secara " +
+            "langsung melalui tombol di bawah."
+        );
+
+
+        buatTombolBukaDrive();
 
     }
-
-
-    throw new Error(
-        "PDF Google Drive tidak dapat dimuat oleh pembaca otomatis. Kemungkinan file belum disetel 'Siapa saja yang memiliki link dapat melihat'."
-    );
-
 }
 
 
 /* =========================================================
-   PDF.JS
+   RENDER SATU HALAMAN
 ========================================================= */
 
-async function bukaPDFDenganPdfJS(url){
-
-    const loadingTask =
-        pdfjsLib.getDocument({
-
-            url:url,
-
-            withCredentials:false,
-
-            disableAutoFetch:false,
-
-            disableStream:false
-
-        });
-
-
-    pdfDoc =
-        await loadingTask.promise;
-
-
-    if(
-        !pdfDoc ||
-        !pdfDoc.numPages
-    ){
-
-        throw new Error(
-            "PDF tidak memiliki halaman."
-        );
-
-    }
-
-
-    totalHalaman =
-        pdfDoc.numPages;
-
-
-    document.getElementById(
-        "pageTotal"
-    ).textContent =
-        "/ " +
-        totalHalaman;
-
-
-    document.getElementById(
-        "pageInput"
-    ).max =
-        totalHalaman;
-
-
-    await tampilkanHalaman(
-        halamanSekarang
-    );
-
-}
-
-
-/* =========================================================
-   TAMPILKAN HALAMAN
-========================================================= */
-
-async function tampilkanHalaman(nomor){
+async function renderPage(
+    nomor
+){
 
     if(!pdfDoc){
-
         return;
+    }
 
+
+    if(nomor < 1){
+        nomor = 1;
     }
 
 
     if(
-        nomor < 1 ||
-        nomor > totalHalaman
+        nomor >
+        pdfDoc.numPages
     ){
 
-        return;
-
+        nomor =
+            pdfDoc.numPages;
     }
 
 
@@ -1232,207 +1038,173 @@ async function tampilkanHalaman(nomor){
         nomor;
 
 
-    const page =
-        await pdfDoc.getPage(
-            halamanSekarang
-        );
+    if(rendering){
 
+        pendingPage =
+            nomor;
 
-    const baseViewport =
-        page.getViewport({
-            scale:1
-        });
-
-
-    const container =
-        document.getElementById(
-            "pdfContainer"
-        );
-
-
-    let scale =
-        zoom;
-
-
-    if(zoom === 1){
-
-        const availableWidth =
-            Math.max(
-                container.clientWidth - 20,
-                300
-            );
-
-
-        scale =
-            availableWidth /
-            baseViewport.width;
-
-
-        scale =
-            Math.max(
-                scale,
-                0.5
-            );
-
+        return;
     }
 
 
-    const viewport =
-        page.getViewport({
-            scale:scale
-        });
+    rendering = true;
 
 
-    const canvas =
+    try{
+
+        const page =
+            await pdfDoc.getPage(
+                nomor
+            );
+
+
+        const canvas =
+            document.getElementById(
+                "pdfCanvas"
+            );
+
+        const context =
+            canvas.getContext("2d");
+
+
+        const viewport =
+            page.getViewport({
+                scale:scale
+            });
+
+
+        canvas.width =
+            viewport.width;
+
+        canvas.height =
+            viewport.height;
+
+
+        await page.render({
+            canvasContext:context,
+            viewport:viewport
+        }).promise;
+
+
         document.getElementById(
-            "pdfCanvas"
+            "pageInput"
+        ).value =
+            nomor;
+
+
+        document.getElementById(
+            "pageStatus"
+        ).textContent =
+            "Halaman " +
+            nomor +
+            " / " +
+            pdfDoc.numPages;
+
+
+        document.getElementById(
+            "zoomInfo"
+        ).textContent =
+            Math.round(
+                scale * 100
+            ) + "%";
+
+
+        catatAktivitas();
+
+
+    }catch(error){
+
+        console.error(
+            error
         );
 
-
-    const context =
-        canvas.getContext("2d");
-
-
-    const outputScale =
-        window.devicePixelRatio ||
-        1;
-
-
-    canvas.width =
-        Math.floor(
-            viewport.width *
-            outputScale
+        tampilError(
+            "Halaman PDF gagal ditampilkan: " +
+            error.message
         );
 
+    }finally{
 
-    canvas.height =
-        Math.floor(
-            viewport.height *
-            outputScale
-        );
+        rendering = false;
 
 
-    canvas.style.width =
-        Math.floor(
-            viewport.width
-        ) +
-        "px";
+        if(pendingPage !== null){
 
+            const next =
+                pendingPage;
 
-    canvas.style.height =
-        Math.floor(
-            viewport.height
-        ) +
-        "px";
+            pendingPage =
+                null;
 
-
-    const renderContext = {
-
-        canvasContext:
-            context,
-
-        viewport:
-            viewport,
-
-        transform:
-            outputScale !== 1
-            ?
-            [
-                outputScale,
-                0,
-                0,
-                outputScale,
-                0,
-                0
-            ]
-            :
-            null
-
-    };
-
-
-    await page.render(
-        renderContext
-    ).promise;
-
-
-    document.getElementById(
-        "pageInput"
-    ).value =
-        halamanSekarang;
-
-
-    document.getElementById(
-        "prevBtn"
-    ).disabled =
-        halamanSekarang <= 1;
-
-
-    document.getElementById(
-        "nextBtn"
-    ).disabled =
-        halamanSekarang >=
-        totalHalaman;
-
-
-    document.getElementById(
-        "pdfContainer"
-    ).scrollTop =
-        0;
-
+            renderPage(next);
+        }
+    }
 }
 
 
 /* =========================================================
-   HALAMAN SEBELUMNYA
+   NAVIGASI HALAMAN
 ========================================================= */
 
 window.halamanSebelumnya =
 function(){
 
-    if(
-        halamanSekarang > 1
-    ){
-
-        tampilkanHalaman(
-            halamanSekarang - 1
-        );
-
+    if(!pdfDoc){
+        return;
     }
 
+
+    if(
+        halamanSekarang <= 1
+    ){
+
+        catatAktivitas();
+
+        return;
+    }
+
+
+    renderPage(
+        halamanSekarang - 1
+    );
 };
 
-
-/* =========================================================
-   HALAMAN BERIKUTNYA
-========================================================= */
 
 window.halamanBerikutnya =
 function(){
 
-    if(
-        halamanSekarang <
-        totalHalaman
-    ){
-
-        tampilkanHalaman(
-            halamanSekarang + 1
-        );
-
+    if(!pdfDoc){
+        return;
     }
 
+
+    if(
+        halamanSekarang >=
+        pdfDoc.numPages
+    ){
+
+        catatAktivitas();
+
+        return;
+    }
+
+
+    renderPage(
+        halamanSekarang + 1
+    );
 };
 
-
-/* =========================================================
-   LOMPAT HALAMAN
-========================================================= */
 
 window.lompatHalaman =
 function(){
 
+    if(!pdfDoc){
+        return;
+    }
+
+
     let nomor =
-        Number(
+        parseInt(
             document.getElementById(
                 "pageInput"
             ).value
@@ -1440,28 +1212,32 @@ function(){
 
 
     if(
-        !Number.isFinite(nomor)
+        isNaN(nomor)
     ){
 
-        nomor = 1;
-
+        nomor =
+            halamanSekarang;
     }
 
 
-    nomor =
-        Math.max(
-            1,
-            Math.min(
-                totalHalaman,
-                nomor
-            )
-        );
+    if(nomor < 1){
+        nomor = 1;
+    }
 
 
-    tampilkanHalaman(
+    if(
+        nomor >
+        pdfDoc.numPages
+    ){
+
+        nomor =
+            pdfDoc.numPages;
+    }
+
+
+    renderPage(
         nomor
     );
-
 };
 
 
@@ -1472,47 +1248,84 @@ function(){
 window.zoomMasuk =
 function(){
 
-    zoom =
+    scale =
         Math.min(
-            zoom + 0.2,
+            scale + 0.1,
             3
         );
 
-
-    tampilkanHalaman(
+    renderPage(
         halamanSekarang
     );
-
 };
 
 
 window.zoomKeluar =
 function(){
 
-    zoom =
+    scale =
         Math.max(
-            zoom - 0.2,
-            0.6
+            scale - 0.1,
+            0.5
         );
 
-
-    tampilkanHalaman(
+    renderPage(
         halamanSekarang
     );
-
 };
 
 
-window.fitLebar =
+window.fitWidth =
 function(){
 
-    zoom = 1;
+    const wrapper =
+        document.getElementById(
+            "canvasWrapper"
+        );
 
 
-    tampilkanHalaman(
+    if(!pdfDoc){
+        return;
+    }
+
+
+    pdfDoc.getPage(
         halamanSekarang
-    );
+    ).then(
+        page => {
 
+            const base =
+                page.getViewport({
+                    scale:1
+                });
+
+
+            const available =
+                wrapper.clientWidth -
+                25;
+
+
+            scale =
+                available /
+                base.width;
+
+
+            scale =
+                Math.max(
+                    0.5,
+                    Math.min(
+                        scale,
+                        3
+                    )
+                );
+
+
+            renderPage(
+                halamanSekarang
+            );
+
+        }
+    );
 };
 
 
@@ -1521,50 +1334,101 @@ function(){
 ========================================================= */
 
 window.fullscreen =
-function(){
+async function(){
 
-    const element =
-        document.documentElement;
-
-
-    if(
-        !document.fullscreenElement
-    ){
+    try{
 
         if(
-            element.requestFullscreen
+            !document.fullscreenElement
         ){
 
-            element.requestFullscreen();
+            await document
+                .documentElement
+                .requestFullscreen();
 
+            aktifkanPembaca();
+
+            resetInactivity();
+
+        }else{
+
+            await document
+                .exitFullscreen();
+
+            /*
+              Keluar fullscreen = berhenti membaca
+              dan waktu disimpan.
+            */
+
+            hentikanTimerAktif();
+
+            await simpanRiwayat();
+
+            setStatusPaused(
+                "⏸ Keluar fullscreen — waktu disimpan"
+            );
         }
 
-    }else{
+    }catch(error){
 
-        if(
-            document.exitFullscreen
-        ){
-
-            document.exitFullscreen();
-
-        }
+        console.error(
+            error
+        );
 
     }
-
 };
 
 
 /* =========================================================
-   MULAI RIWAYAT MEMBACA
+   DETEKSI FULLSCREEN
 ========================================================= */
 
-async function mulaiMembaca(){
+document.addEventListener(
+    "fullscreenchange",
+    async function(){
+
+        if(
+            document.fullscreenElement
+        ){
+
+            aktifkanPembaca();
+
+            resetInactivity();
+
+        }else{
+
+            hentikanTimerAktif();
+
+            await simpanRiwayat();
+
+            setStatusPaused(
+                "⏸ Keluar fullscreen — waktu disimpan"
+            );
+        }
+    }
+);
+
+
+/* =========================================================
+   RIWAYAT BACA
+========================================================= */
+
+async function mulaiRiwayat(){
+
+    if(!anggota || !buku){
+        return;
+    }
+
+
+    mulaiWaktu =
+        new Date();
+
+
+    totalDetik =
+        0;
+
 
     try{
-
-        mulaiWaktu =
-            new Date();
-
 
         const {
             data,
@@ -1572,19 +1436,11 @@ async function mulaiMembaca(){
         } = await db
             .from("riwayat_baca")
             .insert({
-
-                anggota_id:
-                    anggota.id,
-
-                buku_id:
-                    buku.id,
-
+                anggota_id:anggota.id,
+                buku_id:buku.id,
                 mulai_baca:
                     mulaiWaktu.toISOString(),
-
-                durasi_menit:
-                    0
-
+                durasi_menit:0
             })
             .select("id")
             .single();
@@ -1593,19 +1449,11 @@ async function mulaiMembaca(){
         if(error){
 
             console.error(
-                "Gagal menyimpan riwayat:",
+                "Gagal membuat riwayat:",
                 error
             );
 
-            /*
-               PDF tetap bisa dibaca
-               walaupun riwayat gagal.
-            */
-
-            mulaiTimer();
-
             return;
-
         }
 
 
@@ -1613,21 +1461,12 @@ async function mulaiMembaca(){
             data.id;
 
 
-        mulaiTimer();
-
-
     }catch(error){
 
         console.error(
-            "Riwayat membaca:",
             error
         );
-
-
-        mulaiTimer();
-
     }
-
 }
 
 
@@ -1635,14 +1474,10 @@ async function mulaiMembaca(){
    TIMER
 ========================================================= */
 
-function mulaiTimer(){
+function mulaiTimerAktif(){
 
     if(timerInterval){
-
-        clearInterval(
-            timerInterval
-        );
-
+        return;
     }
 
 
@@ -1651,94 +1486,316 @@ function mulaiTimer(){
             function(){
 
                 if(
-                    sedangAktif
+                    !sedangAktif
                 ){
-
-                    waktuAktif++;
-
-                    tampilkanTimer();
-
+                    return;
                 }
+
+
+                totalDetik++;
+
+
+                tampilkanTimer();
+
 
             },
             1000
         );
+}
 
+
+function hentikanTimerAktif(){
+
+    sedangAktif =
+        false;
+
+
+    if(timerInterval){
+
+        clearInterval(
+            timerInterval
+        );
+
+        timerInterval =
+            null;
+    }
+
+
+    tampilkanTimer();
+}
+
+
+function aktifkanPembaca(){
+
+    if(
+        !document.fullscreenElement
+    ){
+
+        /*
+          Jika browser menolak fullscreen,
+          pembaca masih dapat digunakan.
+        */
+
+    }
+
+
+    sedangAktif =
+        true;
+
+
+    mulaiTimerAktif();
+
+
+    setStatusActive();
 }
 
 
 function tampilkanTimer(){
 
-    const jam =
-        Math.floor(
-            waktuAktif / 3600
-        );
-
-
     const menit =
         Math.floor(
-            (waktuAktif % 3600) / 60
+            totalDetik / 60
         );
 
-
     const detik =
-        waktuAktif % 60;
+        totalDetik % 60;
 
 
     document.getElementById(
         "timer"
     ).textContent =
-
-        String(jam).padStart(
-            2,
-            "0"
-        )
-
-        + ":"
-
-        +
-
-        String(menit).padStart(
-            2,
-            "0"
-        )
-
-        + ":"
-
-        +
-
-        String(detik).padStart(
-            2,
-            "0"
-        );
-
+        String(menit).padStart(2,"0") +
+        ":" +
+        String(detik).padStart(2,"0");
 }
 
 
 /* =========================================================
-   SIMPAN DURASI
+   STATUS AKTIVITAS
 ========================================================= */
 
-async function simpanDurasi(){
+function setStatusActive(){
 
-    if(!riwayatId){
+    const el =
+        document.getElementById(
+            "activityStatus"
+        );
 
-        return;
 
+    el.className =
+        "activity active";
+
+
+    el.textContent =
+        "● Sedang membaca";
+}
+
+
+function setStatusPaused(
+    text
+){
+
+    const el =
+        document.getElementById(
+            "activityStatus"
+        );
+
+
+    el.className =
+        "activity paused";
+
+
+    el.textContent =
+        text ||
+        "⏸ Waktu berhenti";
+}
+
+
+/* =========================================================
+   AKTIVITAS SISWA
+========================================================= */
+
+function catatAktivitas(){
+
+    if(
+        !document.getElementById(
+            "reader"
+        ).classList.contains("hidden")
+    ){
+
+        if(
+            !document.fullscreenElement
+        ){
+
+            /*
+              Tidak memaksa fullscreen.
+              Tetapi waktu tetap bisa berhenti
+              ketika siswa berada di luar fullscreen.
+            */
+
+        }
+
+
+        if(
+            !sedangAktif &&
+            document.fullscreenElement
+        ){
+
+            aktifkanPembaca();
+        }
+
+
+        resetInactivity();
+    }
+}
+
+
+/* =========================================================
+   2 MENIT TANPA AKTIVITAS
+========================================================= */
+
+function resetInactivity(){
+
+    if(
+        inactivityTimer
+    ){
+
+        clearTimeout(
+            inactivityTimer
+        );
     }
 
 
-    const durasiMenit =
-        Math.floor(
-            waktuAktif / 60
+    if(
+        !document.fullscreenElement
+    ){
+
+        return;
+    }
+
+
+    if(
+        !sedangAktif
+    ){
+
+        return;
+    }
+
+
+    inactivityTimer =
+        setTimeout(
+            async function(){
+
+                hentikanTimerAktif();
+
+
+                setStatusPaused(
+                    "⏸ Tidak ada aktivitas selama 2 menit"
+                );
+
+
+                await simpanRiwayat();
+
+            },
+            BATAS_TIDAK_AKTIF
         );
+}
+
+
+/* =========================================================
+   EVENT AKTIVITAS
+========================================================= */
+
+[
+    "wheel",
+    "touchstart",
+    "touchmove",
+    "mousedown",
+    "keydown"
+]
+.forEach(
+    eventName => {
+
+        document.addEventListener(
+            eventName,
+            function(){
+
+                if(
+                    document.fullscreenElement
+                ){
+
+                    if(
+                        !sedangAktif
+                    ){
+
+                        aktifkanPembaca();
+                    }
+
+
+                    resetInactivity();
+                }
+
+            },
+            {
+                passive:true
+            }
+        );
+    }
+);
+
+
+/*
+   Scroll khusus area PDF
+*/
+
+document.getElementById(
+    "canvasWrapper"
+).addEventListener(
+    "scroll",
+    function(){
+
+        catatAktivitas();
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+/* =========================================================
+   SIMPAN RIWAYAT
+========================================================= */
+
+async function simpanRiwayat(){
+
+    if(
+        !riwayatId
+    ){
+
+        return;
+    }
 
 
     try{
 
-        await db
+        const durasiMenit =
+            Math.max(
+                1,
+                Math.floor(
+                    totalDetik / 60
+                )
+            );
+
+
+        const {
+            error
+        } = await db
             .from("riwayat_baca")
             .update({
+
+                selesai_baca:
+                    new Date().toISOString(),
 
                 durasi_menit:
                     durasiMenit
@@ -1749,15 +1806,22 @@ async function simpanDurasi(){
                 riwayatId
             );
 
+
+        if(error){
+
+            console.error(
+                "Gagal menyimpan riwayat:",
+                error
+            );
+
+        }
+
     }catch(error){
 
         console.error(
-            "Gagal menyimpan durasi:",
             error
         );
-
     }
-
 }
 
 
@@ -1768,271 +1832,325 @@ async function simpanDurasi(){
 window.selesaiMembaca =
 async function(){
 
-    if(!buku){
-
-        kembaliKeKatalog();
-
-        return;
-
-    }
+    hentikanTimerAktif();
 
 
-    const yakin =
-        confirm(
-            "Apakah Anda sudah selesai membaca buku ini?"
+    if(
+        inactivityTimer
+    ){
+
+        clearTimeout(
+            inactivityTimer
         );
 
-
-    if(!yakin){
-
-        return;
-
-    }
-
-
-    await tutupRiwayat();
-
-
-    window.location.href =
-        "index.html";
-
-};
-
-
-/* =========================================================
-   TUTUP RIWAYAT
-========================================================= */
-
-async function tutupRiwayat(){
-
-    if(timerInterval){
-
-        clearInterval(
-            timerInterval
-        );
-
-        timerInterval =
+        inactivityTimer =
             null;
-
     }
 
 
-    if(!riwayatId){
-
-        return;
-
-    }
+    await simpanRiwayat();
 
 
-    const selesai =
-        new Date();
-
-
-    const durasiMenit =
-        Math.floor(
-            waktuAktif / 60
-        );
-
+    /*
+       Jika fullscreen aktif,
+       keluar setelah riwayat disimpan.
+    */
 
     try{
 
-        const {
-            error
-        } = await db
-            .from("riwayat_baca")
-            .update({
+        if(
+            document.fullscreenElement
+        ){
 
-                selesai_baca:
-                    selesai.toISOString(),
-
-                durasi_menit:
-                    durasiMenit
-
-            })
-            .eq(
-                "id",
-                riwayatId
-            );
-
-
-        if(error){
-
-            console.error(
-                "Gagal menutup riwayat:",
-                error
-            );
+            await document.exitFullscreen();
 
         }
 
     }catch(error){
 
-        console.error(
+        console.log(
             error
         );
-
     }
-
-}
-
-
-/* =========================================================
-   KEMBALI KE KATALOG
-========================================================= */
-
-window.kembaliKeKatalog =
-async function(){
-
-    await tutupRiwayat();
 
 
     window.location.href =
         "index.html";
-
 };
 
 
 /* =========================================================
-   PAUSE SAAT TAB TIDAK AKTIF
+   KATALOG
 ========================================================= */
 
-document.addEventListener(
-    "visibilitychange",
-    function(){
+window.kembaliKatalog =
+function(){
 
-        sedangAktif =
-            !document.hidden;
+    hentikanTimerAktif();
 
 
-        if(
-            !document.hidden &&
-            pdfDoc
-        ){
+    simpanRiwayat()
+        .finally(
+            function(){
 
-            tampilkanHalaman(
-                halamanSekarang
-            );
+                window.location.href =
+                    "index.html";
 
-        }
-
-    }
-);
+            }
+        );
+};
 
 
 /* =========================================================
-   SIMPAN SAAT HALAMAN DITUTUP
+   SEBELUM HALAMAN DITUTUP
 ========================================================= */
 
 window.addEventListener(
     "beforeunload",
     function(){
 
-        if(!riwayatId){
+        if(
+            !riwayatId
+        ){
 
             return;
-
         }
 
 
         const durasiMenit =
-            Math.floor(
-                waktuAktif / 60
+            Math.max(
+                1,
+                Math.floor(
+                    totalDetik / 60
+                )
             );
 
 
-        fetch(
-
+        const url =
             SUPABASE_URL +
             "/rest/v1/riwayat_baca?id=eq." +
             encodeURIComponent(
                 riwayatId
-            ),
+            );
 
-            {
 
-                method:"PATCH",
+        try{
 
-                keepalive:true,
+            fetch(
+                url,
+                {
+                    method:"PATCH",
 
-                headers:{
+                    headers:{
+                        "Content-Type":
+                            "application/json",
 
-                    "apikey":
-                        SUPABASE_KEY,
+                        "apikey":
+                            SUPABASE_KEY,
 
-                    "Authorization":
-                        "Bearer " +
-                        SUPABASE_KEY,
+                        "Authorization":
+                            "Bearer " +
+                            SUPABASE_KEY,
 
-                    "Content-Type":
-                        "application/json",
+                        "Prefer":
+                            "return=minimal"
+                    },
 
-                    "Prefer":
-                        "return=minimal"
+                    body:JSON.stringify({
 
-                },
-
-                body:
-                    JSON.stringify({
+                        selesai_baca:
+                            new Date().toISOString(),
 
                         durasi_menit:
                             durasiMenit
 
-                    })
+                    }),
 
-            }
-
-        );
-
-    }
-);
-
-
-/* =========================================================
-   RESIZE
-========================================================= */
-
-let resizeTimer;
-
-
-window.addEventListener(
-    "resize",
-    function(){
-
-        clearTimeout(
-            resizeTimer
-        );
-
-
-        resizeTimer =
-            setTimeout(
-                function(){
-
-                    if(pdfDoc){
-
-                        tampilkanHalaman(
-                            halamanSekarang
-                        );
-
-                    }
-
-                },
-                250
+                    keepalive:true
+                }
             );
 
+        }catch(error){
+
+            console.error(
+                error
+            );
+        }
     }
 );
 
 
 /* =========================================================
-   MULAI APLIKASI
+   VISIBILITY
 ========================================================= */
 
-if(
-    cekLogin()
+document.addEventListener(
+    "visibilitychange",
+    async function(){
+
+        if(
+            document.hidden
+        ){
+
+            hentikanTimerAktif();
+
+            await simpanRiwayat();
+
+            setStatusPaused(
+                "⏸ Halaman tidak aktif — waktu disimpan"
+            );
+
+        }else{
+
+            /*
+              Tidak langsung menjalankan timer.
+              Harus ada aktivitas lagi.
+            */
+
+            setStatusPaused(
+                "▶ Lakukan aktivitas untuk melanjutkan"
+            );
+        }
+    }
+);
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function tampilLoading(
+    tampil
 ){
 
-    loadBuku();
-
+    document.getElementById(
+        "loading"
+    ).style.display =
+        tampil ?
+        "flex" :
+        "none";
 }
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function tampilError(
+    pesan
+){
+
+    const box =
+        document.getElementById(
+            "errorBox"
+        );
+
+
+    box.innerHTML =
+        pesan;
+
+
+    box.style.display =
+        "block";
+}
+
+
+/* =========================================================
+   TOMBOL BUKA DRIVE
+========================================================= */
+
+function buatTombolBukaDrive(){
+
+    if(
+        !buku ||
+        !buku.file_url
+    ){
+
+        return;
+    }
+
+
+    const box =
+        document.getElementById(
+            "errorBox"
+        );
+
+
+    const old =
+        document.getElementById(
+            "driveButton"
+        );
+
+
+    if(old){
+        return;
+    }
+
+
+    const button =
+        document.createElement(
+            "button"
+        );
+
+
+    button.id =
+        "driveButton";
+
+
+    button.className =
+        "btn btn-primary";
+
+
+    button.style.marginTop =
+        "12px";
+
+
+    button.textContent =
+        "📖 Buka PDF";
+
+
+    button.onclick =
+    function(){
+
+        window.open(
+            buku.file_url,
+            "_blank"
+        );
+    };
+
+
+    box.appendChild(
+        document.createElement("br")
+    );
+
+
+    box.appendChild(
+        button
+    );
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+await ambilBuku();
+
+
+/*
+   Tidak ada requestFullscreen()
+   di sini.
+
+   Fullscreen hanya dijalankan oleh:
+   mulaiPembaca()
+   atau tombol Fullscreen.
+*/
+
+document.getElementById(
+    "startScreen"
+).style.display =
+    "flex";
+
 
 </script>
 
