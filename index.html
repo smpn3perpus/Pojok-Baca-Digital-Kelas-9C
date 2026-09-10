@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -118,6 +119,148 @@ header{
 .welcome p{
     color:#64748b;
     line-height:1.6;
+}
+
+/* ================= RIWAYAT BACA ================= */
+
+.history-section{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:22px;
+    box-shadow:0 3px 12px rgba(0,0,0,.07);
+}
+
+.history-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:16px;
+}
+
+.history-header h3{
+    color:#1e3a8a;
+    font-size:19px;
+}
+
+.history-count{
+    color:#64748b;
+    font-size:13px;
+}
+
+.history-list{
+    display:grid;
+    gap:12px;
+}
+
+.history-item{
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:14px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:#f8fafc;
+}
+
+.history-cover{
+    width:60px;
+    height:78px;
+    flex-shrink:0;
+    border-radius:8px;
+    overflow:hidden;
+    background:linear-gradient(135deg,#dbeafe,#bfdbfe);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.history-cover img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.history-cover-icon{
+    font-size:27px;
+}
+
+.history-info{
+    flex:1;
+    min-width:0;
+}
+
+.history-title{
+    font-weight:bold;
+    color:#1e293b;
+    font-size:15px;
+    margin-bottom:4px;
+    line-height:1.4;
+}
+
+.history-author{
+    color:#64748b;
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.history-detail{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 14px;
+    color:#64748b;
+    font-size:11px;
+    line-height:1.5;
+}
+
+.history-status{
+    align-self:flex-start;
+    flex-shrink:0;
+    padding:6px 9px;
+    border-radius:7px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.history-status.selesai{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.history-status.proses{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.history-empty{
+    text-align:center;
+    padding:28px 15px;
+    color:#64748b;
+    background:#f8fafc;
+    border-radius:12px;
+    border:1px dashed #cbd5e1;
+}
+
+.history-empty-icon{
+    font-size:40px;
+    margin-bottom:8px;
+}
+
+.history-loading{
+    text-align:center;
+    padding:25px;
+    color:#64748b;
+}
+
+.history-error{
+    background:#fef2f2;
+    border:1px solid #fecaca;
+    color:#991b1b;
+    padding:13px;
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.5;
 }
 
 /* ================= SEARCH ================= */
@@ -492,6 +635,10 @@ header{
     cursor:pointer;
 }
 
+.btn-modal-read:disabled{
+    cursor:not-allowed;
+}
+
 /* ================= FOOTER ================= */
 
 footer{
@@ -557,6 +704,15 @@ footer{
     .btn-detail{
         padding:8px 5px;
     }
+
+    .history-item{
+        align-items:flex-start;
+    }
+
+    .history-status{
+        font-size:10px;
+        padding:5px 7px;
+    }
 }
 
 @media(max-width:430px){
@@ -575,6 +731,23 @@ footer{
 
     .book-cover{
         height:190px;
+    }
+
+    .history-cover{
+        width:50px;
+        height:68px;
+    }
+
+    .history-title{
+        font-size:13px;
+    }
+
+    .history-detail{
+        display:block;
+    }
+
+    .history-detail div{
+        margin-top:3px;
     }
 }
 </style>
@@ -622,6 +795,39 @@ footer{
             Jelajahi koleksi buku digital dan temukan bacaan
             yang menarik untuk menambah wawasan dan pengetahuan.
         </p>
+
+    </section>
+
+
+    <!-- ================= RIWAYAT BUKU SAYA ================= -->
+
+    <section class="history-section">
+
+        <div class="history-header">
+
+            <h3>
+                📖 Riwayat Buku Saya
+            </h3>
+
+            <span
+                class="history-count"
+                id="jumlahRiwayat"
+            >
+                Memuat...
+            </span>
+
+        </div>
+
+        <div
+            class="history-list"
+            id="historyList"
+        >
+
+            <div class="history-loading">
+                Memuat riwayat membaca...
+            </div>
+
+        </div>
 
     </section>
 
@@ -826,6 +1032,8 @@ let kategoriAktif = "Semua";
 
 let bukuTerpilih = null;
 
+let userLogin = null;
+
 
 /* =========================================================
    CEK LOGIN
@@ -906,11 +1114,6 @@ function ubahUrlGambarDrive(url){
 
     const text = String(url).trim();
 
-    /*
-       Format:
-       https://drive.google.com/file/d/FILE_ID/view
-    */
-
     const match = text.match(
         /\/d\/([a-zA-Z0-9_-]+)/
     );
@@ -926,11 +1129,6 @@ function ubahUrlGambarDrive(url){
             "&sz=w1000"
         );
     }
-
-    /*
-       Jika URL sudah merupakan URL gambar biasa,
-       gunakan langsung.
-    */
 
     return text;
 }
@@ -957,10 +1155,6 @@ function ubahUrlFileDrive(url){
 
         const fileId = match[1];
 
-        /*
-           URL preview Google Drive.
-        */
-
         return (
             "https://drive.google.com/file/d/" +
             encodeURIComponent(fileId) +
@@ -969,6 +1163,77 @@ function ubahUrlFileDrive(url){
     }
 
     return text;
+}
+
+
+/* =========================================================
+   FORMAT TANGGAL
+========================================================= */
+
+function formatTanggal(tanggal){
+
+    if(!tanggal){
+
+        return "-";
+    }
+
+    const date =
+        new Date(tanggal);
+
+    if(isNaN(date.getTime())){
+
+        return "-";
+    }
+
+    return date.toLocaleString(
+        "id-ID",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
+}
+
+
+/* =========================================================
+   FORMAT DURASI
+========================================================= */
+
+function formatDurasi(menit){
+
+    const nilai =
+        Number(menit || 0);
+
+    if(nilai < 1){
+
+        return "Kurang dari 1 menit";
+    }
+
+    if(nilai < 60){
+
+        return nilai + " menit";
+    }
+
+    const jam =
+        Math.floor(nilai / 60);
+
+    const sisa =
+        nilai % 60;
+
+    if(sisa === 0){
+
+        return jam + " jam";
+    }
+
+    return (
+        jam +
+        " jam " +
+        sisa +
+        " menit"
+    );
 }
 
 
@@ -1072,6 +1337,405 @@ function iconKategori(kategori){
             BUKU
         </div>
     `;
+}
+
+
+/* =========================================================
+   LOAD RIWAYAT BACA SISWA
+========================================================= */
+
+async function loadRiwayatBaca(){
+
+    const list =
+        document.getElementById(
+            "historyList"
+        );
+
+    const jumlah =
+        document.getElementById(
+            "jumlahRiwayat"
+        );
+
+    if(!userLogin || !userLogin.id){
+
+        list.innerHTML = `
+            <div class="history-error">
+                Data siswa tidak ditemukan.
+            </div>
+        `;
+
+        jumlah.textContent = "0 riwayat";
+
+        return;
+    }
+
+
+    list.innerHTML = `
+        <div class="history-loading">
+            Memuat riwayat membaca...
+        </div>
+    `;
+
+
+    try{
+
+        /*
+           Ambil hanya riwayat siswa yang sedang login.
+        */
+
+        const {
+            data:riwayat,
+            error:errorRiwayat
+        } = await db
+            .from("riwayat_baca")
+            .select(
+                "id,anggota_id,buku_id,mulai_baca,selesai_baca,durasi_menit,created_at"
+            )
+            .eq(
+                "anggota_id",
+                userLogin.id
+            )
+            .order(
+                "mulai_baca",
+                {
+                    ascending:false
+                }
+            );
+
+
+        if(errorRiwayat){
+
+            console.error(
+                "Gagal mengambil riwayat:",
+                errorRiwayat
+            );
+
+            list.innerHTML = `
+                <div class="history-error">
+                    ❌ Gagal memuat riwayat membaca.
+                    <br>
+                    ${escapeHtml(
+                        errorRiwayat.message
+                    )}
+                </div>
+            `;
+
+            jumlah.textContent =
+                "Gagal memuat";
+
+            return;
+        }
+
+
+        const dataRiwayat =
+            riwayat || [];
+
+
+        jumlah.textContent =
+            dataRiwayat.length +
+            (
+                dataRiwayat.length === 1
+                ? " riwayat"
+                : " riwayat"
+            );
+
+
+        if(dataRiwayat.length === 0){
+
+            list.innerHTML = `
+                <div class="history-empty">
+
+                    <div class="history-empty-icon">
+                        📖
+                    </div>
+
+                    <strong>
+                        Belum ada riwayat membaca
+                    </strong>
+
+                    <p style="
+                        margin-top:6px;
+                    ">
+                        Buku yang Anda baca akan muncul
+                        di bagian ini.
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        /*
+           Ambil ID buku yang pernah dibaca.
+        */
+
+        const daftarBukuId =
+            [
+                ...new Set(
+                    dataRiwayat
+                        .map(item =>
+                            Number(item.buku_id)
+                        )
+                        .filter(id =>
+                            Number.isFinite(id)
+                        )
+                )
+            ];
+
+
+        let dataBuku = [];
+
+
+        if(daftarBukuId.length > 0){
+
+            const {
+                data:buku,
+                error:errorBuku
+            } = await db
+                .from("buku")
+                .select(
+                    "id,judul,penulis,gambar_url,kategori"
+                )
+                .in(
+                    "id",
+                    daftarBukuId
+                );
+
+
+            if(errorBuku){
+
+                console.error(
+                    "Gagal mengambil data buku:",
+                    errorBuku
+                );
+
+                /*
+                   Riwayat tetap ditampilkan
+                   walaupun data buku gagal diambil.
+                */
+
+                dataBuku = [];
+
+            }else{
+
+                dataBuku =
+                    buku || [];
+            }
+        }
+
+
+        /*
+           Gabungkan riwayat dengan data buku.
+        */
+
+        const mapBuku =
+            new Map();
+
+        dataBuku.forEach(
+            function(buku){
+
+                mapBuku.set(
+                    Number(buku.id),
+                    buku
+                );
+
+            }
+        );
+
+
+        list.innerHTML =
+            dataRiwayat
+                .map(function(item){
+
+                    const buku =
+                        mapBuku.get(
+                            Number(item.buku_id)
+                        );
+
+
+                    const judul =
+                        buku?.judul ||
+                        "Buku tidak ditemukan";
+
+
+                    const penulis =
+                        buku?.penulis ||
+                        "Penulis tidak diketahui";
+
+
+                    const gambar =
+                        buku
+                            ? ubahUrlGambarDrive(
+                                buku.gambar_url
+                            )
+                            : "";
+
+
+                    const selesai =
+                        !!item.selesai_baca;
+
+
+                    let coverHTML;
+
+
+                    if(gambar){
+
+                        coverHTML = `
+                            <img
+                                src="${escapeHtml(gambar)}"
+                                alt="Cover ${escapeHtml(judul)}"
+                                onerror="
+                                    this.style.display='none';
+                                    this.nextElementSibling.style.display='block';
+                                "
+                            >
+
+                            <div
+                                class="history-cover-icon"
+                                style="display:none;"
+                            >
+                                📚
+                            </div>
+                        `;
+
+                    }else{
+
+                        coverHTML = `
+                            <div class="history-cover-icon">
+                                📚
+                            </div>
+                        `;
+                    }
+
+
+                    return `
+
+                        <div class="history-item">
+
+                            <div class="history-cover">
+
+                                ${coverHTML}
+
+                            </div>
+
+
+                            <div class="history-info">
+
+                                <div class="history-title">
+
+                                    ${escapeHtml(judul)}
+
+                                </div>
+
+
+                                <div class="history-author">
+
+                                    ✍️
+                                    ${escapeHtml(penulis)}
+
+                                </div>
+
+
+                                <div class="history-detail">
+
+                                    <div>
+                                        🕐 Mulai:
+                                        ${escapeHtml(
+                                            formatTanggal(
+                                                item.mulai_baca
+                                            )
+                                        )}
+                                    </div>
+
+                                    ${
+                                        item.selesai_baca
+                                        ?
+                                        `
+                                            <div>
+                                                🏁 Selesai:
+                                                ${escapeHtml(
+                                                    formatTanggal(
+                                                        item.selesai_baca
+                                                    )
+                                                )}
+                                            </div>
+                                        `
+                                        :
+                                        `
+                                            <div>
+                                                ⏳ Belum selesai
+                                            </div>
+                                        `
+                                    }
+
+                                    <div>
+                                        ⏱️ Durasi:
+                                        ${escapeHtml(
+                                            formatDurasi(
+                                                item.durasi_menit
+                                            )
+                                        )}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="
+                                    history-status
+                                    ${
+                                        selesai
+                                        ? "selesai"
+                                        : "proses"
+                                    }
+                                "
+                            >
+
+                                ${
+                                    selesai
+                                    ? "✓ Selesai"
+                                    : "📖 Sedang Membaca"
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                })
+                .join("");
+
+
+    }catch(error){
+
+        console.error(
+            "Kesalahan load riwayat:",
+            error
+        );
+
+        list.innerHTML = `
+            <div class="history-error">
+
+                ❌ Terjadi kesalahan saat
+                memuat riwayat membaca.
+
+                <br><br>
+
+                ${escapeHtml(
+                    error.message
+                )}
+
+            </div>
+        `;
+
+        jumlah.textContent =
+            "Gagal memuat";
+    }
 }
 
 
@@ -1189,8 +1853,6 @@ function tampilkanBuku(){
         .toLowerCase();
 
 
-    /* FILTER */
-
     let hasil =
         semuaBuku.filter(function(buku){
 
@@ -1227,16 +1889,12 @@ function tampilkanBuku(){
         });
 
 
-    /* JUMLAH */
-
     document.getElementById(
         "jumlahBuku"
     ).textContent =
         hasil.length +
         " buku";
 
-
-    /* TIDAK ADA */
 
     if(hasil.length === 0){
 
@@ -1264,8 +1922,6 @@ function tampilkanBuku(){
         return;
     }
 
-
-    /* RENDER */
 
     grid.innerHTML = hasil
         .map(function(buku){
@@ -1314,8 +1970,6 @@ function buatKartuBuku(buku){
     const tersedia =
         !!buku.file_url;
 
-
-    /* COVER */
 
     let coverHTML;
 
@@ -1864,11 +2518,11 @@ document.addEventListener(
     "DOMContentLoaded",
     async function(){
 
-        const user =
+        userLogin =
             cekLogin();
 
 
-        if(!user){
+        if(!userLogin){
 
             return;
         }
@@ -1879,13 +2533,21 @@ document.addEventListener(
         ).textContent =
             "👤 " +
             (
-                user.nama ||
-                user.nisn ||
+                userLogin.nama ||
+                userLogin.nisn ||
                 "Siswa"
             );
 
 
-        await loadBuku();
+        /*
+           Jalankan koleksi dan riwayat
+           secara bersamaan.
+        */
+
+        await Promise.all([
+            loadBuku(),
+            loadRiwayatBaca()
+        ]);
 
     }
 );
@@ -1894,3 +2556,4 @@ document.addEventListener(
 
 </body>
 </html>
+```
