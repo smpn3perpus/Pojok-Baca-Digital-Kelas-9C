@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Perpustakaan Digital Kelas 9C</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f7fb;
+    color:#1f2937;
+    min-height:100vh;
+}
+
+/* HEADER */
+header{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;
+    padding:35px 20px;
+    text-align:center;
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+header h1{
+    font-size:clamp(26px,5vw,40px);
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:17px;
+    opacity:.95;
+}
+
+/* SEARCH */
+.search-container{
+    max-width:900px;
+    margin:25px auto;
+    padding:0 20px;
+}
+
+.search-box{
+    width:100%;
+    padding:15px 20px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    font-size:16px;
+    outline:none;
+    background:white;
+    box-shadow:0 3px 10px rgba(0,0,0,.06);
+}
+
+.search-box:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+/* CONTENT */
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:10px 20px 40px;
+}
+
+.section-title{
+    text-align:center;
+    margin:15px 0 25px;
+}
+
+.section-title h2{
+    font-size:28px;
+    color:#1e3a8a;
+}
+
+/* BOOK GRID */
+.book-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+    gap:22px;
+}
+
+/* BOOK CARD */
+.book-card{
+    background:white;
+    border-radius:16px;
+    padding:22px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    transition:.25s ease;
+    border:1px solid #e5e7eb;
+    display:flex;
+    flex-direction:column;
+}
+
+.book-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+}
+
+.book-icon{
+    width:75px;
+    height:90px;
+    margin:0 auto 18px;
+    border-radius:8px;
+    background:linear-gradient(135deg,#2563eb,#60a5fa);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:38px;
+    box-shadow:0 5px 12px rgba(37,99,235,.25);
+}
+
+.book-title{
+    font-size:21px;
+    font-weight:bold;
+    color:#111827;
+    text-align:center;
+    margin-bottom:14px;
+    line-height:1.35;
+}
+
+.book-info{
+    font-size:14px;
+    line-height:1.8;
+    color:#4b5563;
+    margin-bottom:18px;
+}
+
+.book-info strong{
+    color:#1f2937;
+}
+
+.stock{
+    display:inline-block;
+    padding:4px 9px;
+    border-radius:6px;
+    background:#dcfce7;
+    color:#166534;
+    font-weight:bold;
+}
+
+.category{
+    display:inline-block;
+    padding:4px 9px;
+    border-radius:6px;
+    background:#dbeafe;
+    color:#1e40af;
+    font-weight:bold;
+}
+
+/* BUTTONS */
+.button-group{
+    display:flex;
+    gap:10px;
+    margin-top:auto;
+}
+
+.btn{
+    flex:1;
+    border:none;
+    border-radius:9px;
+    padding:11px 10px;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-read{
+    background:#2563eb;
+    color:white;
+}
+
+.btn-read:hover{
+    background:#1d4ed8;
+}
+
+.btn-detail{
+    background:#e5e7eb;
+    color:#1f2937;
+}
+
+.btn-detail:hover{
+    background:#d1d5db;
+}
+
+/* STATUS */
+.status{
+    text-align:center;
+    padding:45px 20px;
+    font-size:17px;
+    color:#6b7280;
+}
+
+.loading{
+    color:#2563eb;
+}
+
+.error{
+    color:#dc2626;
+}
+
+.empty{
+    background:white;
+    border-radius:15px;
+    padding:40px 20px;
+    text-align:center;
+    color:#6b7280;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    padding:25px 20px;
+    margin-top:30px;
+    background:#111827;
+    color:#d1d5db;
+    font-size:14px;
+}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+    header{
+        padding:28px 15px;
+    }
+
+    .container{
+        padding-left:15px;
+        padding-right:15px;
+    }
+
+    .book-grid{
+        grid-template-columns:1fr;
+    }
+
+    .button-group{
+        flex-direction:column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 Perpustakaan Digital Kelas 9C</h1>
+    <p>SMP Negeri 3 Sibolga</p>
+</header>
+
+<div class="search-container">
+    <input
+        type="text"
+        id="searchInput"
+        class="search-box"
+        placeholder="🔎 Cari judul, penulis, penerbit, atau kategori..."
+        oninput="cariBuku()"
+    >
+</div>
+
+<main class="container">
+
+    <div class="section-title">
+        <h2>📖 Koleksi Buku</h2>
+    </div>
+
+    <div id="status" class="status loading">
+        ⏳ Memuat koleksi buku...
+    </div>
+
+    <div id="bookGrid" class="book-grid"></div>
+
+</main>
+
+<footer>
+    Dibuat oleh Mr. Rahmat Batubara, S.T.P.
+</footer>
+
+<script>
+
+/* =========================================================
+   KONFIGURASI SUPABASE
+   ========================================================= */
+
+const SUPABASE_URL = "https://veffzxxrsjfgupynryog.supabase.co";
+const SUPABASE_KEY = "sb_publishable_2HoFz3ZTlrOX_DTGsIW3og_7cHS0LLG";
+
+const { createClient } = supabase;
+
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+let buku = [];
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   ESCAPE ATTRIBUTE
+   ========================================================= */
+
+function escapeAttribute(value){
+
+    if(value === null || value === undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/"/g,"&quot;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;");
+}
+
+
+/* =========================================================
+   AMBIL DATA BUKU DARI SUPABASE
+   ========================================================= */
+
+async function ambilBuku(){
+
+    const status = document.getElementById("status");
+    const bookGrid = document.getElementById("bookGrid");
+
+    status.style.display = "block";
+    status.className = "status loading";
+    status.innerHTML = "⏳ Memuat koleksi buku...";
+
+    bookGrid.innerHTML = "";
+
+    try{
+
+        const { data, error } = await db
+            .from("buku")
+            .select("*")
+            .order("id", {
+                ascending:true
+            });
+
+        if(error){
+            throw error;
+        }
+
+        buku = data || [];
+
+        status.style.display = "none";
+
+        tampilkanBuku(buku);
+
+    }catch(error){
+
+        console.error("Supabase Error:", error);
+
+        status.className = "status error";
+
+        status.innerHTML =
+            "❌ Gagal memuat koleksi buku.<br><br>" +
+            escapeHTML(error.message);
+
+    }
+
+}
+
+
+/* =========================================================
+   TAMPILKAN BUKU
+   ========================================================= */
+
+function tampilkanBuku(data){
+
+    const bookGrid = document.getElementById("bookGrid");
+    const status = document.getElementById("status");
+
+    bookGrid.innerHTML = "";
+
+    if(!data || data.length === 0){
+
+        bookGrid.innerHTML = `
+            <div class="empty" style="grid-column:1/-1;">
+                📚 Belum ada buku dalam koleksi.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    data.forEach(function(item){
+
+        const judul =
+            item.judul || "Tanpa Judul";
+
+        const penulis =
+            item.penulis || "-";
+
+        const penerbit =
+            item.penerbit || "-";
+
+        const tahun =
+            item.tahun_terbit || "-";
+
+        const kategori =
+            item.kategori || "-";
+
+        const stok =
+            item.stok ?? 0;
+
+        const fileUrl =
+            item.file_url || "";
+
+
+        const card = document.createElement("div");
+
+        card.className = "book-card";
+
+
+        card.innerHTML = `
+
+            <div class="book-icon">
+                📖
+            </div>
+
+            <div class="book-title">
+                ${escapeHTML(judul)}
+            </div>
+
+            <div class="book-info">
+
+                <div>
+                    <strong>✍️ Penulis:</strong>
+                    ${escapeHTML(penulis)}
+                </div>
+
+                <div>
+                    <strong>🏢 Penerbit:</strong>
+                    ${escapeHTML(penerbit)}
+                </div>
+
+                <div>
+                    <strong>📅 Tahun:</strong>
+                    ${escapeHTML(tahun)}
+                </div>
+
+                <div>
+                    <strong>📂 Kategori:</strong>
+                    <span class="category">
+                        ${escapeHTML(kategori)}
+                    </span>
+                </div>
+
+                <div>
+                    <strong>📦 Stok:</strong>
+                    <span class="stock">
+                        ${escapeHTML(stok)}
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="button-group">
+
+                <button
+                    class="btn btn-read"
+                    onclick="bacaBuku('${escapeAttribute(fileUrl)}')"
+                >
+                    📖 Baca Buku
+                </button>
+
+                <button
+                    class="btn btn-detail"
+                    onclick="detailBuku(${item.id})"
+                >
+                    ℹ️ Detail
+                </button>
+
+            </div>
+
+        `;
+
+
+        bookGrid.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================================
+   PENCARIAN
+   ========================================================= */
+
+function cariBuku(){
+
+    const keyword =
+        document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    if(keyword === ""){
+
+        tampilkanBuku(buku);
+
+        return;
+    }
+
+
+    const hasil =
+        buku.filter(function(item){
+
+            const teks = [
+
+                item.judul,
+                item.penulis,
+                item.penerbit,
+                item.kategori,
+                item.tahun_terbit
+
+            ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+
+
+            return teks.includes(keyword);
+
+        });
+
+
+    tampilkanBuku(hasil);
+
+}
+
+
+/* =========================================================
+   BACA BUKU
+   ========================================================= */
+
+function bacaBuku(url){
+
+    if(!url){
+
+        alert(
+            "📚 File buku belum tersedia."
+        );
+
+        return;
+    }
+
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+/* =========================================================
+   DETAIL BUKU
+   ========================================================= */
+
+function detailBuku(id){
+
+    const item =
+        buku.find(function(b){
+            return Number(b.id) === Number(id);
+        });
+
+
+    if(!item){
+
+        alert(
+            "Data buku tidak ditemukan."
+        );
+
+        return;
+    }
+
+
+    const judul =
+        item.judul || "Tanpa Judul";
+
+    const penulis =
+        item.penulis || "-";
+
+    const penerbit =
+        item.penerbit || "-";
+
+    const tahun =
+        item.tahun_terbit || "-";
+
+    const kategori =
+        item.kategori || "-";
+
+    const stok =
+        item.stok ?? 0;
+
+
+    alert(
+        "📖 DETAIL BUKU\n\n" +
+
+        "Judul      : " + judul + "\n" +
+
+        "Penulis    : " + penulis + "\n" +
+
+        "Penerbit   : " + penerbit + "\n" +
+
+        "Tahun      : " + tahun + "\n" +
+
+        "Kategori   : " + kategori + "\n" +
+
+        "Stok       : " + stok
+    );
+
+}
+
+
+/* =========================================================
+   JALANKAN SAAT HALAMAN DIBUKA
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        ambilBuku();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
