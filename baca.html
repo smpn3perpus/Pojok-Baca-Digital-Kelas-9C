@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -492,8 +491,6 @@ button{
 
     <section class="pdf-area">
 
-        <!-- TOOLBAR -->
-
         <div class="pdf-toolbar">
 
             <button onclick="halamanSebelumnya()">
@@ -547,8 +544,6 @@ button{
         </div>
 
 
-        <!-- LOADING -->
-
         <div id="loading"
              class="loading">
 
@@ -561,14 +556,10 @@ button{
         </div>
 
 
-        <!-- ERROR -->
-
         <div id="errorBox"
              class="error-box">
         </div>
 
-
-        <!-- CANVAS -->
 
         <div id="canvasWrapper"
              class="canvas-wrapper"
@@ -578,8 +569,6 @@ button{
 
         </div>
 
-
-        <!-- BOTTOM CONTROLS -->
 
         <div class="bottom-controls">
 
@@ -746,7 +735,7 @@ let pendingPage = null;
 
 
 /* =========================================================
-   RIWAYAT
+   RIWAYAT MEMBACA
 ========================================================= */
 
 let riwayatId = null;
@@ -761,13 +750,27 @@ let sedangAktif = false;
 
 let inactivityTimer = null;
 
-let riwayatSudahDisimpan = false;
 
 /*
-   Minimal waktu membaca yang boleh masuk
-   ke tabel riwayat_baca adalah 5 menit.
+=========================================================
+ATURAN UTAMA
+
+Tidak ada INSERT sebelum 5 menit.
+
+300 detik = 5 menit.
+
+0 - 299 detik:
+    TIDAK ADA DATA RIWAYAT
+
+300 detik:
+    BARU INSERT
+
+301 detik dan seterusnya:
+    UPDATE DATA YANG SUDAH ADA
+=========================================================
 */
-const MIN_DURASI_DETIK = 5 * 60;
+
+const MIN_DURASI_DETIK = 300;
 
 const BATAS_TIDAK_AKTIF =
     2 * 60 * 1000;
@@ -891,18 +894,13 @@ async function(){
     );
 
 
-    /*
-       Buka PDF terlebih dahulu.
-    */
-
     await bukaBuku();
 
 
     /*
-       PENTING:
-       Tidak membuat record riwayat saat mulai.
-       Record baru dibuat setelah waktu aktif
-       mencapai minimal 5 menit.
+       HANYA memulai penghitung waktu.
+
+       TIDAK ADA INSERT DATABASE DI SINI.
     */
 
     mulaiRiwayat();
@@ -916,7 +914,7 @@ async function(){
 
 
 /* =========================================================
-   BUKA PDF SUPABASE
+   BUKA PDF
 ========================================================= */
 
 async function bukaBuku(){
@@ -1019,7 +1017,7 @@ async function bukaBuku(){
 
 
 /* =========================================================
-   RENDER SATU HALAMAN
+   RENDER HALAMAN
 ========================================================= */
 
 async function renderPage(
@@ -1434,22 +1432,26 @@ document.addEventListener(
 
             aktifkanPembaca();
 
-
             resetInactivity();
-
 
         }else{
 
             hentikanTimerAktif();
 
-
             clearInactivity();
 
+            /*
+               Kalau belum 5 menit:
+               fungsi ini TIDAK melakukan INSERT.
+            */
 
             await simpanRiwayat();
 
 
-            if(totalDetik < MIN_DURASI_DETIK){
+            if(
+                totalDetik <
+                MIN_DURASI_DETIK
+            ){
 
                 setStatusPaused(
                     "⏸ Keluar fullscreen — belum 5 menit, tidak disimpan"
@@ -1475,11 +1477,12 @@ document.addEventListener(
 function mulaiRiwayat(){
 
     /*
-       Tidak INSERT ke database di sini.
+       PENTING:
 
-       Waktu mulai hanya disimpan di memori.
-       INSERT baru dilakukan setelah total waktu
-       aktif mencapai 5 menit.
+       Tidak ada INSERT.
+
+       Hanya menyimpan waktu mulai
+       di memori browser.
     */
 
     mulaiWaktu =
@@ -1492,27 +1495,29 @@ function mulaiRiwayat(){
 
     riwayatId =
         null;
-
-
-    riwayatSudahDisimpan =
-        false;
 }
 
 
 /* =========================================================
-   BUAT RIWAYAT SETELAH 5 MENIT
+   INSERT HANYA SETELAH 5 MENIT
 ========================================================= */
 
 async function buatRiwayatJikaSudah5Menit(){
 
-    if(
-        riwayatId ||
-        riwayatSudahDisimpan
-    ){
+    /*
+       Kalau sudah punya ID,
+       jangan INSERT kedua kali.
+    */
+
+    if(riwayatId){
 
         return;
     }
 
+
+    /*
+       Pastikan data tersedia.
+    */
 
     if(
         !anggota ||
@@ -1525,14 +1530,22 @@ async function buatRiwayatJikaSudah5Menit(){
 
 
     /*
-       Harus benar-benar mencapai
-       300 detik waktu aktif.
+       INI PENGAMAN UTAMA.
+
+       Kurang dari 300 detik:
+       BERHENTI.
+
+       Tidak ada INSERT.
     */
 
     if(
         totalDetik <
         MIN_DURASI_DETIK
     ){
+
+        console.log(
+            "Belum 5 menit. Tidak ada INSERT."
+        );
 
         return;
     }
@@ -1577,25 +1590,26 @@ async function buatRiwayatJikaSudah5Menit(){
         }
 
 
-        riwayatId =
-            data.id;
+        if(
+            data &&
+            data.id
+        ){
+
+            riwayatId =
+                data.id;
 
 
-        /*
-           Menandakan bahwa record sudah
-           berhasil dibuat di database.
-        */
-
-        console.log(
-            "Riwayat tersimpan setelah mencapai 5 menit.",
-            riwayatId
-        );
+            console.log(
+                "BERHASIL INSERT setelah 5 menit:",
+                riwayatId
+            );
+        }
 
 
     }catch(error){
 
         console.error(
-            "Error membuat riwayat:",
+            "Error INSERT riwayat:",
             error
         );
     }
@@ -1633,14 +1647,21 @@ function mulaiTimerAktif(){
 
 
                 /*
-                   Tepat ketika mencapai 5 menit,
-                   buat record riwayat.
+                   HANYA pada detik 300
+                   sistem mencoba INSERT.
+
+                   Sebelum ini tidak ada INSERT.
                 */
 
                 if(
                     totalDetik ===
                     MIN_DURASI_DETIK
                 ){
+
+                    console.log(
+                        "Mencapai 5 menit. Membuat riwayat..."
+                    );
+
 
                     await buatRiwayatJikaSudah5Menit();
 
@@ -1859,11 +1880,13 @@ function resetInactivity(){
 
 
                 /*
-                   Jika belum 5 menit:
-                   tidak ada INSERT.
+                   Fungsi ini aman.
 
-                   Jika sudah >= 5 menit:
-                   update riwayat yang sudah ada.
+                   Kalau <5 menit:
+                   tidak INSERT.
+
+                   Kalau >=5 menit:
+                   update record yang sudah ada.
                 */
 
                 await simpanRiwayat();
@@ -1875,7 +1898,7 @@ function resetInactivity(){
 
 
 /* =========================================================
-   DETEKSI AKTIVITAS SISWA
+   DETEKSI AKTIVITAS
 ========================================================= */
 
 [
@@ -1932,15 +1955,18 @@ document.getElementById(
 
 
 /* =========================================================
-   SIMPAN RIWAYAT
+   SIMPAN / UPDATE RIWAYAT
 ========================================================= */
 
 async function simpanRiwayat(){
 
     /*
-       PENTING:
-       Kalau belum mencapai 5 menit,
-       jangan INSERT dan jangan UPDATE.
+       PENGAMAN PALING PENTING.
+
+       Di bawah 5 menit:
+       JANGAN INSERT.
+       JANGAN UPDATE.
+       LANGSUNG RETURN.
     */
 
     if(
@@ -1949,7 +1975,9 @@ async function simpanRiwayat(){
     ){
 
         console.log(
-            "Durasi kurang dari 5 menit. Riwayat tidak disimpan."
+            "Durasi " +
+            totalDetik +
+            " detik < 300 detik. Tidak disimpan."
         );
 
         return;
@@ -1957,8 +1985,8 @@ async function simpanRiwayat(){
 
 
     /*
-       Kalau sudah 5 menit tetapi record belum
-       terbentuk karena suatu kondisi, buat dulu.
+       Kalau sudah >=5 menit tetapi
+       record belum ada, buat sekarang.
     */
 
     if(
@@ -1969,23 +1997,19 @@ async function simpanRiwayat(){
     }
 
 
+    /*
+       Jika INSERT gagal, jangan lanjut UPDATE.
+    */
+
     if(
         !riwayatId
     ){
 
+        console.warn(
+            "Riwayat belum memiliki ID. Tidak melakukan UPDATE."
+        );
+
         return;
-    }
-
-
-    if(
-        riwayatSudahDisimpan
-    ){
-
-        /*
-           Tetap boleh memperbarui durasi
-           jika sesi berlanjut.
-        */
-
     }
 
 
@@ -2019,15 +2043,11 @@ async function simpanRiwayat(){
         if(error){
 
             console.error(
-                "Gagal menyimpan riwayat:",
+                "Gagal UPDATE riwayat:",
                 error
             );
 
         }else{
-
-            riwayatSudahDisimpan =
-                true;
-
 
             console.log(
                 "Riwayat diperbarui:",
@@ -2040,6 +2060,7 @@ async function simpanRiwayat(){
     }catch(error){
 
         console.error(
+            "Error UPDATE riwayat:",
             error
         );
     }
@@ -2058,6 +2079,11 @@ async function(){
 
     clearInactivity();
 
+
+    /*
+       Jika <5 menit:
+       tidak ada INSERT.
+    */
 
     await simpanRiwayat();
 
@@ -2131,8 +2157,12 @@ window.addEventListener(
     function(){
 
         /*
-           Jika belum 5 menit, jangan melakukan
-           PATCH sama sekali.
+           DI BAWAH 5 MENIT:
+
+           Jangan PATCH.
+           Jangan INSERT.
+           Jangan melakukan apa pun
+           ke riwayat_baca.
         */
 
         if(
@@ -2140,15 +2170,18 @@ window.addEventListener(
             MIN_DURASI_DETIK
         ){
 
+            console.log(
+                "beforeunload: belum 5 menit, tidak disimpan."
+            );
+
             return;
         }
 
 
         /*
-           Jika sudah 5 menit tetapi belum punya ID,
-           browser tidak akan membuat INSERT async
-           di sini. Biasanya record sudah dibuat
-           tepat saat detik ke-300.
+           Kalau sudah 5 menit tetapi
+           riwayatId belum ada, jangan
+           mencoba INSERT saat beforeunload.
         */
 
         if(
@@ -2244,6 +2277,13 @@ document.addEventListener(
 
             clearInactivity();
 
+
+            /*
+               Di bawah 5 menit:
+               simpanRiwayat() langsung RETURN.
+
+               Jadi tidak ada INSERT.
+            */
 
             await simpanRiwayat();
 
@@ -2356,4 +2396,3 @@ document.getElementById(
 
 </body>
 </html>
-```
