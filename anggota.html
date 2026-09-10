@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Registrasi Anggota - Pojok Baca</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    min-height:100vh;
+    background:linear-gradient(135deg,#eff6ff,#dbeafe);
+    color:#1f2937;
+    display:flex;
+    flex-direction:column;
+}
+
+/* HEADER */
+header{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;
+    text-align:center;
+    padding:32px 20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+header h1{
+    font-size:clamp(25px,5vw,36px);
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:16px;
+}
+
+/* CONTAINER */
+.container{
+    width:100%;
+    max-width:500px;
+    margin:40px auto;
+    padding:0 20px;
+    flex:1;
+}
+
+/* CARD */
+.card{
+    background:white;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 8px 30px rgba(0,0,0,.10);
+}
+
+.card h2{
+    text-align:center;
+    color:#1e3a8a;
+    margin-bottom:8px;
+    font-size:25px;
+}
+
+.card .subtitle{
+    text-align:center;
+    color:#6b7280;
+    font-size:14px;
+    margin-bottom:25px;
+}
+
+/* FORM */
+.form-group{
+    margin-bottom:18px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:bold;
+    color:#374151;
+    font-size:14px;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid #d1d5db;
+    border-radius:9px;
+    font-size:15px;
+    outline:none;
+    background:white;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+/* BUTTON */
+.btn{
+    width:100%;
+    border:none;
+    border-radius:10px;
+    padding:14px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+    margin-top:5px;
+}
+
+.btn:hover{
+    background:#1d4ed8;
+}
+
+.btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+/* MESSAGE */
+.message{
+    display:none;
+    margin-top:18px;
+    padding:13px;
+    border-radius:9px;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.message.success{
+    display:block;
+    background:#dcfce7;
+    color:#166534;
+    border:1px solid #bbf7d0;
+}
+
+.message.error{
+    display:block;
+    background:#fee2e2;
+    color:#991b1b;
+    border:1px solid #fecaca;
+}
+
+/* LINKS */
+.links{
+    text-align:center;
+    margin-top:22px;
+    font-size:14px;
+}
+
+.links a{
+    color:#2563eb;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.links a:hover{
+    text-decoration:underline;
+}
+
+/* FOOTER */
+footer{
+    background:#111827;
+    color:#d1d5db;
+    text-align:center;
+    padding:22px 15px;
+    font-size:14px;
+    margin-top:30px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+
+    .container{
+        margin:25px auto;
+    }
+
+    .card{
+        padding:23px 20px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 Pojok Baca Digital</h1>
+    <p>SMP Negeri 3 Sibolga</p>
+</header>
+
+<main class="container">
+
+    <div class="card">
+
+        <h2>📝 Registrasi Anggota</h2>
+
+        <p class="subtitle">
+            Daftarkan diri Anda untuk mulai membaca buku digital.
+        </p>
+
+        <form id="formRegistrasi">
+
+            <div class="form-group">
+                <label for="nama">👤 Nama Lengkap</label>
+
+                <input
+                    type="text"
+                    id="nama"
+                    placeholder="Masukkan nama lengkap"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="nisn">🆔 NISN</label>
+
+                <input
+                    type="text"
+                    id="nisn"
+                    placeholder="Masukkan NISN"
+                    inputmode="numeric"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="kelas">🏫 Kelas</label>
+
+                <select id="kelas" required>
+
+                    <option value="">
+                        -- Pilih Kelas --
+                    </option>
+
+                    <option value="9A">9A</option>
+                    <option value="9B">9B</option>
+                    <option value="9C">9C</option>
+                    <option value="9D">9D</option>
+                    <option value="9E">9E</option>
+                    <option value="9F">9F</option>
+                    <option value="9G">9G</option>
+                    <option value="9H">9H</option>
+
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="password">🔐 Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Buat password"
+                    minlength="6"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="password2">🔐 Ulangi Password</label>
+
+                <input
+                    type="password"
+                    id="password2"
+                    placeholder="Ulangi password"
+                    minlength="6"
+                    required
+                >
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn"
+                id="btnDaftar"
+            >
+                📝 Daftar Anggota
+            </button>
+
+        </form>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+        <div class="links">
+
+            Sudah memiliki akun?
+
+            <a href="login.html">
+                Login Anggota
+            </a>
+
+            <br><br>
+
+            <a href="index.html">
+                ← Kembali ke Koleksi Buku
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    Dibuat oleh Mr. Rahmat Batubara, S.T.P.
+</footer>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+   ========================================================= */
+
+const SUPABASE_URL =
+    "MASUKKAN_PROJECT_URL_ANDA";
+
+const SUPABASE_KEY =
+    "MASUKKAN_PUBLISHABLE_KEY_ANDA";
+
+
+const { createClient } = supabase;
+
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =========================================================
+   ELEMENT
+   ========================================================= */
+
+const form =
+    document.getElementById("formRegistrasi");
+
+const message =
+    document.getElementById("message");
+
+const btnDaftar =
+    document.getElementById("btnDaftar");
+
+
+/* =========================================================
+   PESAN
+   ========================================================= */
+
+function tampilkanPesan(teks, tipe){
+
+    message.className =
+        "message " + tipe;
+
+    message.innerHTML = teks;
+
+}
+
+
+/* =========================================================
+   REGISTRASI
+   ========================================================= */
+
+form.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+
+        const nama =
+            document
+                .getElementById("nama")
+                .value
+                .trim();
+
+
+        const nisn =
+            document
+                .getElementById("nisn")
+                .value
+                .trim();
+
+
+        const kelas =
+            document
+                .getElementById("kelas")
+                .value;
+
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        const password2 =
+            document
+                .getElementById("password2")
+                .value;
+
+
+        /* VALIDASI */
+
+        if(!nama || !nisn || !kelas || !password){
+
+            tampilkanPesan(
+                "⚠️ Semua data wajib diisi.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if(password.length < 6){
+
+            tampilkanPesan(
+                "⚠️ Password minimal 6 karakter.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if(password !== password2){
+
+            tampilkanPesan(
+                "⚠️ Password dan ulangi password tidak sama.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        btnDaftar.disabled = true;
+
+        btnDaftar.textContent =
+            "⏳ Mendaftarkan...";
+
+
+        try{
+
+            /* CEK NISN */
+
+            const { data: existing, error: checkError } =
+                await db
+                    .from("anggota")
+                    .select("id")
+                    .eq("nisn", nisn)
+                    .maybeSingle();
+
+
+            if(checkError){
+
+                throw checkError;
+
+            }
+
+
+            if(existing){
+
+                throw new Error(
+                    "NISN tersebut sudah terdaftar sebagai anggota."
+                );
+
+            }
+
+
+            /* INSERT ANGGOTA */
+
+            const { error: insertError } =
+                await db
+                    .from("anggota")
+                    .insert([
+                        {
+                            nama: nama,
+                            nisn: nisn,
+                            kelas: kelas,
+                            password: password
+                        }
+                    ]);
+
+
+            if(insertError){
+
+                throw insertError;
+
+            }
+
+
+            tampilkanPesan(
+                "✅ Registrasi berhasil!<br><br>" +
+                "Anggota <strong>" +
+                escapeHTML(nama) +
+                "</strong> sudah terdaftar.<br><br>" +
+                "Silakan masuk menggunakan NISN dan password Anda.",
+                "success"
+            );
+
+
+            form.reset();
+
+
+            setTimeout(function(){
+
+                window.location.href =
+                    "login.html";
+
+            },2500);
+
+
+        }catch(error){
+
+            console.error(
+                "Registrasi error:",
+                error
+            );
+
+
+            tampilkanPesan(
+                "❌ Registrasi gagal.<br><br>" +
+                escapeHTML(error.message),
+                "error"
+            );
+
+
+        }finally{
+
+            btnDaftar.disabled = false;
+
+            btnDaftar.textContent =
+                "📝 Daftar Anggota";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
