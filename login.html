@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login Anggota - Pojok Baca</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    min-height:100vh;
+    background:linear-gradient(135deg,#eff6ff,#dbeafe);
+    color:#1f2937;
+    display:flex;
+    flex-direction:column;
+}
+
+header{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;
+    text-align:center;
+    padding:32px 20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+header h1{
+    font-size:clamp(25px,5vw,36px);
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:16px;
+}
+
+.container{
+    width:100%;
+    max-width:460px;
+    margin:45px auto;
+    padding:0 20px;
+    flex:1;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 8px 30px rgba(0,0,0,.10);
+}
+
+.card h2{
+    text-align:center;
+    color:#1e3a8a;
+    margin-bottom:8px;
+    font-size:26px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#6b7280;
+    font-size:14px;
+    margin-bottom:27px;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:bold;
+    color:#374151;
+    font-size:14px;
+}
+
+.form-group input{
+    width:100%;
+    padding:14px;
+    border:1px solid #d1d5db;
+    border-radius:9px;
+    font-size:15px;
+    outline:none;
+}
+
+.form-group input:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+.btn{
+    width:100%;
+    border:none;
+    border-radius:10px;
+    padding:14px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn:hover{
+    background:#1d4ed8;
+}
+
+.btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.message{
+    display:none;
+    margin-top:18px;
+    padding:13px;
+    border-radius:9px;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.message.success{
+    display:block;
+    background:#dcfce7;
+    color:#166534;
+    border:1px solid #bbf7d0;
+}
+
+.message.error{
+    display:block;
+    background:#fee2e2;
+    color:#991b1b;
+    border:1px solid #fecaca;
+}
+
+.links{
+    text-align:center;
+    margin-top:23px;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.links a{
+    color:#2563eb;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.links a:hover{
+    text-decoration:underline;
+}
+
+footer{
+    background:#111827;
+    color:#d1d5db;
+    text-align:center;
+    padding:22px 15px;
+    font-size:14px;
+    margin-top:30px;
+}
+
+@media(max-width:600px){
+
+    .container{
+        margin:25px auto;
+    }
+
+    .card{
+        padding:23px 20px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 Pojok Baca Digital</h1>
+    <p>SMP Negeri 3 Sibolga</p>
+</header>
+
+<main class="container">
+
+    <div class="card">
+
+        <h2>🔐 Login Anggota</h2>
+
+        <p class="subtitle">
+            Masuk untuk mulai membaca buku digital.
+        </p>
+
+        <form id="formLogin">
+
+            <div class="form-group">
+
+                <label for="nisn">
+                    🆔 NISN
+                </label>
+
+                <input
+                    type="text"
+                    id="nisn"
+                    placeholder="Masukkan NISN"
+                    inputmode="numeric"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    🔐 Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Masukkan password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn"
+                id="btnLogin"
+            >
+                🔑 Login
+            </button>
+
+        </form>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+        <div class="links">
+
+            Belum memiliki akun?
+
+            <a href="anggota.html">
+                Registrasi Anggota
+            </a>
+
+            <br>
+
+            <a href="index.html">
+                ← Kembali ke Koleksi Buku
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    Dibuat oleh Mr. Rahmat Batubara, S.T.P.
+</footer>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+   ========================================================= */
+
+const SUPABASE_URL =
+    "https://veffzxxrsjfgupynryog.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_2HoFz3ZTlrOX_DTGsIW3og_7cHS0LLG";
+
+
+const { createClient } = supabase;
+
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =========================================================
+   ELEMENT
+   ========================================================= */
+
+const form =
+    document.getElementById("formLogin");
+
+const message =
+    document.getElementById("message");
+
+const btnLogin =
+    document.getElementById("btnLogin");
+
+
+/* =========================================================
+   PESAN
+   ========================================================= */
+
+function tampilkanPesan(teks, tipe){
+
+    message.className =
+        "message " + tipe;
+
+    message.innerHTML = teks;
+
+}
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+form.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+
+        const nisn =
+            document
+                .getElementById("nisn")
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        if(!nisn || !password){
+
+            tampilkanPesan(
+                "⚠️ NISN dan password wajib diisi.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        btnLogin.disabled = true;
+
+        btnLogin.textContent =
+            "⏳ Memeriksa...";
+
+
+        try{
+
+            const { data, error } =
+                await db
+                    .from("anggota")
+                    .select(
+                        "id,nama,nisn,kelas"
+                    )
+                    .eq("nisn", nisn)
+                    .eq("password", password)
+                    .maybeSingle();
+
+
+            if(error){
+
+                throw error;
+
+            }
+
+
+            if(!data){
+
+                throw new Error(
+                    "NISN atau password salah."
+                );
+
+            }
+
+
+            /*
+             * Simpan identitas anggota
+             * selama sesi membaca.
+             */
+
+            const anggotaLogin = {
+
+                id: data.id,
+
+                nama: data.nama,
+
+                nisn: data.nisn,
+
+                kelas: data.kelas
+
+            };
+
+
+            localStorage.setItem(
+                "pojok_baca_anggota",
+                JSON.stringify(anggotaLogin)
+            );
+
+
+            tampilkanPesan(
+                "✅ Login berhasil.<br><br>" +
+                "Selamat datang, <strong>" +
+                escapeHTML(data.nama) +
+                "</strong>.<br>" +
+                "Membuka koleksi buku...",
+                "success"
+            );
+
+
+            setTimeout(function(){
+
+                window.location.href =
+                    "index.html";
+
+            },1200);
+
+
+        }catch(error){
+
+            console.error(
+                "Login error:",
+                error
+            );
+
+
+            tampilkanPesan(
+                "❌ Login gagal.<br><br>" +
+                escapeHTML(error.message),
+                "error"
+            );
+
+
+        }finally{
+
+            btnLogin.disabled = false;
+
+            btnLogin.textContent =
+                "🔑 Login";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
