@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login Anggota - Pojok Baca</title>
+<title>Login - Pojok Baca Digital Kelas 9C</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -34,11 +34,20 @@ header{
 
 header h1{
     font-size:clamp(25px,5vw,36px);
-    margin-bottom:8px;
+    margin-bottom:7px;
 }
 
 header p{
     font-size:16px;
+}
+
+.slogan{
+    margin-top:9px;
+    color:#fde68a;
+    font-size:15px;
+    font-weight:bold;
+    font-style:italic;
+    letter-spacing:.4px;
 }
 
 .container{
@@ -101,6 +110,14 @@ header p{
 .form-group input:focus{
     border-color:#2563eb;
     box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+.login-help{
+    margin-top:-8px;
+    margin-bottom:18px;
+    color:#64748b;
+    font-size:12px;
+    line-height:1.5;
 }
 
 .btn{
@@ -395,11 +412,15 @@ footer{
 
 <header>
 
-    <h1>📚 Pojok Baca Digital</h1>
+    <h1>📚 Pojok Baca Digital Kelas 9C</h1>
 
     <p>
         SMP Negeri 3 Sibolga
     </p>
+
+    <div class="slogan">
+        “Reader Now, Leader Tomorrow”
+    </div>
 
 </header>
 
@@ -428,18 +449,27 @@ footer{
 
                 <div class="form-group">
 
-                    <label for="nisn">
-                        🆔 NISN
+                    <label for="identitas">
+                        🆔 NISN / NIP / NIK
                     </label>
 
                     <input
                         type="text"
-                        id="nisn"
-                        placeholder="Masukkan NISN"
+                        id="identitas"
+                        placeholder="Masukkan NISN atau NIP/NIK"
                         inputmode="numeric"
                         autocomplete="username"
                         required
                     >
+
+                </div>
+
+
+                <div class="login-help">
+
+                    👨‍🎓 Siswa login menggunakan <strong>NISN</strong>.<br>
+
+                    👨‍🏫 Guru login menggunakan <strong>NIP atau NIK</strong>.
 
                 </div>
 
@@ -621,7 +651,7 @@ const SUPABASE_KEY =
     "sb_publishable_2HoFz3ZTlrOX_DTGsIW3og_7cHS0LLG";
 
 const db =
-    supabase.createClient(
+    window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
     );
@@ -667,9 +697,9 @@ form.addEventListener(
         event.preventDefault();
 
 
-        const nisn =
+        const identitas =
             document
-            .getElementById("nisn")
+            .getElementById("identitas")
             .value
             .trim();
 
@@ -680,10 +710,10 @@ form.addEventListener(
             .value;
 
 
-        if(!nisn || !password){
+        if(!identitas || !password){
 
             tampilkanPesan(
-                "⚠️ NISN dan password wajib diisi.",
+                "⚠️ NISN / NIP / NIK dan password wajib diisi.",
                 "error"
             );
 
@@ -701,24 +731,37 @@ form.addEventListener(
 
         try{
 
-            const {
-                data,
-                error
-            } =
+            let data = null;
+            let error = null;
+
+
+            /* =================================================
+               LOGIN BARU
+               Berdasarkan kolom identitas
+            ================================================= */
+
+            const hasilIdentitas =
                 await db
                 .from("anggota")
                 .select(
-                    "id,nama,nisn,kelas"
+                    "id,nama,nisn,kelas,jenis_anggota,identitas"
                 )
                 .eq(
-                    "nisn",
-                    nisn
+                    "identitas",
+                    identitas
                 )
                 .eq(
                     "password",
                     password
                 )
                 .maybeSingle();
+
+
+            data =
+                hasilIdentitas.data;
+
+            error =
+                hasilIdentitas.error;
 
 
             if(error){
@@ -728,18 +771,75 @@ form.addEventListener(
             }
 
 
+            /* =================================================
+               BACKUP UNTUK DATA SISWA LAMA
+
+               Jika data lama belum mempunyai
+               kolom identitas yang terisi,
+               login tetap bisa menggunakan NISN.
+            ================================================= */
+
+            if(!data){
+
+                const hasilNisn =
+                    await db
+                    .from("anggota")
+                    .select(
+                        "id,nama,nisn,kelas,jenis_anggota,identitas"
+                    )
+                    .eq(
+                        "nisn",
+                        identitas
+                    )
+                    .eq(
+                        "password",
+                        password
+                    )
+                    .maybeSingle();
+
+
+                if(hasilNisn.error){
+
+                    throw hasilNisn.error;
+
+                }
+
+
+                data =
+                    hasilNisn.data;
+
+            }
+
+
+            /* =================================================
+               JIKA TIDAK DITEMUKAN
+            ================================================= */
+
             if(!data){
 
                 throw new Error(
-                    "NISN atau password salah."
+                    "NISN, NIP/NIK atau password salah."
                 );
 
             }
 
 
-            /*
-             * Simpan identitas anggota.
-             */
+            /* =================================================
+               TENTUKAN JENIS ANGGOTA
+            ================================================= */
+
+            const jenisAnggota =
+                data.jenis_anggota ||
+                (
+                    data.nisn
+                    ? "siswa"
+                    : "guru"
+                );
+
+
+            /* =================================================
+               SIMPAN SESSION LOGIN
+            ================================================= */
 
             const anggotaLogin = {
 
@@ -750,10 +850,18 @@ form.addEventListener(
                     data.nama,
 
                 nisn:
-                    data.nisn,
+                    data.nisn || null,
 
                 kelas:
-                    data.kelas
+                    data.kelas || null,
+
+                jenis_anggota:
+                    jenisAnggota,
+
+                identitas:
+                    data.identitas ||
+                    data.nisn ||
+                    identitas
 
             };
 
@@ -766,11 +874,25 @@ form.addEventListener(
             );
 
 
+            /* =================================================
+               LABEL SELAMAT DATANG
+            ================================================= */
+
+            const sapaan =
+                jenisAnggota === "guru"
+                    ? "Bapak/Ibu"
+                    : "Siswa";
+
+
             tampilkanPesan(
 
                 "✅ Login berhasil.<br><br>" +
 
-                "Selamat datang, <strong>" +
+                "Selamat datang, " +
+
+                sapaan +
+
+                " <strong>" +
 
                 escapeHTML(
                     data.nama
@@ -784,6 +906,10 @@ form.addEventListener(
 
             );
 
+
+            /* =================================================
+               REDIRECT
+            ================================================= */
 
             setTimeout(
                 function(){
@@ -928,8 +1054,6 @@ function getBatasBulan(){
 
 /* =========================================================
    FORMAT DURASI
-   riwayat_baca.durasi_menit
-   menggunakan SATUAN MENIT
 ========================================================= */
 
 function formatDurasi(totalMenit){
@@ -1040,8 +1164,8 @@ async function loadTop10Pembaca(){
     try{
 
         /* =================================================
-           1. AMBIL RIWAYAT BACA BULAN INI
-           ================================================= */
+           1. RIWAYAT BACA BULAN INI
+        ================================================= */
 
         const {
             data: riwayat,
@@ -1070,8 +1194,8 @@ async function loadTop10Pembaca(){
 
 
         /* =================================================
-           2. AMBIL DATA ANGGOTA
-           ================================================= */
+           2. DATA ANGGOTA
+        ================================================= */
 
         const {
             data: anggota,
@@ -1080,7 +1204,7 @@ async function loadTop10Pembaca(){
             await db
             .from("anggota")
             .select(
-                "id,nama,nisn,kelas"
+                "id,nama,nisn,kelas,jenis_anggota"
             );
 
 
@@ -1108,8 +1232,8 @@ async function loadTop10Pembaca(){
 
 
         /* =================================================
-           3. KELOMPOKKAN BERDASARKAN ANGGOTA_ID
-           ================================================= */
+           3. KELOMPOKKAN PEMBACA
+        ================================================= */
 
         const pembacaMap =
             new Map();
@@ -1154,6 +1278,7 @@ async function loadTop10Pembaca(){
                     pembacaMap.set(
                         key,
                         {
+
                             id:
                                 orang.id,
 
@@ -1167,7 +1292,11 @@ async function loadTop10Pembaca(){
 
                             kelas:
                                 orang.kelas ||
-                                "-",
+                                "",
+
+                            jenis_anggota:
+                                orang.jenis_anggota ||
+                                "siswa",
 
                             totalMenit:
                                 0,
@@ -1192,8 +1321,8 @@ async function loadTop10Pembaca(){
 
 
                 /* =================================================
-                   WAKTU MEMBACA = INDIKATOR UTAMA
-                   ================================================= */
+                   WAKTU MEMBACA = PRIORITAS UTAMA
+                ================================================= */
 
                 pembaca.totalMenit +=
                     Math.max(
@@ -1206,14 +1335,14 @@ async function loadTop10Pembaca(){
 
                 /* =================================================
                    JUMLAH SESI
-                   ================================================= */
+                ================================================= */
 
                 pembaca.sesi++;
 
 
                 /* =================================================
                    JUMLAH BUKU UNIK
-                   ================================================= */
+                ================================================= */
 
                 if(
                     item.buku_id !== null &&
@@ -1234,8 +1363,8 @@ async function loadTop10Pembaca(){
 
 
         /* =================================================
-           4. HITUNG JUMLAH BUKU
-           ================================================= */
+           4. HITUNG BUKU UNIK
+        ================================================= */
 
         let ranking =
             Array.from(
@@ -1259,22 +1388,21 @@ async function loadTop10Pembaca(){
 
 
         /* =================================================
-           5. URUTAN PERINGKAT
-           
+           5. URUTKAN PERINGKAT
+
            PRIORITAS:
-           
+
            1. WAKTU MEMBACA
-           2. JUMLAH BUKU
+           2. JUMLAH BUKU UNIK
            3. JUMLAH SESI
-           ================================================= */
+           4. NAMA
+        ================================================= */
 
         ranking.sort(
             (a,b) => {
 
-                /*
-                   PRIORITAS 1
-                   Total waktu membaca
-                */
+
+                /* PRIORITAS 1 */
 
                 if(
                     b.totalMenit !==
@@ -1289,10 +1417,7 @@ async function loadTop10Pembaca(){
                 }
 
 
-                /*
-                   PRIORITAS 2
-                   Jumlah buku berbeda
-                */
+                /* PRIORITAS 2 */
 
                 if(
                     b.jumlahBuku !==
@@ -1307,10 +1432,7 @@ async function loadTop10Pembaca(){
                 }
 
 
-                /*
-                   PRIORITAS 3
-                   Jumlah sesi membaca
-                */
+                /* PRIORITAS 3 */
 
                 if(
                     b.sesi !==
@@ -1325,10 +1447,7 @@ async function loadTop10Pembaca(){
                 }
 
 
-                /*
-                   Jika semuanya sama,
-                   urut nama agar stabil.
-                */
+                /* PRIORITAS 4 */
 
                 return String(
                     a.nama
@@ -1342,9 +1461,8 @@ async function loadTop10Pembaca(){
 
 
         /* =================================================
-           6. KHUSUS LOGIN:
-              HANYA TOP 10
-           ================================================= */
+           6. HANYA TOP 10 UNTUK LOGIN
+        ================================================= */
 
         ranking =
             ranking.slice(
@@ -1446,7 +1564,6 @@ function tampilkanTop10(
             let kelas =
                 "";
 
-
             let ikon =
                 nomor;
 
@@ -1497,10 +1614,35 @@ function tampilkanTop10(
                 kelas;
 
 
+            /* =================================================
+               LABEL KELAS / GURU
+            ================================================= */
+
+            let labelKelas =
+                "Kelas " +
+                (
+                    pembaca.kelas ||
+                    "-"
+                );
+
+
+            if(
+                pembaca.jenis_anggota ===
+                "guru"
+            ){
+
+                labelKelas =
+                    "👨‍🏫 Guru";
+
+            }
+
+
             item.innerHTML = `
 
                 <div class="rank-number">
+
                     ${ikon}
+
                 </div>
 
 
@@ -1517,9 +1659,8 @@ function tampilkanTop10(
 
                     <div class="reader-class">
 
-                        Kelas
                         ${escapeHTML(
-                            pembaca.kelas
+                            labelKelas
                         )}
 
                     </div>
@@ -1618,7 +1759,36 @@ function escapeHTML(
 
 
 /* =========================================================
-   MULAI
+   ENTER UNTUK LOGIN
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Enter" &&
+            (
+                document.activeElement.id ===
+                "identitas" ||
+                document.activeElement.id ===
+                "password"
+            )
+        ){
+
+            /*
+             * Form submit akan menangani login.
+             * Tidak perlu memanggil login dua kali.
+             */
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INISIALISASI
 ========================================================= */
 
 document.getElementById(
