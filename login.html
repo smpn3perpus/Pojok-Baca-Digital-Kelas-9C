@@ -43,10 +43,17 @@ header p{
 
 .container{
     width:100%;
-    max-width:460px;
-    margin:45px auto;
+    max-width:1000px;
+    margin:35px auto;
     padding:0 20px;
     flex:1;
+}
+
+.main-grid{
+    display:grid;
+    grid-template-columns:minmax(300px,460px) minmax(320px,1fr);
+    gap:25px;
+    align-items:start;
 }
 
 .card{
@@ -158,6 +165,190 @@ header p{
     text-decoration:underline;
 }
 
+
+/* =====================================================
+   TOP 10 PEMBACA
+===================================================== */
+
+.ranking-card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 8px 30px rgba(0,0,0,.10);
+}
+
+.ranking-heading{
+    text-align:center;
+    margin-bottom:8px;
+}
+
+.ranking-heading h2{
+    color:#1e3a8a;
+    font-size:23px;
+}
+
+.ranking-heading p{
+    color:#6b7280;
+    font-size:13px;
+    margin-top:6px;
+}
+
+.ranking-month{
+    text-align:center;
+    margin:15px 0 18px;
+}
+
+.ranking-month span{
+    display:inline-block;
+    background:#eff6ff;
+    color:#1d4ed8;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.ranking-info{
+    background:#fefce8;
+    border:1px solid #fde68a;
+    color:#854d0e;
+    padding:11px 13px;
+    border-radius:10px;
+    font-size:12px;
+    line-height:1.5;
+    margin-bottom:16px;
+}
+
+.ranking-loading{
+    text-align:center;
+    padding:30px 10px;
+    color:#64748b;
+    font-size:14px;
+}
+
+.ranking-empty{
+    text-align:center;
+    padding:30px 10px;
+    color:#64748b;
+    font-size:14px;
+}
+
+.ranking-list{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.rank-item{
+    display:grid;
+    grid-template-columns:45px 1fr auto;
+    align-items:center;
+    gap:10px;
+    padding:11px;
+    border-radius:12px;
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+}
+
+.rank-item.rank-first{
+    background:#fffbeb;
+    border-color:#fde68a;
+}
+
+.rank-item.rank-second{
+    background:#f8fafc;
+    border-color:#cbd5e1;
+}
+
+.rank-item.rank-third{
+    background:#fff7ed;
+    border-color:#fed7aa;
+}
+
+.rank-number{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#e2e8f0;
+    color:#334155;
+    font-weight:bold;
+    font-size:13px;
+}
+
+.rank-first .rank-number{
+    background:#fef3c7;
+    font-size:19px;
+}
+
+.rank-second .rank-number{
+    background:#e2e8f0;
+    font-size:19px;
+}
+
+.rank-third .rank-number{
+    background:#ffedd5;
+    font-size:19px;
+}
+
+.reader-name{
+    font-weight:bold;
+    color:#1e293b;
+    font-size:13px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.reader-class{
+    color:#64748b;
+    font-size:11px;
+    margin-top:3px;
+}
+
+.reader-time{
+    text-align:right;
+}
+
+.reader-time strong{
+    display:block;
+    color:#2563eb;
+    font-size:13px;
+}
+
+.reader-time small{
+    display:block;
+    color:#64748b;
+    font-size:10px;
+    margin-top:2px;
+}
+
+.ranking-footer{
+    text-align:center;
+    margin-top:15px;
+    color:#64748b;
+    font-size:11px;
+}
+
+.refresh-ranking{
+    display:block;
+    margin:14px auto 0;
+    border:none;
+    background:#eff6ff;
+    color:#2563eb;
+    padding:8px 13px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.refresh-ranking:hover{
+    background:#dbeafe;
+}
+
 footer{
     background:#111827;
     color:#d1d5db;
@@ -167,14 +358,33 @@ footer{
     margin-top:30px;
 }
 
+@media(max-width:800px){
+
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
 @media(max-width:600px){
 
     .container{
         margin:25px auto;
+        padding:0 15px;
     }
 
-    .card{
+    .card,
+    .ranking-card{
         padding:23px 20px;
+    }
+
+    .rank-item{
+        grid-template-columns:40px 1fr auto;
+        gap:8px;
+    }
+
+    .reader-time strong{
+        font-size:12px;
     }
 
 }
@@ -184,87 +394,202 @@ footer{
 <body>
 
 <header>
+
     <h1>📚 Pojok Baca Digital</h1>
-    <p>SMP Negeri 3 Sibolga</p>
+
+    <p>
+        SMP Negeri 3 Sibolga
+    </p>
+
 </header>
+
 
 <main class="container">
 
-    <div class="card">
+    <div class="main-grid">
 
-        <h2>🔐 Login Anggota</h2>
 
-        <p class="subtitle">
-            Masuk untuk mulai membaca buku digital.
-        </p>
+        <!-- =================================================
+             LOGIN
+        ================================================== -->
 
-        <form id="formLogin">
+        <div class="card">
 
-            <div class="form-group">
+            <h2>
+                🔐 Login Anggota
+            </h2>
 
-                <label for="nisn">
-                    🆔 NISN
-                </label>
+            <p class="subtitle">
+                Masuk untuk mulai membaca buku digital.
+            </p>
 
-                <input
-                    type="text"
-                    id="nisn"
-                    placeholder="Masukkan NISN"
-                    inputmode="numeric"
-                    autocomplete="username"
-                    required
+
+            <form id="formLogin">
+
+                <div class="form-group">
+
+                    <label for="nisn">
+                        🆔 NISN
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nisn"
+                        placeholder="Masukkan NISN"
+                        inputmode="numeric"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        🔐 Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Masukkan password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn"
+                    id="btnLogin"
                 >
+                    🔑 Login
+                </button>
+
+            </form>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+
+            <div class="links">
+
+                Belum memiliki akun?
+
+                <a href="anggota.html">
+                    Registrasi Anggota
+                </a>
+
+                <br>
+
+                <a href="index.html">
+                    ← Kembali ke Koleksi Buku
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TOP 10 PEMBACA
+        ================================================== -->
+
+        <div class="ranking-card">
+
+            <div class="ranking-heading">
+
+                <h2>
+                    🏆 Top 10 Pembaca
+                </h2>
+
+                <p>
+                    Pembaca paling aktif bulan ini
+                </p>
 
             </div>
 
 
-            <div class="form-group">
+            <div class="ranking-month">
 
-                <label for="password">
-                    🔐 Password
-                </label>
+                <span id="rankingMonth">
+                    📅 Memuat periode...
+                </span>
 
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Masukkan password"
-                    autocomplete="current-password"
-                    required
-                >
+            </div>
+
+
+            <div class="ranking-info">
+
+                ⏱️
+                <strong>
+                    Waktu membaca adalah penentu utama peringkat.
+                </strong>
+
+                Jika waktu sama, jumlah buku menjadi
+                pembanding berikutnya.
+
+            </div>
+
+
+            <div
+                id="rankingLoading"
+                class="ranking-loading"
+            >
+
+                ⏳ Memuat peringkat pembaca...
+
+            </div>
+
+
+            <div
+                id="rankingEmpty"
+                class="ranking-empty"
+                style="display:none;"
+            >
+
+                📚
+
+                <br><br>
+
+                Belum ada aktivitas membaca
+                bulan ini.
+
+            </div>
+
+
+            <div
+                id="rankingList"
+                class="ranking-list"
+                style="display:none;"
+            ></div>
+
+
+            <div
+                id="rankingFooter"
+                class="ranking-footer"
+                style="display:none;"
+            >
+
+                Menampilkan 10 pembaca terbaik bulan ini.
 
             </div>
 
 
             <button
-                type="submit"
-                class="btn"
-                id="btnLogin"
+                type="button"
+                class="refresh-ranking"
+                onclick="loadTop10Pembaca()"
             >
-                🔑 Login
+                🔄 Refresh Peringkat
             </button>
-
-        </form>
-
-
-        <div
-            id="message"
-            class="message"
-        ></div>
-
-
-        <div class="links">
-
-            Belum memiliki akun?
-
-            <a href="anggota.html">
-                Registrasi Anggota
-            </a>
-
-            <br>
-
-            <a href="index.html">
-                ← Kembali ke Koleksi Buku
-            </a>
 
         </div>
 
@@ -272,8 +597,11 @@ footer{
 
 </main>
 
+
 <footer>
+
     Dibuat oleh Mr. Rahmat Batubara, S.T.P.
+
 </footer>
 
 
@@ -281,7 +609,7 @@ footer{
 
 /* =========================================================
    SUPABASE
-   ========================================================= */
+========================================================= */
 
 const SUPABASE_URL =
     "https://veffzxxrsjfgupynryog.supabase.co";
@@ -289,46 +617,96 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_2HoFz3ZTlrOX_DTGsIW3og_7cHS0LLG";
 
+const { createClient } =
+    supabase;
 
-const { createClient } = supabase;
-
-const db = createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+const db =
+    createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
 /* =========================================================
-   ELEMENT
-   ========================================================= */
+   KONFIGURASI PEMBACA
+========================================================= */
+
+/*
+   Tabel aktivitas membaca.
+*/
+
+const TABEL_BACA =
+    "riwayat_membaca";
+
+
+/*
+   Nama kolom database.
+*/
+
+const KOLOM_BACA = {
+
+    nama:
+        "nama",
+
+    nisn:
+        "nisn",
+
+    kelas:
+        "kelas",
+
+    waktu:
+        "waktu_membaca",
+
+    tanggal:
+        "created_at",
+
+    buku:
+        "buku_id"
+
+};
+
+
+/* =========================================================
+   ELEMENT LOGIN
+========================================================= */
 
 const form =
-    document.getElementById("formLogin");
+    document.getElementById(
+        "formLogin"
+    );
 
 const message =
-    document.getElementById("message");
+    document.getElementById(
+        "message"
+    );
 
 const btnLogin =
-    document.getElementById("btnLogin");
+    document.getElementById(
+        "btnLogin"
+    );
 
 
 /* =========================================================
-   PESAN
-   ========================================================= */
+   PESAN LOGIN
+========================================================= */
 
-function tampilkanPesan(teks, tipe){
+function tampilkanPesan(
+    teks,
+    tipe
+){
 
     message.className =
         "message " + tipe;
 
-    message.innerHTML = teks;
+    message.innerHTML =
+        teks;
 
 }
 
 
 /* =========================================================
    LOGIN
-   ========================================================= */
+========================================================= */
 
 form.addEventListener(
     "submit",
@@ -339,18 +717,25 @@ form.addEventListener(
 
         const nisn =
             document
-                .getElementById("nisn")
-                .value
-                .trim();
+            .getElementById(
+                "nisn"
+            )
+            .value
+            .trim();
 
 
         const password =
             document
-                .getElementById("password")
-                .value;
+            .getElementById(
+                "password"
+            )
+            .value;
 
 
-        if(!nisn || !password){
+        if(
+            !nisn ||
+            !password
+        ){
 
             tampilkanPesan(
                 "⚠️ NISN dan password wajib diisi.",
@@ -358,10 +743,12 @@ form.addEventListener(
             );
 
             return;
+
         }
 
 
-        btnLogin.disabled = true;
+        btnLogin.disabled =
+            true;
 
         btnLogin.textContent =
             "⏳ Memeriksa...";
@@ -369,15 +756,26 @@ form.addEventListener(
 
         try{
 
-            const { data, error } =
+            const {
+                data,
+                error
+            } =
                 await db
-                    .from("anggota")
-                    .select(
-                        "id,nama,nisn,kelas"
-                    )
-                    .eq("nisn", nisn)
-                    .eq("password", password)
-                    .maybeSingle();
+                .from(
+                    "anggota"
+                )
+                .select(
+                    "id,nama,nisn,kelas"
+                )
+                .eq(
+                    "nisn",
+                    nisn
+                )
+                .eq(
+                    "password",
+                    password
+                )
+                .maybeSingle();
 
 
             if(error){
@@ -403,42 +801,61 @@ form.addEventListener(
 
             const anggotaLogin = {
 
-                id: data.id,
+                id:
+                    data.id,
 
-                nama: data.nama,
+                nama:
+                    data.nama,
 
-                nisn: data.nisn,
+                nisn:
+                    data.nisn,
 
-                kelas: data.kelas
+                kelas:
+                    data.kelas
 
             };
 
 
             localStorage.setItem(
                 "pojok_baca_anggota",
-                JSON.stringify(anggotaLogin)
+                JSON.stringify(
+                    anggotaLogin
+                )
             );
 
 
             tampilkanPesan(
+
                 "✅ Login berhasil.<br><br>" +
+
                 "Selamat datang, <strong>" +
-                escapeHTML(data.nama) +
+
+                escapeHTML(
+                    data.nama
+                ) +
+
                 "</strong>.<br>" +
+
                 "Membuka koleksi buku...",
+
                 "success"
+
             );
 
 
-            setTimeout(function(){
+            setTimeout(
+                function(){
 
-                window.location.href =
-                    "index.html";
+                    window.location.href =
+                        "index.html";
 
-            },1200);
+                },
+                1200
+            );
 
 
-        }catch(error){
+        }
+        catch(error){
 
             console.error(
                 "Login error:",
@@ -447,15 +864,22 @@ form.addEventListener(
 
 
             tampilkanPesan(
+
                 "❌ Login gagal.<br><br>" +
-                escapeHTML(error.message),
+
+                escapeHTML(
+                    error.message
+                ),
+
                 "error"
+
             );
 
+        }
+        finally{
 
-        }finally{
-
-            btnLogin.disabled = false;
+            btnLogin.disabled =
+                false;
 
             btnLogin.textContent =
                 "🔑 Login";
@@ -467,23 +891,911 @@ form.addEventListener(
 
 
 /* =========================================================
-   ESCAPE HTML
-   ========================================================= */
+   BULAN
+========================================================= */
 
-function escapeHTML(value){
+const NAMA_BULAN = [
 
-    if(value === null || value === undefined){
-        return "";
-    }
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember"
 
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+];
+
+
+function getPeriodeBulan(){
+
+    const sekarang =
+        new Date();
+
+    return (
+        NAMA_BULAN[
+            sekarang.getMonth()
+        ]
+        +
+        " "
+        +
+        sekarang.getFullYear()
+    );
 
 }
+
+
+/* =========================================================
+   BATAS BULAN BERJALAN
+========================================================= */
+
+function getBatasBulan(){
+
+    const sekarang =
+        new Date();
+
+    const tahun =
+        sekarang.getFullYear();
+
+    const bulan =
+        sekarang.getMonth();
+
+
+    const awal =
+        new Date(
+            tahun,
+            bulan,
+            1,
+            0,
+            0,
+            0,
+            0
+        );
+
+
+    const akhir =
+        new Date(
+            tahun,
+            bulan + 1,
+            1,
+            0,
+            0,
+            0,
+            0
+        );
+
+
+    return {
+        awal,
+        akhir
+    };
+
+}
+
+
+/* =========================================================
+   KONVERSI WAKTU KE DETIK
+========================================================= */
+
+function konversiKeDetik(
+    value
+){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+
+        return 0;
+
+    }
+
+
+    /*
+       Angka dianggap detik.
+    */
+
+    if(
+        typeof value === "number"
+    ){
+
+        return Math.max(
+            0,
+            value
+        );
+
+    }
+
+
+    const teks =
+        String(value)
+        .trim()
+        .toLowerCase();
+
+
+    /*
+       Format HH:MM:SS
+    */
+
+    if(
+        teks.includes(":")
+    ){
+
+        const bagian =
+            teks
+            .split(":")
+            .map(
+                Number
+            );
+
+
+        if(
+            bagian.length === 3 &&
+            bagian.every(
+                x =>
+                    !isNaN(x)
+            )
+        ){
+
+            return (
+                bagian[0] * 3600 +
+                bagian[1] * 60 +
+                bagian[2]
+            );
+
+        }
+
+
+        if(
+            bagian.length === 2 &&
+            bagian.every(
+                x =>
+                    !isNaN(x)
+            )
+        ){
+
+            return (
+                bagian[0] * 60 +
+                bagian[1]
+            );
+
+        }
+
+    }
+
+
+    /*
+       Format:
+       2 jam 30 menit
+    */
+
+    let total =
+        0;
+
+
+    const jam =
+        teks.match(
+            /(\d+(?:\.\d+)?)\s*jam/
+        );
+
+
+    const menit =
+        teks.match(
+            /(\d+(?:\.\d+)?)\s*menit/
+        );
+
+
+    const detik =
+        teks.match(
+            /(\d+(?:\.\d+)?)\s*detik/
+        );
+
+
+    if(jam){
+
+        total +=
+            Number(
+                jam[1]
+            ) * 3600;
+
+    }
+
+
+    if(menit){
+
+        total +=
+            Number(
+                menit[1]
+            ) * 60;
+
+    }
+
+
+    if(detik){
+
+        total +=
+            Number(
+                detik[1]
+            );
+
+    }
+
+
+    if(total > 0){
+
+        return total;
+
+    }
+
+
+    /*
+       Angka string dianggap detik.
+    */
+
+    const angka =
+        Number(teks);
+
+
+    if(
+        !isNaN(angka)
+    ){
+
+        return Math.max(
+            0,
+            angka
+        );
+
+    }
+
+
+    return 0;
+
+}
+
+
+/* =========================================================
+   FORMAT DURASI
+========================================================= */
+
+function formatDurasi(
+    totalDetik
+){
+
+    let detik =
+        Math.max(
+            0,
+            Number(
+                totalDetik
+            ) || 0
+        );
+
+
+    const jam =
+        Math.floor(
+            detik / 3600
+        );
+
+
+    detik =
+        detik % 3600;
+
+
+    const menit =
+        Math.floor(
+            detik / 60
+        );
+
+
+    const sisaDetik =
+        Math.floor(
+            detik % 60
+        );
+
+
+    if(jam > 0){
+
+        return (
+            jam +
+            " jam " +
+            menit +
+            " menit"
+        );
+
+    }
+
+
+    if(menit > 0){
+
+        return (
+            menit +
+            " menit"
+        );
+
+    }
+
+
+    return (
+        sisaDetik +
+        " detik"
+    );
+
+}
+
+
+/* =========================================================
+   LOAD TOP 10
+========================================================= */
+
+async function loadTop10Pembaca(){
+
+    const loading =
+        document.getElementById(
+            "rankingLoading"
+        );
+
+    const empty =
+        document.getElementById(
+            "rankingEmpty"
+        );
+
+    const list =
+        document.getElementById(
+            "rankingList"
+        );
+
+    const footer =
+        document.getElementById(
+            "rankingFooter"
+        );
+
+
+    loading.style.display =
+        "block";
+
+    empty.style.display =
+        "none";
+
+    list.style.display =
+        "none";
+
+    footer.style.display =
+        "none";
+
+
+    document.getElementById(
+        "rankingMonth"
+    ).textContent =
+        "📅 " +
+        getPeriodeBulan();
+
+
+    const {
+        awal,
+        akhir
+    } =
+        getBatasBulan();
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await db
+            .from(
+                TABEL_BACA
+            )
+            .select("*")
+            .gte(
+                KOLOM_BACA.tanggal,
+                awal.toISOString()
+            )
+            .lt(
+                KOLOM_BACA.tanggal,
+                akhir.toISOString()
+            );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        const aktivitas =
+            data || [];
+
+
+        /*
+           Gabungkan aktivitas
+           berdasarkan NISN.
+        */
+
+        const pembacaMap =
+            new Map();
+
+
+        aktivitas.forEach(
+            item => {
+
+                const nama =
+                    String(
+                        item[
+                            KOLOM_BACA.nama
+                        ] ||
+                        "Pembaca"
+                    ).trim();
+
+
+                const nisn =
+                    String(
+                        item[
+                            KOLOM_BACA.nisn
+                        ] ||
+                        ""
+                    ).trim();
+
+
+                const kelas =
+                    String(
+                        item[
+                            KOLOM_BACA.kelas
+                        ] ||
+                        "-"
+                    ).trim();
+
+
+                /*
+                   NISN menjadi identitas utama.
+                   Jika NISN tidak tersedia,
+                   gunakan nama + kelas.
+                */
+
+                const key =
+                    nisn
+                    ||
+                    (
+                        nama
+                        .toLowerCase()
+                        .replace(
+                            /\s+/g,
+                            " "
+                        )
+                        +
+                        "|"
+                        +
+                        kelas
+                        .toLowerCase()
+                    );
+
+
+                if(
+                    !pembacaMap.has(
+                        key
+                    )
+                ){
+
+                    pembacaMap.set(
+                        key,
+                        {
+                            nama,
+                            nisn,
+                            kelas,
+                            totalDetik:0,
+                            sesi:0,
+                            bukuSet:new Set()
+                        }
+                    );
+
+                }
+
+
+                const pembaca =
+                    pembacaMap.get(
+                        key
+                    );
+
+
+                /*
+                   WAKTU MEMBACA
+                   adalah indikator utama.
+                */
+
+                pembaca.totalDetik +=
+                    konversiKeDetik(
+                        item[
+                            KOLOM_BACA.waktu
+                        ]
+                    );
+
+
+                pembaca.sesi++;
+
+
+                /*
+                   Buku berbeda.
+                */
+
+                const buku =
+                    item[
+                        KOLOM_BACA.buku
+                    ];
+
+
+                if(
+                    buku !== null &&
+                    buku !== undefined &&
+                    buku !== ""
+                ){
+
+                    pembaca.bukuSet.add(
+                        String(buku)
+                    );
+
+                }
+
+            }
+        );
+
+
+        let ranking =
+            Array.from(
+                pembacaMap.values()
+            );
+
+
+        ranking =
+            ranking.map(
+                item => {
+
+                    item.jumlahBuku =
+                        item.bukuSet.size;
+
+                    delete item.bukuSet;
+
+                    return item;
+
+                }
+            );
+
+
+        /*
+           URUTAN RANKING:
+
+           1. Total waktu membaca
+           2. Jumlah buku
+           3. Jumlah sesi
+        */
+
+        ranking.sort(
+            (a,b) => {
+
+                if(
+                    b.totalDetik !==
+                    a.totalDetik
+                ){
+
+                    return (
+                        b.totalDetik -
+                        a.totalDetik
+                    );
+
+                }
+
+
+                if(
+                    b.jumlahBuku !==
+                    a.jumlahBuku
+                ){
+
+                    return (
+                        b.jumlahBuku -
+                        a.jumlahBuku
+                    );
+
+                }
+
+
+                return (
+                    b.sesi -
+                    a.sesi
+                );
+
+            }
+        );
+
+
+        /*
+           HANYA TOP 10
+           untuk login.html.
+        */
+
+        ranking =
+            ranking.slice(
+                0,
+                10
+            );
+
+
+        loading.style.display =
+            "none";
+
+
+        if(
+            ranking.length === 0
+        ){
+
+            empty.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        tampilkanTop10(
+            ranking
+        );
+
+
+    }
+    catch(error){
+
+        console.error(
+            "Gagal mengambil peringkat:",
+            error
+        );
+
+
+        loading.style.display =
+            "none";
+
+
+        empty.style.display =
+            "block";
+
+
+        empty.innerHTML = `
+
+            ⚠️
+            <br><br>
+
+            Gagal memuat peringkat.
+
+            <br>
+
+            <small>
+                ${escapeHTML(
+                    error.message
+                )}
+            </small>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   TAMPILKAN TOP 10
+========================================================= */
+
+function tampilkanTop10(
+    ranking
+){
+
+    const list =
+        document.getElementById(
+            "rankingList"
+        );
+
+    const footer =
+        document.getElementById(
+            "rankingFooter"
+        );
+
+
+    list.innerHTML =
+        "";
+
+
+    ranking.forEach(
+        (pembaca,index) => {
+
+            const nomor =
+                index + 1;
+
+
+            let kelas =
+                "";
+
+
+            let ikon =
+                nomor;
+
+
+            if(
+                nomor === 1
+            ){
+
+                kelas =
+                    "rank-first";
+
+                ikon =
+                    "🥇";
+
+            }
+            else if(
+                nomor === 2
+            ){
+
+                kelas =
+                    "rank-second";
+
+                ikon =
+                    "🥈";
+
+            }
+            else if(
+                nomor === 3
+            ){
+
+                kelas =
+                    "rank-third";
+
+                ikon =
+                    "🥉";
+
+            }
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "rank-item " +
+                kelas;
+
+
+            item.innerHTML = `
+
+                <div class="rank-number">
+                    ${ikon}
+                </div>
+
+
+                <div>
+
+                    <div class="reader-name">
+
+                        ${escapeHTML(
+                            pembaca.nama
+                        )}
+
+                    </div>
+
+                    <div class="reader-class">
+
+                        Kelas
+                        ${escapeHTML(
+                            pembaca.kelas
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="reader-time">
+
+                    <strong>
+
+                        ⏱️
+                        ${formatDurasi(
+                            pembaca.totalDetik
+                        )}
+
+                    </strong>
+
+                    <small>
+
+                        📚
+                        ${pembaca.jumlahBuku}
+                        buku
+
+                    </small>
+
+                </div>
+
+            `;
+
+
+            list.appendChild(
+                item
+            );
+
+        }
+    );
+
+
+    list.style.display =
+        "flex";
+
+    footer.style.display =
+        "block";
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(
+    value
+){
+
+    if(
+        value === null ||
+        value === undefined
+    ){
+
+        return "";
+
+    }
+
+
+    return String(
+        value
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   MULAI
+========================================================= */
+
+document.getElementById(
+    "rankingMonth"
+).textContent =
+    "📅 " +
+    getPeriodeBulan();
+
+
+loadTop10Pembaca();
 
 </script>
 
