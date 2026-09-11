@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -292,6 +291,135 @@ th{
     color:#64748b;
 }
 
+/* =====================================================
+   PERINGKAT PEMBACA
+===================================================== */
+
+.ranking-panel{
+    border:1px solid #e2e8f0;
+}
+
+.ranking-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+}
+
+.ranking-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.ranking-icon{
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    background:#fef3c7;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+}
+
+.ranking-title h2{
+    font-size:19px;
+}
+
+.ranking-title p{
+    font-size:12px;
+    color:#64748b;
+    margin-top:4px;
+}
+
+.ranking-info{
+    background:#eff6ff;
+    color:#1d4ed8;
+    border-radius:9px;
+    padding:10px 13px;
+    font-size:12px;
+    margin-bottom:18px;
+}
+
+.rank-number{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:14px;
+    background:#f1f5f9;
+}
+
+.rank-1{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.rank-2{
+    background:#e2e8f0;
+    color:#334155;
+}
+
+.rank-3{
+    background:#ffedd5;
+    color:#9a3412;
+}
+
+.rank-name{
+    font-weight:bold;
+}
+
+.rank-class{
+    color:#64748b;
+    font-size:12px;
+    margin-top:3px;
+}
+
+.time-main{
+    font-weight:bold;
+    color:#2563eb;
+    font-size:14px;
+}
+
+.time-detail{
+    color:#64748b;
+    font-size:11px;
+    margin-top:3px;
+}
+
+.badge-book{
+    display:inline-block;
+    background:#dcfce7;
+    color:#166534;
+    border-radius:20px;
+    padding:5px 9px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.ranking-empty{
+    text-align:center;
+    padding:35px 15px;
+    color:#64748b;
+}
+
+.ranking-loading{
+    text-align:center;
+    padding:30px;
+    color:#64748b;
+}
+
+.month-label{
+    font-weight:bold;
+    color:#0f172a;
+}
+
 footer{
     text-align:center;
     padding:25px;
@@ -327,6 +455,9 @@ footer{
         align-items:flex-start;
     }
 
+    .ranking-header{
+        align-items:flex-start;
+    }
 }
 </style>
 </head>
@@ -354,7 +485,9 @@ footer{
 
 <main class="container">
 
-    <!-- STATISTIK -->
+    <!-- =====================================================
+         STATISTIK
+    ====================================================== -->
 
     <section class="stats">
 
@@ -385,7 +518,140 @@ footer{
     </section>
 
 
-    <!-- DAFTAR BUKU -->
+    <!-- =====================================================
+         REKAP PERINGKAT PEMBACA
+    ====================================================== -->
+
+    <section class="panel ranking-panel">
+
+        <div class="ranking-header">
+
+            <div class="ranking-title">
+
+                <div class="ranking-icon">
+                    🏆
+                </div>
+
+                <div>
+
+                    <h2>
+                        Rekap Peringkat Pembaca
+                    </h2>
+
+                    <p>
+                        Peringkat pembaca berdasarkan
+                        total waktu membaca bulan ini
+                    </p>
+
+                </div>
+
+            </div>
+
+            <button
+                class="btn btn-primary"
+                onclick="loadPeringkatPembaca()"
+            >
+                🔄 Refresh Peringkat
+            </button>
+
+        </div>
+
+
+        <div class="ranking-info">
+
+            ⏱️ <strong>Waktu membaca adalah indikator utama.</strong>
+            Jika total waktu membaca sama, jumlah buku yang dibaca
+            digunakan sebagai pembanding.
+
+            <br><br>
+
+            📅 Periode:
+            <span
+                id="periodeRanking"
+                class="month-label"
+            >
+                -
+            </span>
+
+        </div>
+
+
+        <div
+            id="rankingLoading"
+            class="ranking-loading"
+        >
+            ⏳ Memuat peringkat pembaca...
+        </div>
+
+
+        <div
+            id="rankingTableWrap"
+            class="table-wrap"
+            style="display:none;"
+        >
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Peringkat
+                        </th>
+
+                        <th>
+                            Pembaca
+                        </th>
+
+                        <th>
+                            Total Waktu Membaca
+                        </th>
+
+                        <th>
+                            Buku Dibaca
+                        </th>
+
+                        <th>
+                            Sesi Membaca
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="tabelPeringkat"
+                ></tbody>
+
+            </table>
+
+        </div>
+
+
+        <div
+            id="rankingEmpty"
+            class="ranking-empty"
+            style="display:none;"
+        >
+
+            <div style="font-size:42px;">
+                📚
+            </div>
+
+            <p>
+                Belum ada aktivitas membaca
+                pada bulan ini.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DAFTAR BUKU
+    ====================================================== -->
 
     <section class="panel">
 
@@ -424,7 +690,9 @@ footer{
     </section>
 
 
-    <!-- FORM -->
+    <!-- =====================================================
+         FORM BUKU
+    ====================================================== -->
 
     <section
         class="panel"
@@ -621,11 +889,16 @@ footer{
     </section>
 
 
-    <!-- TABEL -->
+    <!-- =====================================================
+         TABEL BUKU
+    ====================================================== -->
 
     <section class="panel">
 
-        <div id="loading" class="loading">
+        <div
+            id="loading"
+            class="loading"
+        >
             ⏳ Memuat buku...
         </div>
 
@@ -638,6 +911,7 @@ footer{
             <table>
 
                 <thead>
+
                     <tr>
                         <th>No</th>
                         <th>Cover</th>
@@ -649,9 +923,12 @@ footer{
                         <th>Stok</th>
                         <th>Aksi</th>
                     </tr>
+
                 </thead>
 
-                <tbody id="tabelBuku"></tbody>
+                <tbody
+                    id="tabelBuku"
+                ></tbody>
 
             </table>
 
@@ -668,7 +945,9 @@ footer{
                 📚
             </div>
 
-            <p>Belum ada buku.</p>
+            <p>
+                Belum ada buku.
+            </p>
 
         </div>
 
@@ -702,10 +981,800 @@ const db =
 
 
 /* =====================================================
-   DATA
+   KONFIGURASI DATA PEMBACA
+===================================================== */
+
+/*
+   GANTI hanya nama tabel ini jika tabel aktivitas membaca
+   di database Bapak memiliki nama yang berbeda.
+*/
+
+const TABEL_BACA =
+    "riwayat_membaca";
+
+
+/*
+   Nama kolom yang digunakan.
+   Jika struktur database Bapak berbeda,
+   bagian ini yang disesuaikan.
+*/
+
+const KOLOM_BACA = {
+
+    nama:
+        "nama",
+
+    kelas:
+        "kelas",
+
+    waktu:
+        "waktu_membaca",
+
+    tanggal:
+        "created_at",
+
+    buku:
+        "buku_id"
+
+};
+
+
+/* =====================================================
+   DATA BUKU
 ===================================================== */
 
 let semuaBuku = [];
+
+
+/* =====================================================
+   DATA PERINGKAT
+===================================================== */
+
+let semuaPeringkat = [];
+
+
+/* =====================================================
+   FORMAT NAMA BULAN
+===================================================== */
+
+const namaBulan = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember"
+];
+
+
+function periodeBulanIni(){
+
+    const sekarang =
+        new Date();
+
+    return (
+        namaBulan[sekarang.getMonth()]
+        + " "
+        + sekarang.getFullYear()
+    );
+
+}
+
+
+/* =====================================================
+   TANGGAL AWAL DAN AKHIR BULAN
+===================================================== */
+
+function batasBulanIni(){
+
+    const sekarang =
+        new Date();
+
+    const tahun =
+        sekarang.getFullYear();
+
+    const bulan =
+        sekarang.getMonth();
+
+    const awal =
+        new Date(
+            tahun,
+            bulan,
+            1,
+            0,
+            0,
+            0,
+            0
+        );
+
+    const akhir =
+        new Date(
+            tahun,
+            bulan + 1,
+            1,
+            0,
+            0,
+            0,
+            0
+        );
+
+    return {
+        awal,
+        akhir
+    };
+
+}
+
+
+/* =====================================================
+   FORMAT WAKTU
+===================================================== */
+
+function formatDurasi(totalDetik){
+
+    let detik =
+        Math.max(
+            0,
+            Number(totalDetik) || 0
+        );
+
+    const jam =
+        Math.floor(
+            detik / 3600
+        );
+
+    detik =
+        detik % 3600;
+
+    const menit =
+        Math.floor(
+            detik / 60
+        );
+
+    const sisaDetik =
+        detik % 60;
+
+
+    if(jam > 0){
+
+        return (
+            jam +
+            " jam " +
+            menit +
+            " menit"
+        );
+
+    }
+
+
+    if(menit > 0){
+
+        return (
+            menit +
+            " menit " +
+            sisaDetik +
+            " detik"
+        );
+
+    }
+
+
+    return (
+        sisaDetik +
+        " detik"
+    );
+
+}
+
+
+/* =====================================================
+   KONVERSI WAKTU KE DETIK
+===================================================== */
+
+function konversiKeDetik(value){
+
+    if(value === null ||
+       value === undefined ||
+       value === ""){
+
+        return 0;
+
+    }
+
+
+    if(typeof value === "number"){
+
+        return value;
+
+    }
+
+
+    const teks =
+        String(value)
+        .trim()
+        .toLowerCase();
+
+
+    /*
+       Jika format HH:MM:SS
+    */
+
+    if(teks.includes(":")){
+
+        const bagian =
+            teks
+            .split(":")
+            .map(Number);
+
+        if(
+            bagian.length === 3 &&
+            bagian.every(
+                x => !isNaN(x)
+            )
+        ){
+
+            return (
+                bagian[0] * 3600 +
+                bagian[1] * 60 +
+                bagian[2]
+            );
+
+        }
+
+
+        if(
+            bagian.length === 2 &&
+            bagian.every(
+                x => !isNaN(x)
+            )
+        ){
+
+            return (
+                bagian[0] * 60 +
+                bagian[1]
+            );
+
+        }
+
+    }
+
+
+    /*
+       Format angka biasa.
+       Diasumsikan detik.
+    */
+
+    const angka =
+        Number(teks);
+
+
+    if(!isNaN(angka)){
+
+        return angka;
+
+    }
+
+
+    /*
+       Format "2 jam 30 menit"
+    */
+
+    let total =
+        0;
+
+
+    const jam =
+        teks.match(
+            /(\d+(?:\.\d+)?)\s*jam/
+        );
+
+    const menit =
+        teks.match(
+            /(\d+(?:\.\d+)?)\s*menit/
+        );
+
+    const detik =
+        teks.match(
+            /(\d+(?:\.\d+)?)\s*detik/
+        );
+
+
+    if(jam){
+
+        total +=
+            Number(jam[1]) * 3600;
+
+    }
+
+    if(menit){
+
+        total +=
+            Number(menit[1]) * 60;
+
+    }
+
+    if(detik){
+
+        total +=
+            Number(detik[1]);
+
+    }
+
+
+    return total;
+
+}
+
+
+/* =====================================================
+   LOAD PERINGKAT PEMBACA
+===================================================== */
+
+async function loadPeringkatPembaca(){
+
+    const loading =
+        document.getElementById(
+            "rankingLoading"
+        );
+
+    const table =
+        document.getElementById(
+            "rankingTableWrap"
+        );
+
+    const empty =
+        document.getElementById(
+            "rankingEmpty"
+        );
+
+
+    loading.style.display =
+        "block";
+
+    table.style.display =
+        "none";
+
+    empty.style.display =
+        "none";
+
+
+    document.getElementById(
+        "periodeRanking"
+    ).textContent =
+        periodeBulanIni();
+
+
+    const {
+        awal,
+        akhir
+    } =
+        batasBulanIni();
+
+
+    /*
+       Ambil aktivitas membaca
+       bulan berjalan.
+    */
+
+    const {
+        data,
+        error
+    } =
+        await db
+        .from(TABEL_BACA)
+        .select("*")
+        .gte(
+            KOLOM_BACA.tanggal,
+            awal.toISOString()
+        )
+        .lt(
+            KOLOM_BACA.tanggal,
+            akhir.toISOString()
+        );
+
+
+    loading.style.display =
+        "none";
+
+
+    if(error){
+
+        console.error(
+            "Gagal mengambil data pembaca:",
+            error
+        );
+
+
+        empty.style.display =
+            "block";
+
+
+        empty.innerHTML = `
+            <div style="font-size:42px;">
+                ⚠️
+            </div>
+
+            <p>
+                Data aktivitas membaca belum dapat dimuat.
+            </p>
+
+            <small>
+                ${escapeHTML(error.message)}
+            </small>
+        `;
+
+        return;
+
+    }
+
+
+    const aktivitas =
+        data || [];
+
+
+    /*
+       Gabungkan data berdasarkan pembaca.
+    */
+
+    const map =
+        new Map();
+
+
+    aktivitas.forEach(
+        item => {
+
+            const nama =
+                String(
+                    item[KOLOM_BACA.nama] ||
+                    "Pembaca"
+                ).trim();
+
+
+            const kelas =
+                String(
+                    item[KOLOM_BACA.kelas] ||
+                    "-"
+                ).trim();
+
+
+            /*
+               Gunakan nama + kelas sebagai
+               identitas pengelompokan.
+            */
+
+            const key =
+                nama
+                .toLowerCase()
+                .replace(/\s+/g," ")
+                +
+                "|"
+                +
+                kelas
+                .toLowerCase()
+                .trim();
+
+
+            if(!map.has(key)){
+
+                map.set(
+                    key,
+                    {
+                        nama,
+                        kelas,
+                        totalDetik:0,
+                        sesi:0,
+                        bukuSet:new Set()
+                    }
+                );
+
+            }
+
+
+            const pembaca =
+                map.get(key);
+
+
+            pembaca.totalDetik +=
+                konversiKeDetik(
+                    item[
+                        KOLOM_BACA.waktu
+                    ]
+                );
+
+
+            pembaca.sesi++;
+
+
+            const buku =
+                item[
+                    KOLOM_BACA.buku
+                ];
+
+
+            if(
+                buku !== null &&
+                buku !== undefined &&
+                buku !== ""
+            ){
+
+                pembaca.bukuSet.add(
+                    String(buku)
+                );
+
+            }
+
+        }
+    );
+
+
+    semuaPeringkat =
+        Array.from(
+            map.values()
+        )
+        .map(
+            item => {
+
+                item.jumlahBuku =
+                    item.bukuSet.size;
+
+                delete item.bukuSet;
+
+                return item;
+
+            }
+        )
+        .sort(
+            (a,b) => {
+
+                /*
+                   PRIORITAS 1:
+                   TOTAL WAKTU MEMBACA
+                */
+
+                if(
+                    b.totalDetik !==
+                    a.totalDetik
+                ){
+
+                    return (
+                        b.totalDetik -
+                        a.totalDetik
+                    );
+
+                }
+
+
+                /*
+                   PRIORITAS 2:
+                   JUMLAH BUKU
+                */
+
+                if(
+                    b.jumlahBuku !==
+                    a.jumlahBuku
+                ){
+
+                    return (
+                        b.jumlahBuku -
+                        a.jumlahBuku
+                    );
+
+                }
+
+
+                /*
+                   PRIORITAS 3:
+                   JUMLAH SESI
+                */
+
+                return (
+                    b.sesi -
+                    a.sesi
+                );
+
+            }
+        );
+
+
+    tampilkanPeringkat();
+
+}
+
+
+/* =====================================================
+   TAMPILKAN PERINGKAT
+===================================================== */
+
+function tampilkanPeringkat(){
+
+    const tbody =
+        document.getElementById(
+            "tabelPeringkat"
+        );
+
+
+    const table =
+        document.getElementById(
+            "rankingTableWrap"
+        );
+
+
+    const empty =
+        document.getElementById(
+            "rankingEmpty"
+        );
+
+
+    tbody.innerHTML =
+        "";
+
+
+    if(
+        semuaPeringkat.length === 0
+    ){
+
+        table.style.display =
+            "none";
+
+        empty.style.display =
+            "block";
+
+        return;
+
+    }
+
+
+    table.style.display =
+        "block";
+
+    empty.style.display =
+        "none";
+
+
+    semuaPeringkat.forEach(
+        (pembaca,index) => {
+
+            const nomor =
+                index + 1;
+
+
+            let kelasRank =
+                "";
+
+
+            if(nomor === 1){
+
+                kelasRank =
+                    "rank-1";
+
+            }
+            else if(nomor === 2){
+
+                kelasRank =
+                    "rank-2";
+
+            }
+            else if(nomor === 3){
+
+                kelasRank =
+                    "rank-3";
+
+            }
+
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            tr.innerHTML = `
+
+                <td>
+
+                    <div
+                        class="rank-number ${kelasRank}"
+                    >
+                        ${
+                            nomor === 1
+                            ? "🥇"
+                            : nomor === 2
+                            ? "🥈"
+                            : nomor === 3
+                            ? "🥉"
+                            : nomor
+                        }
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <div class="rank-name">
+
+                        ${escapeHTML(
+                            pembaca.nama
+                        )}
+
+                    </div>
+
+                    <div class="rank-class">
+
+                        Kelas:
+                        ${escapeHTML(
+                            pembaca.kelas
+                        )}
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <div class="time-main">
+
+                        ⏱️
+                        ${formatDurasi(
+                            pembaca.totalDetik
+                        )}
+
+                    </div>
+
+                    <div class="time-detail">
+
+                        ${
+                            Number(
+                                pembaca.totalDetik
+                            ).toLocaleString(
+                                "id-ID"
+                            )
+                        }
+                        detik
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <span class="badge-book">
+
+                        📚
+                        ${
+                            pembaca.jumlahBuku
+                        }
+                        buku
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    ${pembaca.sesi}
+                    kali
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+}
 
 
 /* =====================================================
@@ -714,28 +1783,40 @@ let semuaBuku = [];
 
 async function loadBuku(){
 
-    document.getElementById("loading").style.display =
+    document.getElementById(
+        "loading"
+    ).style.display =
         "block";
 
-    document.getElementById("tableWrap").style.display =
+    document.getElementById(
+        "tableWrap"
+    ).style.display =
         "none";
 
-    document.getElementById("empty").style.display =
+    document.getElementById(
+        "empty"
+    ).style.display =
         "none";
 
 
     const {
         data,
         error
-    } = await db
+    } =
+        await db
         .from("buku")
         .select("*")
-        .order("id",{
-            ascending:true
-        });
+        .order(
+            "id",
+            {
+                ascending:true
+            }
+        );
 
 
-    document.getElementById("loading").style.display =
+    document.getElementById(
+        "loading"
+    ).style.display =
         "none";
 
 
@@ -743,19 +1824,28 @@ async function loadBuku(){
 
         console.error(error);
 
-        document.getElementById("empty").style.display =
+        document.getElementById(
+            "empty"
+        ).style.display =
             "block";
 
-        document.getElementById("empty").innerHTML =
+
+        document.getElementById(
+            "empty"
+        ).innerHTML =
             "❌ Gagal mengambil data buku.<br><br>" +
-            escapeHTML(error.message);
+            escapeHTML(
+                error.message
+            );
 
         return;
 
     }
 
 
-    semuaBuku = data || [];
+    semuaBuku =
+        data || [];
+
 
     updateStatistik();
 
@@ -770,31 +1860,44 @@ async function loadBuku(){
 
 function updateStatistik(){
 
-    document.getElementById("totalBuku").textContent =
+    document.getElementById(
+        "totalBuku"
+    ).textContent =
         semuaBuku.length;
 
 
     const stok =
         semuaBuku.reduce(
             (total,buku) =>
-                total + (Number(buku.stok) || 0),
+                total +
+                (
+                    Number(
+                        buku.stok
+                    ) || 0
+                ),
             0
         );
 
 
-    document.getElementById("totalStok").textContent =
+    document.getElementById(
+        "totalStok"
+    ).textContent =
         stok;
 
 
     const kategori =
         new Set(
             semuaBuku
-            .map(b => b.kategori)
+            .map(
+                b => b.kategori
+            )
             .filter(Boolean)
         );
 
 
-    document.getElementById("totalKategori").textContent =
+    document.getElementById(
+        "totalKategori"
+    ).textContent =
         kategori.size;
 
 }
@@ -807,48 +1910,63 @@ function updateStatistik(){
 function tampilkanBuku(){
 
     const tbody =
-        document.getElementById("tabelBuku");
+        document.getElementById(
+            "tabelBuku"
+        );
 
 
     const keyword =
         document
-        .getElementById("search")
+        .getElementById(
+            "search"
+        )
         .value
         .toLowerCase()
         .trim();
 
 
     const hasil =
-        semuaBuku.filter(buku => {
+        semuaBuku.filter(
+            buku => {
 
-            const teks = [
+                const teks = [
 
-                buku.judul,
-                buku.penulis,
-                buku.penerbit,
-                buku.kategori,
-                buku.tahun_terbit
+                    buku.judul,
+                    buku.penulis,
+                    buku.penerbit,
+                    buku.kategori,
+                    buku.tahun_terbit
 
-            ]
-            .filter(Boolean)
-            .join(" ")
-            .toLowerCase();
-
-
-            return teks.includes(keyword);
-
-        });
+                ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
 
 
-    tbody.innerHTML = "";
+                return teks.includes(
+                    keyword
+                );
+
+            }
+        );
 
 
-    if(hasil.length === 0){
+    tbody.innerHTML =
+        "";
 
-        document.getElementById("tableWrap").style.display =
+
+    if(
+        hasil.length === 0
+    ){
+
+        document.getElementById(
+            "tableWrap"
+        ).style.display =
             "none";
 
-        document.getElementById("empty").style.display =
+        document.getElementById(
+            "empty"
+        ).style.display =
             "block";
 
         return;
@@ -856,10 +1974,14 @@ function tampilkanBuku(){
     }
 
 
-    document.getElementById("tableWrap").style.display =
+    document.getElementById(
+        "tableWrap"
+    ).style.display =
         "block";
 
-    document.getElementById("empty").style.display =
+    document.getElementById(
+        "empty"
+    ).style.display =
         "none";
 
 
@@ -867,54 +1989,70 @@ function tampilkanBuku(){
         (buku,index) => {
 
             const tr =
-                document.createElement("tr");
+                document.createElement(
+                    "tr"
+                );
 
 
-            let coverHTML =
-                `
+            let coverHTML = `
                 <div class="cover">
                     📖
                 </div>
-                `;
+            `;
 
 
-            if(buku.gambar_url){
+            if(
+                buku.gambar_url
+            ){
 
-                coverHTML =
-                    `
+                coverHTML = `
                     <div class="cover">
+
                         <img
-                            src="${escapeHTML(buku.gambar_url)}"
+                            src="${escapeHTML(
+                                buku.gambar_url
+                            )}"
                             alt="Cover buku"
                             onerror="
                                 this.style.display='none';
                                 this.parentElement.innerHTML='📖';
                             "
                         >
+
                     </div>
-                    `;
+                `;
 
             }
 
 
             tr.innerHTML = `
 
-                <td>${index + 1}</td>
+                <td>
+                    ${index + 1}
+                </td>
 
-                <td>${coverHTML}</td>
+                <td>
+                    ${coverHTML}
+                </td>
 
                 <td>
                     <strong>
-                        ${escapeHTML(buku.judul || "-")}
+                        ${escapeHTML(
+                            buku.judul || "-"
+                        )}
                     </strong>
                 </td>
 
                 <td>
-                    ${escapeHTML(buku.penulis || "-")}
+                    ${escapeHTML(
+                        buku.penulis || "-"
+                    )}
                 </td>
 
                 <td>
-                    ${escapeHTML(buku.penerbit || "-")}
+                    ${escapeHTML(
+                        buku.penerbit || "-"
+                    )}
                 </td>
 
                 <td>
@@ -922,7 +2060,9 @@ function tampilkanBuku(){
                 </td>
 
                 <td>
-                    ${escapeHTML(buku.kategori || "-")}
+                    ${escapeHTML(
+                        buku.kategori || "-"
+                    )}
                 </td>
 
                 <td>
@@ -968,22 +2108,32 @@ function tampilkanBuku(){
 
 function bukaTambah(){
 
-    document.getElementById("formPanel").style.display =
+    document.getElementById(
+        "formPanel"
+    ).style.display =
         "block";
 
 
-    document.getElementById("formTitle").textContent =
+    document.getElementById(
+        "formTitle"
+    ).textContent =
         "➕ Tambah Buku";
 
 
-    document.getElementById("bukuForm").reset();
+    document.getElementById(
+        "bukuForm"
+    ).reset();
 
 
-    document.getElementById("bukuId").value =
+    document.getElementById(
+        "bukuId"
+    ).value =
         "";
 
 
-    document.getElementById("stok").value =
+    document.getElementById(
+        "stok"
+    ).value =
         "1";
 
 
@@ -1006,60 +2156,86 @@ function editBuku(id){
 
     const buku =
         semuaBuku.find(
-            b => Number(b.id) === Number(id)
+            b =>
+                Number(b.id) ===
+                Number(id)
         );
 
 
     if(!buku){
 
-        alert("Buku tidak ditemukan.");
+        alert(
+            "Buku tidak ditemukan."
+        );
 
         return;
 
     }
 
 
-    document.getElementById("formPanel").style.display =
+    document.getElementById(
+        "formPanel"
+    ).style.display =
         "block";
 
 
-    document.getElementById("formTitle").textContent =
+    document.getElementById(
+        "formTitle"
+    ).textContent =
         "✏️ Edit Buku";
 
 
-    document.getElementById("bukuId").value =
+    document.getElementById(
+        "bukuId"
+    ).value =
         buku.id;
 
 
-    document.getElementById("judul").value =
+    document.getElementById(
+        "judul"
+    ).value =
         buku.judul || "";
 
 
-    document.getElementById("penulis").value =
+    document.getElementById(
+        "penulis"
+    ).value =
         buku.penulis || "";
 
 
-    document.getElementById("penerbit").value =
+    document.getElementById(
+        "penerbit"
+    ).value =
         buku.penerbit || "";
 
 
-    document.getElementById("tahun").value =
+    document.getElementById(
+        "tahun"
+    ).value =
         buku.tahun_terbit || "";
 
 
-    document.getElementById("kategori").value =
+    document.getElementById(
+        "kategori"
+    ).value =
         buku.kategori || "";
 
 
-    document.getElementById("stok").value =
+    document.getElementById(
+        "stok"
+    ).value =
         buku.stok ?? 0;
 
 
-    document.getElementById("gambar_url").value =
+    document.getElementById(
+        "gambar_url"
+    ).value =
         buku.gambar_url || "";
 
 
-    document.getElementById("file_url").value =
+    document.getElementById(
+        "file_url"
+    ).value =
         buku.file_url || "";
 
 
@@ -1075,57 +2251,89 @@ function editBuku(id){
 
 
 /* =====================================================
-   SIMPAN
+   SIMPAN BUKU
 ===================================================== */
 
 document
-.getElementById("bukuForm")
+.getElementById(
+    "bukuForm"
+)
 .addEventListener(
     "submit",
     async function(e){
 
         e.preventDefault();
 
-
         hapusPesan();
 
 
         const id =
-            document.getElementById("bukuId").value;
+            document.getElementById(
+                "bukuId"
+            ).value;
 
 
         const dataBuku = {
 
             judul:
-                document.getElementById("judul").value.trim(),
+                document.getElementById(
+                    "judul"
+                ).value.trim(),
 
             penulis:
-                document.getElementById("penulis").value.trim() || null,
+                document.getElementById(
+                    "penulis"
+                ).value.trim() ||
+                null,
 
             penerbit:
-                document.getElementById("penerbit").value.trim() || null,
+                document.getElementById(
+                    "penerbit"
+                ).value.trim() ||
+                null,
 
             tahun_terbit:
-                document.getElementById("tahun").value
-                ? Number(document.getElementById("tahun").value)
+                document.getElementById(
+                    "tahun"
+                ).value
+                ? Number(
+                    document.getElementById(
+                        "tahun"
+                    ).value
+                )
                 : null,
 
             kategori:
-                document.getElementById("kategori").value || null,
+                document.getElementById(
+                    "kategori"
+                ).value ||
+                null,
 
             stok:
-                Number(document.getElementById("stok").value) || 0,
+                Number(
+                    document.getElementById(
+                        "stok"
+                    ).value
+                ) || 0,
 
             gambar_url:
-                document.getElementById("gambar_url").value.trim() || null,
+                document.getElementById(
+                    "gambar_url"
+                ).value.trim() ||
+                null,
 
             file_url:
-                document.getElementById("file_url").value.trim() || null
+                document.getElementById(
+                    "file_url"
+                ).value.trim() ||
+                null
 
         };
 
 
-        if(!dataBuku.judul){
+        if(
+            !dataBuku.judul
+        ){
 
             tampilkanError(
                 "Judul buku wajib diisi."
@@ -1144,22 +2352,35 @@ document
             hasil =
                 await db
                 .from("buku")
-                .update(dataBuku)
-                .eq("id",id);
+                .update(
+                    dataBuku
+                )
+                .eq(
+                    "id",
+                    id
+                );
 
-        }else{
+        }
+        else{
 
             hasil =
                 await db
                 .from("buku")
-                .insert([dataBuku]);
+                .insert([
+                    dataBuku
+                ]);
 
         }
 
 
-        if(hasil.error){
+        if(
+            hasil.error
+        ){
 
-            console.error(hasil.error);
+            console.error(
+                hasil.error
+            );
+
 
             tampilkanError(
                 "Gagal menyimpan buku: " +
@@ -1183,7 +2404,9 @@ document
 
         setTimeout(
             () => {
+
                 tutupForm();
+
             },
             700
         );
@@ -1200,7 +2423,9 @@ async function hapusBuku(id){
 
     const buku =
         semuaBuku.find(
-            b => Number(b.id) === Number(id)
+            b =>
+                Number(b.id) ===
+                Number(id)
         );
 
 
@@ -1226,10 +2451,14 @@ async function hapusBuku(id){
 
     const {
         error
-    } = await db
+    } =
+        await db
         .from("buku")
         .delete()
-        .eq("id",id);
+        .eq(
+            "id",
+            id
+        );
 
 
     if(error){
@@ -1255,10 +2484,15 @@ async function hapusBuku(id){
 
 function tutupForm(){
 
-    document.getElementById("formPanel").style.display =
+    document.getElementById(
+        "formPanel"
+    ).style.display =
         "none";
 
-    document.getElementById("bukuForm").reset();
+
+    document.getElementById(
+        "bukuForm"
+    ).reset();
 
 }
 
@@ -1267,13 +2501,19 @@ function tutupForm(){
    PESAN
 ===================================================== */
 
-function tampilkanError(pesan){
+function tampilkanError(
+    pesan
+){
 
     const el =
-        document.getElementById("errorMessage");
+        document.getElementById(
+            "errorMessage"
+        );
+
 
     el.textContent =
         pesan;
+
 
     el.style.display =
         "block";
@@ -1281,13 +2521,19 @@ function tampilkanError(pesan){
 }
 
 
-function tampilkanSuccess(pesan){
+function tampilkanSuccess(
+    pesan
+){
 
     const el =
-        document.getElementById("successMessage");
+        document.getElementById(
+            "successMessage"
+        );
+
 
     el.textContent =
         pesan;
+
 
     el.style.display =
         "block";
@@ -1297,10 +2543,15 @@ function tampilkanSuccess(pesan){
 
 function hapusPesan(){
 
-    document.getElementById("errorMessage").style.display =
+    document.getElementById(
+        "errorMessage"
+    ).style.display =
         "none";
 
-    document.getElementById("successMessage").style.display =
+
+    document.getElementById(
+        "successMessage"
+    ).style.display =
         "none";
 
 }
@@ -1310,14 +2561,33 @@ function hapusPesan(){
    ESCAPE HTML
 ===================================================== */
 
-function escapeHTML(value){
+function escapeHTML(
+    value
+){
 
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
 
@@ -1338,10 +2608,21 @@ function kembaliPerpustakaan(){
    MULAI
 ===================================================== */
 
+document.getElementById(
+    "periodeRanking"
+).textContent =
+    periodeBulanIni();
+
+
+/*
+   Jalankan dua proses secara bersamaan.
+*/
+
 loadBuku();
+
+loadPeringkatPembaca();
 
 </script>
 
 </body>
 </html>
-```
