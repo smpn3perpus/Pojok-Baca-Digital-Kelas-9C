@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Registrasi Anggota - Pojok Baca</title>
+<title>Registrasi - Pojok Baca Digital Kelas 9C</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -18,121 +18,224 @@
 body{
     font-family:Arial, Helvetica, sans-serif;
     min-height:100vh;
-    background:linear-gradient(135deg,#eff6ff,#dbeafe);
-    color:#1f2937;
+    background:
+        linear-gradient(rgba(15,23,42,.78),rgba(15,23,42,.88)),
+        url("https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80")
+        center/cover fixed;
     display:flex;
     flex-direction:column;
+    color:#1e293b;
 }
 
-/* HEADER */
 header{
-    background:linear-gradient(135deg,#2563eb,#1d4ed8);
-    color:white;
     text-align:center;
-    padding:32px 20px;
-    box-shadow:0 4px 15px rgba(0,0,0,.15);
+    color:white;
+    padding:35px 20px 25px;
 }
 
 header h1{
-    font-size:clamp(25px,5vw,36px);
+    font-size:clamp(25px,5vw,42px);
     margin-bottom:8px;
+    text-shadow:0 3px 10px rgba(0,0,0,.35);
 }
 
 header p{
-    font-size:16px;
+    font-size:17px;
+    opacity:.95;
 }
 
-/* CONTAINER */
+.slogan{
+    margin-top:10px;
+    font-size:16px;
+    font-weight:bold;
+    font-style:italic;
+    letter-spacing:.5px;
+    color:#fde68a;
+}
+
 .container{
     width:100%;
-    max-width:500px;
-    margin:40px auto;
-    padding:0 20px;
+    max-width:520px;
+    margin:0 auto;
+    padding:10px 18px 30px;
     flex:1;
 }
 
-/* CARD */
 .card{
-    background:white;
-    border-radius:18px;
-    padding:30px;
-    box-shadow:0 8px 30px rgba(0,0,0,.10);
+    background:rgba(255,255,255,.97);
+    border-radius:22px;
+    padding:28px;
+    box-shadow:0 15px 45px rgba(0,0,0,.28);
 }
 
 .card h2{
     text-align:center;
-    color:#1e3a8a;
-    margin-bottom:8px;
+    color:#0f172a;
+    margin-bottom:7px;
     font-size:25px;
 }
 
-.card .subtitle{
+.subtitle{
     text-align:center;
-    color:#6b7280;
+    color:#64748b;
+    margin-bottom:24px;
     font-size:14px;
-    margin-bottom:25px;
 }
 
-/* FORM */
+.role-title{
+    font-size:14px;
+    font-weight:bold;
+    color:#334155;
+    margin-bottom:10px;
+}
+
+.role-container{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:22px;
+}
+
+.role-option{
+    position:relative;
+}
+
+.role-option input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+.role-label{
+    display:block;
+    text-align:center;
+    padding:14px 10px;
+    border:2px solid #cbd5e1;
+    border-radius:13px;
+    cursor:pointer;
+    font-weight:bold;
+    color:#475569;
+    background:#f8fafc;
+    transition:.2s;
+}
+
+.role-label:hover{
+    border-color:#2563eb;
+    background:#eff6ff;
+}
+
+.role-option input:checked + .role-label{
+    border-color:#2563eb;
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
 .form-group{
-    margin-bottom:18px;
+    margin-bottom:17px;
 }
 
-.form-group label{
+label{
     display:block;
     margin-bottom:7px;
-    font-weight:bold;
-    color:#374151;
     font-size:14px;
+    font-weight:bold;
+    color:#334155;
 }
 
-.form-group input,
-.form-group select{
+input,
+select{
     width:100%;
     padding:13px 14px;
-    border:1px solid #d1d5db;
-    border-radius:9px;
+    border:1px solid #cbd5e1;
+    border-radius:11px;
     font-size:15px;
     outline:none;
     background:white;
+    transition:.2s;
 }
 
-.form-group input:focus,
-.form-group select:focus{
+input:focus,
+select:focus{
     border-color:#2563eb;
     box-shadow:0 0 0 3px rgba(37,99,235,.12);
 }
 
-/* BUTTON */
-.btn{
+input[readonly]{
+    background:#f1f5f9;
+    color:#475569;
+    font-weight:bold;
+}
+
+.info-box{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    color:#1e40af;
+    border-radius:11px;
+    padding:12px 14px;
+    margin-bottom:18px;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.info-box.guru{
+    background:#f0fdf4;
+    border-color:#bbf7d0;
+    color:#166534;
+}
+
+.password-note{
+    font-size:12px;
+    color:#64748b;
+    margin-top:5px;
+}
+
+button{
     width:100%;
     border:none;
-    border-radius:10px;
+    border-radius:11px;
     padding:14px;
-    background:#2563eb;
-    color:white;
     font-size:16px;
     font-weight:bold;
     cursor:pointer;
     transition:.2s;
-    margin-top:5px;
 }
 
-.btn:hover{
+.btn-daftar{
+    background:#2563eb;
+    color:white;
+    box-shadow:0 5px 15px rgba(37,99,235,.25);
+}
+
+.btn-daftar:hover{
     background:#1d4ed8;
+    transform:translateY(-1px);
 }
 
-.btn:disabled{
-    opacity:.6;
+.btn-daftar:disabled{
+    background:#94a3b8;
     cursor:not-allowed;
+    transform:none;
 }
 
-/* MESSAGE */
+.back{
+    display:block;
+    text-align:center;
+    margin-top:18px;
+    color:#2563eb;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.back:hover{
+    text-decoration:underline;
+}
+
 .message{
     display:none;
-    margin-top:18px;
-    padding:13px;
-    border-radius:9px;
+    margin-bottom:18px;
+    padding:12px 14px;
+    border-radius:10px;
     font-size:14px;
     line-height:1.5;
 }
@@ -140,55 +243,46 @@ header p{
 .message.success{
     display:block;
     background:#dcfce7;
+    border:1px solid #86efac;
     color:#166534;
-    border:1px solid #bbf7d0;
 }
 
 .message.error{
     display:block;
     background:#fee2e2;
+    border:1px solid #fca5a5;
     color:#991b1b;
-    border:1px solid #fecaca;
 }
 
-/* LINKS */
-.links{
-    text-align:center;
-    margin-top:22px;
-    font-size:14px;
+.hidden{
+    display:none !important;
 }
 
-.links a{
-    color:#2563eb;
-    text-decoration:none;
-    font-weight:bold;
-}
-
-.links a:hover{
-    text-decoration:underline;
-}
-
-/* FOOTER */
 footer{
-    background:#111827;
-    color:#d1d5db;
+    color:white;
     text-align:center;
-    padding:22px 15px;
-    font-size:14px;
-    margin-top:30px;
+    padding:20px 15px;
+    font-size:13px;
+    background:rgba(0,0,0,.25);
 }
 
-/* MOBILE */
-@media(max-width:600px){
-
-    .container{
-        margin:25px auto;
+@media(max-width:500px){
+    header{
+        padding-top:25px;
     }
 
     .card{
-        padding:23px 20px;
+        padding:22px 18px;
     }
 
+    .role-container{
+        gap:8px;
+    }
+
+    .role-label{
+        padding:12px 7px;
+        font-size:14px;
+    }
 }
 </style>
 </head>
@@ -196,131 +290,186 @@ footer{
 <body>
 
 <header>
-    <h1>📚 Pojok Baca Digital</h1>
+    <h1>📚 Pojok Baca Digital Kelas 9C</h1>
     <p>SMP Negeri 3 Sibolga</p>
+    <div class="slogan">“Reader Now, Leader Tomorrow”</div>
 </header>
 
-<main class="container">
+<div class="container">
 
     <div class="card">
 
         <h2>📝 Registrasi Anggota</h2>
+        <div class="subtitle">
+            Daftarkan diri untuk menggunakan Pojok Baca Digital
+        </div>
 
-        <p class="subtitle">
-            Daftarkan diri Anda untuk mulai membaca buku digital.
-        </p>
+        <div id="message" class="message"></div>
 
-        <form id="formRegistrasi">
+        <div class="role-title">
+            Saya mendaftar sebagai:
+        </div>
 
-            <div class="form-group">
-                <label for="nama">👤 Nama Lengkap</label>
+        <div class="role-container">
 
+            <div class="role-option">
                 <input
-                    type="text"
-                    id="nama"
-                    placeholder="Masukkan nama lengkap"
-                    required
+                    type="radio"
+                    id="roleSiswa"
+                    name="jenisAnggota"
+                    value="siswa"
+                    checked
+                    onchange="ubahJenisAnggota()"
                 >
+                <label class="role-label" for="roleSiswa">
+                    👨‍🎓 Siswa
+                </label>
             </div>
 
-
-            <div class="form-group">
-                <label for="nisn">🆔 NISN</label>
-
+            <div class="role-option">
                 <input
-                    type="text"
-                    id="nisn"
-                    placeholder="Masukkan NISN"
-                    inputmode="numeric"
-                    required
+                    type="radio"
+                    id="roleGuru"
+                    name="jenisAnggota"
+                    value="guru"
+                    onchange="ubahJenisAnggota()"
                 >
+                <label class="role-label" for="roleGuru">
+                    👨‍🏫 Guru
+                </label>
             </div>
-
-
-            <div class="form-group">
-                <label for="kelas">🏫 Kelas</label>
-
-                <select id="kelas" required>
-
-                    <option value="">
-                        -- Pilih Kelas --
-                    </option>
-
-                    <option value="9A">9A</option>
-                    <option value="9B">9B</option>
-                    <option value="9C">9C</option>
-                    <option value="9D">9D</option>
-                    <option value="9E">9E</option>
-                    <option value="9F">9F</option>
-                    <option value="9G">9G</option>
-                    <option value="9H">9H</option>
-
-                </select>
-            </div>
-
-
-            <div class="form-group">
-                <label for="password">🔐 Password</label>
-
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Buat password"
-                    minlength="6"
-                    required
-                >
-            </div>
-
-
-            <div class="form-group">
-                <label for="password2">🔐 Ulangi Password</label>
-
-                <input
-                    type="password"
-                    id="password2"
-                    placeholder="Ulangi password"
-                    minlength="6"
-                    required
-                >
-            </div>
-
-
-            <button
-                type="submit"
-                class="btn"
-                id="btnDaftar"
-            >
-                📝 Daftar Anggota
-            </button>
-
-        </form>
-
-
-        <div
-            id="message"
-            class="message"
-        ></div>
-
-
-        <div class="links">
-
-            Sudah memiliki akun?
-
-            <a href="login.html">
-                Login Anggota
-            </a>
-
-            <br><br>
-
-            <a href="index.html">
-                ← Kembali ke Koleksi Buku
-            </a>
 
         </div>
 
+        <!-- INFORMASI SISWA -->
+        <div id="infoSiswa" class="info-box">
+            <strong>📚 Registrasi Siswa</strong><br>
+            Registrasi hanya diperuntukkan bagi siswa <strong>kelas 9C</strong>.
+            Kelas akan otomatis ditetapkan sebagai 9C.
+        </div>
+
+        <!-- INFORMASI GURU -->
+        <div id="infoGuru" class="info-box guru hidden">
+            <strong>👨‍🏫 Registrasi Guru</strong><br>
+            Guru dapat melakukan registrasi menggunakan <strong>NIP atau NIK</strong>.
+        </div>
+
+        <!-- NAMA -->
+        <div class="form-group">
+            <label for="nama">
+                Nama Lengkap
+            </label>
+
+            <input
+                type="text"
+                id="nama"
+                placeholder="Masukkan nama lengkap"
+                autocomplete="name"
+            >
+        </div>
+
+        <!-- IDENTITAS SISWA -->
+        <div class="form-group" id="groupNisn">
+
+            <label for="nisn">
+                NISN
+            </label>
+
+            <input
+                type="text"
+                id="nisn"
+                placeholder="Masukkan NISN"
+                inputmode="numeric"
+                autocomplete="off"
+            >
+
+        </div>
+
+        <!-- IDENTITAS GURU -->
+        <div class="form-group hidden" id="groupIdentitasGuru">
+
+            <label for="nipNik">
+                NIP / NIK
+            </label>
+
+            <input
+                type="text"
+                id="nipNik"
+                placeholder="Masukkan NIP atau NIK"
+                inputmode="numeric"
+                autocomplete="off"
+            >
+
+        </div>
+
+        <!-- KELAS SISWA -->
+        <div class="form-group" id="groupKelas">
+
+            <label for="kelas">
+                Kelas
+            </label>
+
+            <input
+                type="text"
+                id="kelas"
+                value="9C"
+                readonly
+            >
+
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="form-group">
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Masukkan password"
+                autocomplete="new-password"
+            >
+
+            <div class="password-note">
+                Gunakan password yang mudah diingat tetapi tidak mudah ditebak.
+            </div>
+
+        </div>
+
+        <!-- ULANG PASSWORD -->
+        <div class="form-group">
+
+            <label for="password2">
+                Ulangi Password
+            </label>
+
+            <input
+                type="password"
+                id="password2"
+                placeholder="Masukkan kembali password"
+                autocomplete="new-password"
+            >
+
+        </div>
+
+        <button
+            type="button"
+            class="btn-daftar"
+            id="btnDaftar"
+            onclick="daftarAnggota()"
+        >
+            📝 Daftar Sekarang
+        </button>
+
+        <a href="login.html" class="back">
+            ← Kembali ke Login
+        </a>
+
     </div>
 
-</main>
+</div>
 
 <footer>
     Dibuat oleh Mr. Rahmat Batubara, S.T.P.
@@ -329,229 +478,603 @@ footer{
 
 <script>
 
-/* =========================================================
-   SUPABASE
-   ========================================================= */
-
 const SUPABASE_URL =
     "https://veffzxxrsjfgupynryog.supabase.co";
 
 const SUPABASE_KEY =
     "sb_publishable_2HoFz3ZTlrOX_DTGsIW3og_7cHS0LLG";
 
-
-const { createClient } = supabase;
-
-const db = createClient(
+const db = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
 
 
-/* =========================================================
-   ELEMENT
-   ========================================================= */
+/* ==============================
+   UBAH JENIS ANGGOTA
+================================ */
 
-const form =
-    document.getElementById("formRegistrasi");
+function ubahJenisAnggota(){
 
-const message =
-    document.getElementById("message");
+    const jenis =
+        document.querySelector(
+            'input[name="jenisAnggota"]:checked'
+        ).value;
 
-const btnDaftar =
-    document.getElementById("btnDaftar");
+    const infoSiswa =
+        document.getElementById("infoSiswa");
 
+    const infoGuru =
+        document.getElementById("infoGuru");
 
-/* =========================================================
-   PESAN
-   ========================================================= */
+    const groupNisn =
+        document.getElementById("groupNisn");
 
-function tampilkanPesan(teks, tipe){
+    const groupGuru =
+        document.getElementById("groupIdentitasGuru");
 
-    message.className =
-        "message " + tipe;
+    const groupKelas =
+        document.getElementById("groupKelas");
 
-    message.innerHTML = teks;
+    const nisn =
+        document.getElementById("nisn");
+
+    const nipNik =
+        document.getElementById("nipNik");
+
+    if(jenis === "siswa"){
+
+        infoSiswa.classList.remove("hidden");
+        infoGuru.classList.add("hidden");
+
+        groupNisn.classList.remove("hidden");
+        groupGuru.classList.add("hidden");
+
+        groupKelas.classList.remove("hidden");
+
+        nipNik.value = "";
+
+        nisn.required = true;
+        nipNik.required = false;
+
+    }else{
+
+        infoSiswa.classList.add("hidden");
+        infoGuru.classList.remove("hidden");
+
+        groupNisn.classList.add("hidden");
+        groupGuru.classList.remove("hidden");
+
+        groupKelas.classList.add("hidden");
+
+        nisn.value = "";
+
+        nisn.required = false;
+        nipNik.required = true;
+
+    }
+
+    hapusPesan();
 
 }
 
 
-/* =========================================================
+/* ==============================
+   PESAN
+================================ */
+
+function tampilPesan(teks, tipe){
+
+    const box =
+        document.getElementById("message");
+
+    box.className =
+        "message " + tipe;
+
+    box.innerHTML = teks;
+
+    box.style.display = "block";
+
+    box.scrollIntoView({
+        behavior:"smooth",
+        block:"nearest"
+    });
+}
+
+
+function hapusPesan(){
+
+    const box =
+        document.getElementById("message");
+
+    box.className = "message";
+    box.innerHTML = "";
+    box.style.display = "none";
+
+}
+
+
+/* ==============================
+   MEMBERSIHKAN INPUT
+================================ */
+
+function bersihkan(text){
+
+    return String(text || "").trim();
+
+}
+
+
+/* ==============================
+   CEK IDENTITAS
+================================ */
+
+async function cekIdentitasSudahAda(identitas){
+
+    const { data, error } = await db
+        .from("anggota")
+        .select("id,nama,identitas,nisn,jenis_anggota")
+        .eq("identitas", identitas)
+        .limit(1)
+        .maybeSingle();
+
+    if(error){
+
+        console.error(
+            "Kesalahan cek identitas:",
+            error
+        );
+
+        throw error;
+
+    }
+
+    return data;
+
+}
+
+
+/* ==============================
    REGISTRASI
-   ========================================================= */
+================================ */
 
-form.addEventListener(
-    "submit",
-    async function(event){
+async function daftarAnggota(){
 
-        event.preventDefault();
+    hapusPesan();
 
+    const btn =
+        document.getElementById("btnDaftar");
 
-        const nama =
-            document
-                .getElementById("nama")
-                .value
-                .trim();
+    const jenis =
+        document.querySelector(
+            'input[name="jenisAnggota"]:checked'
+        ).value;
 
+    const nama =
+        bersihkan(
+            document.getElementById("nama").value
+        );
 
-        const nisn =
-            document
-                .getElementById("nisn")
-                .value
-                .trim();
+    const password =
+        document.getElementById("password").value;
 
-
-        const kelas =
-            document
-                .getElementById("kelas")
-                .value;
+    const password2 =
+        document.getElementById("password2").value;
 
 
-        const password =
-            document
-                .getElementById("password")
-                .value;
+    /* ==========================
+       VALIDASI NAMA
+    ========================== */
+
+    if(!nama){
+
+        tampilPesan(
+            "⚠️ Nama lengkap wajib diisi.",
+            "error"
+        );
+
+        document.getElementById("nama").focus();
+
+        return;
+
+    }
 
 
-        const password2 =
-            document
-                .getElementById("password2")
-                .value;
+    /* ==========================
+       IDENTITAS
+    ========================== */
+
+    let identitas = "";
+    let nisn = null;
+    let kelas = null;
 
 
-        /* VALIDASI */
+    if(jenis === "siswa"){
 
-        if(!nama || !nisn || !kelas || !password){
+        nisn =
+            bersihkan(
+                document.getElementById("nisn").value
+            );
 
-            tampilkanPesan(
-                "⚠️ Semua data wajib diisi.",
+        identitas = nisn;
+
+        kelas = "9C";
+
+
+        if(!nisn){
+
+            tampilPesan(
+                "⚠️ NISN wajib diisi.",
                 "error"
             );
 
+            document.getElementById("nisn").focus();
+
             return;
+
         }
 
 
-        if(password.length < 6){
+        if(!/^\d+$/.test(nisn)){
 
-            tampilkanPesan(
-                "⚠️ Password minimal 6 karakter.",
+            tampilPesan(
+                "⚠️ NISN hanya boleh berisi angka.",
                 "error"
             );
 
+            document.getElementById("nisn").focus();
+
             return;
+
         }
 
+    }else{
 
-        if(password !== password2){
+        identitas =
+            bersihkan(
+                document.getElementById("nipNik").value
+            );
 
-            tampilkanPesan(
-                "⚠️ Password dan ulangi password tidak sama.",
+
+        if(!identitas){
+
+            tampilPesan(
+                "⚠️ NIP / NIK wajib diisi.",
                 "error"
             );
 
+            document.getElementById("nipNik").focus();
+
             return;
+
         }
 
 
-        btnDaftar.disabled = true;
+        if(!/^\d+$/.test(identitas)){
 
-        btnDaftar.textContent =
-            "⏳ Mendaftarkan...";
+            tampilPesan(
+                "⚠️ NIP / NIK hanya boleh berisi angka.",
+                "error"
+            );
+
+            document.getElementById("nipNik").focus();
+
+            return;
+
+        }
+
+    }
 
 
-        try{
+    /* ==========================
+       VALIDASI PASSWORD
+    ========================== */
 
-            /* CEK NISN */
+    if(!password){
 
-            const { data: existing, error: checkError } =
+        tampilPesan(
+            "⚠️ Password wajib diisi.",
+            "error"
+        );
+
+        document.getElementById("password").focus();
+
+        return;
+
+    }
+
+
+    if(password.length < 4){
+
+        tampilPesan(
+            "⚠️ Password minimal 4 karakter.",
+            "error"
+        );
+
+        document.getElementById("password").focus();
+
+        return;
+
+    }
+
+
+    if(password !== password2){
+
+        tampilPesan(
+            "⚠️ Password dan ulangi password tidak sama.",
+            "error"
+        );
+
+        document.getElementById("password2").focus();
+
+        return;
+
+    }
+
+
+    /* ==========================
+       NONAKTIFKAN TOMBOL
+    ========================== */
+
+    btn.disabled = true;
+    btn.textContent = "⏳ Memproses...";
+
+
+    try{
+
+        /* ======================
+           CEK DUPLIKAT IDENTITAS
+        ====================== */
+
+        const existing =
+            await cekIdentitasSudahAda(
+                identitas
+            );
+
+
+        if(existing){
+
+            const jenisTerdaftar =
+                existing.jenis_anggota === "guru"
+                    ? "Guru"
+                    : "Siswa";
+
+            tampilPesan(
+                `⚠️ Identitas <strong>${identitas}</strong> sudah terdaftar sebagai ${jenisTerdaftar}. Silakan gunakan identitas lain atau langsung login.`,
+                "error"
+            );
+
+            btn.disabled = false;
+            btn.textContent = "📝 Daftar Sekarang";
+
+            return;
+
+        }
+
+
+        /* ======================
+           BACKUP CEK DATA LAMA
+           SISWA BERDASARKAN NISN
+        ====================== */
+
+        if(jenis === "siswa"){
+
+            const { data: siswaLama, error: errorLama } =
                 await db
                     .from("anggota")
-                    .select("id")
+                    .select("id,nama,nisn")
                     .eq("nisn", nisn)
+                    .limit(1)
                     .maybeSingle();
 
 
-            if(checkError){
+            if(errorLama){
 
-                throw checkError;
-
-            }
-
-
-            if(existing){
-
-                throw new Error(
-                    "NISN tersebut sudah terdaftar sebagai anggota."
+                console.error(
+                    "Kesalahan cek NISN:",
+                    errorLama
                 );
 
-            }
-
-
-            /* INSERT ANGGOTA */
-
-            const { error: insertError } =
-                await db
-                    .from("anggota")
-                    .insert([
-                        {
-                            nama: nama,
-                            nisn: nisn,
-                            kelas: kelas,
-                            password: password
-                        }
-                    ]);
-
-
-            if(insertError){
-
-                throw insertError;
+                throw errorLama;
 
             }
 
 
-            tampilkanPesan(
-                "✅ Registrasi berhasil!<br><br>" +
-                "Anggota <strong>" +
-                escapeHTML(nama) +
-                "</strong> sudah terdaftar.<br><br>" +
-                "Silakan masuk menggunakan NISN dan password Anda.",
-                "success"
-            );
+            if(siswaLama){
+
+                tampilPesan(
+                    `⚠️ NISN <strong>${nisn}</strong> sudah terdaftar. Silakan langsung login.`,
+                    "error"
+                );
+
+                btn.disabled = false;
+                btn.textContent = "📝 Daftar Sekarang";
+
+                return;
+
+            }
+
+        }
 
 
-            form.reset();
+        /* ======================
+           DATA YANG DISIMPAN
+        ====================== */
+
+        const dataAnggota = {
+
+            nama: nama,
+
+            nisn: nisn,
+
+            kelas: kelas,
+
+            password: password,
+
+            jenis_anggota: jenis,
+
+            identitas: identitas
+
+        };
 
 
-            setTimeout(function(){
-
-                window.location.href =
-                    "login.html";
-
-            },2500);
+        console.log(
+            "Data registrasi:",
+            dataAnggota
+        );
 
 
-        }catch(error){
+        /* ======================
+           INSERT SUPABASE
+        ====================== */
+
+        const { data, error } =
+            await db
+                .from("anggota")
+                .insert([dataAnggota])
+                .select(
+                    "id,nama,nisn,kelas,jenis_anggota,identitas"
+                )
+                .single();
+
+
+        if(error){
 
             console.error(
-                "Registrasi error:",
+                "Error registrasi:",
                 error
             );
 
+            throw error;
 
-            tampilkanPesan(
-                "❌ Registrasi gagal.<br><br>" +
-                escapeHTML(error.message),
-                "error"
-            );
+        }
 
 
-        }finally{
+        /* ======================
+           BERHASIL
+        ====================== */
 
-            btnDaftar.disabled = false;
+        const labelJenis =
+            jenis === "siswa"
+                ? "Siswa kelas 9C"
+                : "Guru";
 
-            btnDaftar.textContent =
-                "📝 Daftar Anggota";
+
+        tampilPesan(
+            `
+            ✅ <strong>Registrasi berhasil!</strong><br><br>
+            Nama: <strong>${data.nama}</strong><br>
+            Status: <strong>${labelJenis}</strong><br>
+            Identitas: <strong>${data.identitas}</strong><br><br>
+            Anda akan diarahkan ke halaman login...
+            `,
+            "success"
+        );
+
+
+        /* ======================
+           KOSONGKAN PASSWORD
+        ====================== */
+
+        document.getElementById("password").value = "";
+        document.getElementById("password2").value = "";
+
+
+        /* ======================
+           REDIRECT
+        ====================== */
+
+        setTimeout(function(){
+
+            window.location.href =
+                "login.html";
+
+        },1800);
+
+
+    }catch(error){
+
+        console.error(
+            "REGISTRASI ERROR:",
+            error
+        );
+
+
+        let pesan =
+            "❌ Registrasi gagal. Silakan coba kembali.";
+
+
+        if(error && error.message){
+
+            const msg =
+                error.message.toLowerCase();
+
+
+            if(
+                msg.includes("duplicate") ||
+                msg.includes("unique")
+            ){
+
+                pesan =
+                    "❌ Data tersebut sudah terdaftar.";
+
+            }else if(
+                msg.includes("column") ||
+                msg.includes("schema")
+            ){
+
+                pesan =
+                    "❌ Struktur tabel anggota belum sesuai. Pastikan kolom <strong>jenis_anggota</strong> dan <strong>identitas</strong> sudah tersedia.";
+
+            }else{
+
+                pesan =
+                    "❌ " + error.message;
+
+            }
+
+        }
+
+
+        tampilPesan(
+            pesan,
+            "error"
+        );
+
+
+    }finally{
+
+        btn.disabled = false;
+        btn.textContent = "📝 Daftar Sekarang";
+
+    }
+
+}
+
+
+/* ==============================
+   ENTER UNTUK SUBMIT
+================================ */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            const tag =
+                document.activeElement.tagName;
+
+            if(
+                tag === "INPUT" ||
+                tag === "SELECT"
+            ){
+
+                event.preventDefault();
+
+                daftarAnggota();
+
+            }
 
         }
 
@@ -559,24 +1082,18 @@ form.addEventListener(
 );
 
 
-/* =========================================================
-   ESCAPE HTML
-   ========================================================= */
+/* ==============================
+   INISIALISASI
+================================ */
 
-function escapeHTML(value){
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
 
-    if(value === null || value === undefined){
-        return "";
+        ubahJenisAnggota();
+
     }
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
+);
 
 </script>
 
