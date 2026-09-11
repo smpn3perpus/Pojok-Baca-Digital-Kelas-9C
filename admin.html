@@ -403,6 +403,16 @@ th{
     font-weight:bold;
 }
 
+.badge-session{
+    display:inline-block;
+    background:#f1f5f9;
+    color:#475569;
+    border-radius:20px;
+    padding:5px 9px;
+    font-size:11px;
+    font-weight:bold;
+}
+
 .ranking-empty{
     text-align:center;
     padding:35px 15px;
@@ -539,8 +549,8 @@ footer{
                     </h2>
 
                     <p>
-                        Peringkat pembaca berdasarkan
-                        total waktu membaca bulan ini
+                        Semua peringkat pembaca bulan ini
+                        berdasarkan total waktu membaca
                     </p>
 
                 </div>
@@ -560,8 +570,12 @@ footer{
         <div class="ranking-info">
 
             ⏱️ <strong>Waktu membaca adalah indikator utama.</strong>
-            Jika total waktu membaca sama, jumlah buku yang dibaca
-            digunakan sebagai pembanding.
+
+            Jika total waktu membaca sama,
+            <strong>jumlah buku</strong> menjadi pembanding kedua.
+
+            Jika masih sama,
+            <strong>jumlah sesi membaca</strong> menjadi pembanding ketiga.
 
             <br><br>
 
@@ -596,33 +610,21 @@ footer{
 
                     <tr>
 
-                        <th>
-                            Peringkat
-                        </th>
+                        <th>Peringkat</th>
 
-                        <th>
-                            Pembaca
-                        </th>
+                        <th>Pembaca</th>
 
-                        <th>
-                            Total Waktu Membaca
-                        </th>
+                        <th>Total Waktu Membaca</th>
 
-                        <th>
-                            Buku Dibaca
-                        </th>
+                        <th>Buku Dibaca</th>
 
-                        <th>
-                            Sesi Membaca
-                        </th>
+                        <th>Sesi Membaca</th>
 
                     </tr>
 
                 </thead>
 
-                <tbody
-                    id="tabelPeringkat"
-                ></tbody>
+                <tbody id="tabelPeringkat"></tbody>
 
             </table>
 
@@ -926,9 +928,7 @@ footer{
 
                 </thead>
 
-                <tbody
-                    id="tabelBuku"
-                ></tbody>
+                <tbody id="tabelBuku"></tbody>
 
             </table>
 
@@ -981,60 +981,15 @@ const db =
 
 
 /* =====================================================
-   KONFIGURASI DATA PEMBACA
-===================================================== */
-
-/*
-   GANTI hanya nama tabel ini jika tabel aktivitas membaca
-   di database Bapak memiliki nama yang berbeda.
-*/
-
-const TABEL_BACA =
-    "riwayat_membaca";
-
-
-/*
-   Nama kolom yang digunakan.
-   Jika struktur database Bapak berbeda,
-   bagian ini yang disesuaikan.
-*/
-
-const KOLOM_BACA = {
-
-    nama:
-        "nama",
-
-    kelas:
-        "kelas",
-
-    waktu:
-        "waktu_membaca",
-
-    tanggal:
-        "created_at",
-
-    buku:
-        "buku_id"
-
-};
-
-
-/* =====================================================
-   DATA BUKU
+   DATA
 ===================================================== */
 
 let semuaBuku = [];
-
-
-/* =====================================================
-   DATA PERINGKAT
-===================================================== */
-
 let semuaPeringkat = [];
 
 
 /* =====================================================
-   FORMAT NAMA BULAN
+   NAMA BULAN
 ===================================================== */
 
 const namaBulan = [
@@ -1053,28 +1008,30 @@ const namaBulan = [
 ];
 
 
+/* =====================================================
+   PERIODE BULAN BERJALAN
+===================================================== */
+
 function periodeBulanIni(){
 
-    const sekarang =
-        new Date();
+    const sekarang = new Date();
 
     return (
-        namaBulan[sekarang.getMonth()]
-        + " "
-        + sekarang.getFullYear()
+        namaBulan[sekarang.getMonth()] +
+        " " +
+        sekarang.getFullYear()
     );
 
 }
 
 
 /* =====================================================
-   TANGGAL AWAL DAN AKHIR BULAN
+   BATAS BULAN
 ===================================================== */
 
 function batasBulanIni(){
 
-    const sekarang =
-        new Date();
+    const sekarang = new Date();
 
     const tahun =
         sekarang.getFullYear();
@@ -1082,66 +1039,60 @@ function batasBulanIni(){
     const bulan =
         sekarang.getMonth();
 
-    const awal =
-        new Date(
-            tahun,
-            bulan,
-            1,
-            0,
-            0,
-            0,
-            0
-        );
-
-    const akhir =
-        new Date(
-            tahun,
-            bulan + 1,
-            1,
-            0,
-            0,
-            0,
-            0
-        );
-
     return {
-        awal,
-        akhir
+
+        awal:
+            new Date(
+                tahun,
+                bulan,
+                1,
+                0,
+                0,
+                0,
+                0
+            ),
+
+        akhir:
+            new Date(
+                tahun,
+                bulan + 1,
+                1,
+                0,
+                0,
+                0,
+                0
+            )
+
     };
 
 }
 
 
 /* =====================================================
-   FORMAT WAKTU
+   FORMAT DURASI
+   durasi_menit = MENIT
 ===================================================== */
 
-function formatDurasi(totalDetik){
+function formatDurasi(totalMenit){
 
-    let detik =
+    const menitTotal =
         Math.max(
             0,
-            Number(totalDetik) || 0
+            Math.floor(
+                Number(totalMenit) || 0
+            )
         );
 
     const jam =
         Math.floor(
-            detik / 3600
+            menitTotal / 60
         );
-
-    detik =
-        detik % 3600;
 
     const menit =
-        Math.floor(
-            detik / 60
-        );
-
-    const sisaDetik =
-        detik % 60;
+        menitTotal % 60;
 
 
-    if(jam > 0){
+    if(jam > 0 && menit > 0){
 
         return (
             jam +
@@ -1153,161 +1104,20 @@ function formatDurasi(totalDetik){
     }
 
 
-    if(menit > 0){
+    if(jam > 0){
 
         return (
-            menit +
-            " menit " +
-            sisaDetik +
-            " detik"
+            jam +
+            " jam"
         );
 
     }
 
 
     return (
-        sisaDetik +
-        " detik"
+        menit +
+        " menit"
     );
-
-}
-
-
-/* =====================================================
-   KONVERSI WAKTU KE DETIK
-===================================================== */
-
-function konversiKeDetik(value){
-
-    if(value === null ||
-       value === undefined ||
-       value === ""){
-
-        return 0;
-
-    }
-
-
-    if(typeof value === "number"){
-
-        return value;
-
-    }
-
-
-    const teks =
-        String(value)
-        .trim()
-        .toLowerCase();
-
-
-    /*
-       Jika format HH:MM:SS
-    */
-
-    if(teks.includes(":")){
-
-        const bagian =
-            teks
-            .split(":")
-            .map(Number);
-
-        if(
-            bagian.length === 3 &&
-            bagian.every(
-                x => !isNaN(x)
-            )
-        ){
-
-            return (
-                bagian[0] * 3600 +
-                bagian[1] * 60 +
-                bagian[2]
-            );
-
-        }
-
-
-        if(
-            bagian.length === 2 &&
-            bagian.every(
-                x => !isNaN(x)
-            )
-        ){
-
-            return (
-                bagian[0] * 60 +
-                bagian[1]
-            );
-
-        }
-
-    }
-
-
-    /*
-       Format angka biasa.
-       Diasumsikan detik.
-    */
-
-    const angka =
-        Number(teks);
-
-
-    if(!isNaN(angka)){
-
-        return angka;
-
-    }
-
-
-    /*
-       Format "2 jam 30 menit"
-    */
-
-    let total =
-        0;
-
-
-    const jam =
-        teks.match(
-            /(\d+(?:\.\d+)?)\s*jam/
-        );
-
-    const menit =
-        teks.match(
-            /(\d+(?:\.\d+)?)\s*menit/
-        );
-
-    const detik =
-        teks.match(
-            /(\d+(?:\.\d+)?)\s*detik/
-        );
-
-
-    if(jam){
-
-        total +=
-            Number(jam[1]) * 3600;
-
-    }
-
-    if(menit){
-
-        total +=
-            Number(menit[1]) * 60;
-
-    }
-
-    if(detik){
-
-        total +=
-            Number(detik[1]);
-
-    }
-
-
-    return total;
 
 }
 
@@ -1358,55 +1168,68 @@ async function loadPeringkatPembaca(){
 
 
     /*
-       Ambil aktivitas membaca
-       bulan berjalan.
+       =================================================
+       1. AMBIL RIWAYAT BACA
+
+       TABEL YANG BENAR:
+       riwayat_baca
+
+       KOLOM:
+       anggota_id
+       buku_id
+       durasi_menit
+       created_at
+       =================================================
     */
 
     const {
-        data,
-        error
+        data: riwayat,
+        error: errorRiwayat
     } =
         await db
-        .from(TABEL_BACA)
-        .select("*")
+        .from("riwayat_baca")
+        .select(
+            "id,anggota_id,buku_id,durasi_menit,created_at,mulai_baca,selesai_baca"
+        )
         .gte(
-            KOLOM_BACA.tanggal,
+            "created_at",
             awal.toISOString()
         )
         .lt(
-            KOLOM_BACA.tanggal,
+            "created_at",
             akhir.toISOString()
         );
 
 
-    loading.style.display =
-        "none";
-
-
-    if(error){
+    if(errorRiwayat){
 
         console.error(
-            "Gagal mengambil data pembaca:",
-            error
+            "Gagal mengambil riwayat_baca:",
+            errorRiwayat
         );
 
+        loading.style.display =
+            "none";
 
         empty.style.display =
             "block";
 
-
         empty.innerHTML = `
+
             <div style="font-size:42px;">
                 ⚠️
             </div>
 
             <p>
-                Data aktivitas membaca belum dapat dimuat.
+                Gagal mengambil data aktivitas membaca.
             </p>
 
             <small>
-                ${escapeHTML(error.message)}
+                ${escapeHTML(
+                    errorRiwayat.message
+                )}
             </small>
+
         `;
 
         return;
@@ -1414,62 +1237,158 @@ async function loadPeringkatPembaca(){
     }
 
 
-    const aktivitas =
-        data || [];
+    /*
+       =================================================
+       2. AMBIL DATA ANGGOTA
+       =================================================
+    */
+
+    const {
+        data: anggota,
+        error: errorAnggota
+    } =
+        await db
+        .from("anggota")
+        .select(
+            "id,nama,nisn,kelas"
+        );
+
+
+    if(errorAnggota){
+
+        console.error(
+            "Gagal mengambil anggota:",
+            errorAnggota
+        );
+
+        loading.style.display =
+            "none";
+
+        empty.style.display =
+            "block";
+
+        empty.innerHTML = `
+
+            <div style="font-size:42px;">
+                ⚠️
+            </div>
+
+            <p>
+                Gagal mengambil data anggota.
+            </p>
+
+            <small>
+                ${escapeHTML(
+                    errorAnggota.message
+                )}
+            </small>
+
+        `;
+
+        return;
+
+    }
 
 
     /*
-       Gabungkan data berdasarkan pembaca.
+       =================================================
+       3. BUAT MAP ANGGOTA
+       =================================================
     */
 
-    const map =
+    const mapAnggota =
         new Map();
 
 
-    aktivitas.forEach(
+    (anggota || []).forEach(
+        orang => {
+
+            mapAnggota.set(
+                String(orang.id),
+                orang
+            );
+
+        }
+    );
+
+
+    /*
+       =================================================
+       4. KELOMPOKKAN RIWAYAT BERDASARKAN anggota_id
+       =================================================
+    */
+
+    const mapPembaca =
+        new Map();
+
+
+    (riwayat || []).forEach(
         item => {
 
-            const nama =
-                String(
-                    item[KOLOM_BACA.nama] ||
-                    "Pembaca"
-                ).trim();
+            if(
+                item.anggota_id === null ||
+                item.anggota_id === undefined ||
+                item.anggota_id === ""
+            ){
+
+                return;
+
+            }
 
 
-            const kelas =
+            const anggotaId =
                 String(
-                    item[KOLOM_BACA.kelas] ||
-                    "-"
-                ).trim();
+                    item.anggota_id
+                );
+
+
+            const orang =
+                mapAnggota.get(
+                    anggotaId
+                );
 
 
             /*
-               Gunakan nama + kelas sebagai
-               identitas pengelompokan.
+               Kalau anggota sudah tidak ditemukan,
+               tetap jangan membuat nama palsu.
             */
 
-            const key =
-                nama
-                .toLowerCase()
-                .replace(/\s+/g," ")
-                +
-                "|"
-                +
-                kelas
-                .toLowerCase()
-                .trim();
+            if(!orang){
+
+                return;
+
+            }
 
 
-            if(!map.has(key)){
+            if(
+                !mapPembaca.has(
+                    anggotaId
+                )
+            ){
 
-                map.set(
-                    key,
+                mapPembaca.set(
+                    anggotaId,
                     {
-                        nama,
-                        kelas,
-                        totalDetik:0,
+                        id:anggotaId,
+
+                        nama:
+                            orang.nama ||
+                            "Tanpa Nama",
+
+                        nisn:
+                            orang.nisn ||
+                            "-",
+
+                        kelas:
+                            orang.kelas ||
+                            "-",
+
+                        totalMenit:0,
+
                         sesi:0,
+
                         bukuSet:new Set()
+
                     }
                 );
 
@@ -1477,34 +1396,48 @@ async function loadPeringkatPembaca(){
 
 
             const pembaca =
-                map.get(key);
-
-
-            pembaca.totalDetik +=
-                konversiKeDetik(
-                    item[
-                        KOLOM_BACA.waktu
-                    ]
+                mapPembaca.get(
+                    anggotaId
                 );
 
+
+            /*
+               =================================================
+               PRIORITAS UTAMA:
+               TOTAL WAKTU MEMBACA
+               =================================================
+            */
+
+            pembaca.totalMenit +=
+                Math.max(
+                    0,
+                    Number(
+                        item.durasi_menit
+                    ) || 0
+                );
+
+
+            /*
+               JUMLAH SESI
+            */
 
             pembaca.sesi++;
 
 
-            const buku =
-                item[
-                    KOLOM_BACA.buku
-                ];
-
+            /*
+               JUMLAH BUKU UNIK
+            */
 
             if(
-                buku !== null &&
-                buku !== undefined &&
-                buku !== ""
+                item.buku_id !== null &&
+                item.buku_id !== undefined &&
+                item.buku_id !== ""
             ){
 
                 pembaca.bukuSet.add(
-                    String(buku)
+                    String(
+                        item.buku_id
+                    )
                 );
 
             }
@@ -1513,65 +1446,105 @@ async function loadPeringkatPembaca(){
     );
 
 
+    /*
+       =================================================
+       5. UBAH MAP MENJADI ARRAY
+       =================================================
+    */
+
     semuaPeringkat =
         Array.from(
-            map.values()
+            mapPembaca.values()
         )
         .map(
-            item => {
+            pembaca => {
 
-                item.jumlahBuku =
-                    item.bukuSet.size;
+                return {
 
-                delete item.bukuSet;
+                    id:
+                        pembaca.id,
 
-                return item;
+                    nama:
+                        pembaca.nama,
+
+                    nisn:
+                        pembaca.nisn,
+
+                    kelas:
+                        pembaca.kelas,
+
+                    totalMenit:
+                        pembaca.totalMenit,
+
+                    jumlahBuku:
+                        pembaca.bukuSet.size,
+
+                    sesi:
+                        pembaca.sesi
+
+                };
 
             }
-        )
-        .sort(
-            (a,b) => {
-
-                /*
-                   PRIORITAS 1:
-                   TOTAL WAKTU MEMBACA
-                */
-
-                if(
-                    b.totalDetik !==
-                    a.totalDetik
-                ){
-
-                    return (
-                        b.totalDetik -
-                        a.totalDetik
-                    );
-
-                }
+        );
 
 
-                /*
-                   PRIORITAS 2:
-                   JUMLAH BUKU
-                */
+    /*
+       =================================================
+       6. SORTING PERINGKAT
+       
+       URUTAN MUTLAK:
+       
+       1. TOTAL WAKTU
+       2. JUMLAH BUKU
+       3. JUMLAH SESI
+       =================================================
+    */
 
-                if(
-                    b.jumlahBuku !==
+    semuaPeringkat.sort(
+        (a,b) => {
+
+            /*
+               PRIORITAS 1
+            */
+
+            if(
+                b.totalMenit !==
+                a.totalMenit
+            ){
+
+                return (
+                    b.totalMenit -
+                    a.totalMenit
+                );
+
+            }
+
+
+            /*
+               PRIORITAS 2
+            */
+
+            if(
+                b.jumlahBuku !==
+                a.jumlahBuku
+            ){
+
+                return (
+                    b.jumlahBuku -
                     a.jumlahBuku
-                ){
+                );
 
-                    return (
-                        b.jumlahBuku -
-                        a.jumlahBuku
-                    );
-
-                }
+            }
 
 
-                /*
-                   PRIORITAS 3:
-                   JUMLAH SESI
-                */
+            /*
+               PRIORITAS 3
+            */
+
+            if(
+                b.sesi !==
+                a.sesi
+            ){
 
                 return (
                     b.sesi -
@@ -1579,7 +1552,28 @@ async function loadPeringkatPembaca(){
                 );
 
             }
-        );
+
+
+            /*
+               Jika semuanya sama,
+               urut nama agar stabil.
+            */
+
+            return String(
+                a.nama
+            ).localeCompare(
+                String(
+                    b.nama
+                ),
+                "id"
+            );
+
+        }
+    );
+
+
+    loading.style.display =
+        "none";
 
 
     tampilkanPeringkat();
@@ -1598,12 +1592,10 @@ function tampilkanPeringkat(){
             "tabelPeringkat"
         );
 
-
     const table =
         document.getElementById(
             "rankingTableWrap"
         );
-
 
     const empty =
         document.getElementById(
@@ -1624,6 +1616,19 @@ function tampilkanPeringkat(){
 
         empty.style.display =
             "block";
+
+        empty.innerHTML = `
+
+            <div style="font-size:42px;">
+                📚
+            </div>
+
+            <p>
+                Belum ada aktivitas membaca
+                pada bulan ini.
+            </p>
+
+        `;
 
         return;
 
@@ -1707,6 +1712,13 @@ function tampilkanPeringkat(){
 
                     <div class="rank-class">
 
+                        NISN:
+                        ${escapeHTML(
+                            pembaca.nisn
+                        )}
+
+                        <br>
+
                         Kelas:
                         ${escapeHTML(
                             pembaca.kelas
@@ -1723,21 +1735,19 @@ function tampilkanPeringkat(){
 
                         ⏱️
                         ${formatDurasi(
-                            pembaca.totalDetik
+                            pembaca.totalMenit
                         )}
 
                     </div>
 
                     <div class="time-detail">
 
-                        ${
-                            Number(
-                                pembaca.totalDetik
-                            ).toLocaleString(
-                                "id-ID"
-                            )
-                        }
-                        detik
+                        ${Number(
+                            pembaca.totalMenit
+                        ).toLocaleString(
+                            "id-ID"
+                        )}
+                        menit
 
                     </div>
 
@@ -1749,9 +1759,7 @@ function tampilkanPeringkat(){
                     <span class="badge-book">
 
                         📚
-                        ${
-                            pembaca.jumlahBuku
-                        }
+                        ${pembaca.jumlahBuku}
                         buku
 
                     </span>
@@ -1761,15 +1769,22 @@ function tampilkanPeringkat(){
 
                 <td>
 
-                    ${pembaca.sesi}
-                    kali
+                    <span class="badge-session">
+
+                        📖
+                        ${pembaca.sesi}
+                        sesi
+
+                    </span>
 
                 </td>
 
             `;
 
 
-            tbody.appendChild(tr);
+            tbody.appendChild(
+                tr
+            );
 
         }
     );
@@ -1828,7 +1843,6 @@ async function loadBuku(){
             "empty"
         ).style.display =
             "block";
-
 
         document.getElementById(
             "empty"
@@ -2094,7 +2108,9 @@ function tampilkanBuku(){
             `;
 
 
-            tbody.appendChild(tr);
+            tbody.appendChild(
+                tr
+            );
 
         }
     );
@@ -2613,10 +2629,6 @@ document.getElementById(
 ).textContent =
     periodeBulanIni();
 
-
-/*
-   Jalankan dua proses secara bersamaan.
-*/
 
 loadBuku();
 
