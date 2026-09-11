@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Baca Buku - Pojok Baca Digital</title>
+<title>Baca Buku - Pojok Baca Digital Kelas 9C</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -285,6 +285,7 @@ button{
     padding:15px;
     border-radius:10px;
     line-height:1.6;
+    word-break:break-word;
 }
 
 .bottom-controls{
@@ -351,6 +352,172 @@ button{
     display:none;
 }
 
+
+/* =====================================================
+   FULLSCREEN READER
+   PDF MEMENUHI LAYAR
+===================================================== */
+
+:fullscreen{
+    background:#111827;
+}
+
+:fullscreen body{
+    width:100vw;
+    min-height:100vh;
+    overflow:hidden;
+    background:#111827;
+}
+
+:fullscreen .header{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    width:100vw;
+    z-index:1000;
+}
+
+:fullscreen .header-inner{
+    width:100%;
+    max-width:none;
+}
+
+:fullscreen .reader{
+    width:100vw;
+    max-width:none;
+    min-height:100vh;
+    height:100vh;
+    margin:0;
+    padding:78px 0 0 0;
+    overflow:hidden;
+}
+
+:fullscreen .status-bar{
+    width:100vw;
+    margin:0;
+    border-radius:0;
+    border-left:0;
+    border-right:0;
+}
+
+:fullscreen .pdf-area{
+    width:100vw;
+    height:calc(100vh - 126px);
+    min-height:0;
+    max-width:none;
+    padding:6px;
+    border-radius:0;
+}
+
+:fullscreen .pdf-toolbar{
+    width:100%;
+    max-width:none;
+    flex-shrink:0;
+    margin-bottom:6px;
+}
+
+:fullscreen .canvas-wrapper{
+    width:100%;
+    max-width:none;
+    flex:1;
+    min-height:0;
+    height:auto;
+    padding:5px;
+    border-radius:0;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+
+    overflow:auto;
+}
+
+:fullscreen #pdfCanvas{
+    max-width:none;
+    flex-shrink:0;
+}
+
+:fullscreen .bottom-controls{
+    width:100%;
+    max-width:none;
+    margin-top:6px;
+    flex-shrink:0;
+}
+
+:fullscreen .footer{
+    display:none;
+}
+
+
+/* =====================================================
+   FULLSCREEN DENGAN CLASS FALLBACK
+===================================================== */
+
+body.reader-fullscreen{
+    overflow:hidden;
+}
+
+body.reader-fullscreen .header{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    width:100vw;
+    z-index:1000;
+}
+
+body.reader-fullscreen .reader{
+    width:100vw;
+    max-width:none;
+    min-height:100vh;
+    height:100vh;
+    margin:0;
+    padding:78px 0 0 0;
+    overflow:hidden;
+}
+
+body.reader-fullscreen .status-bar{
+    width:100vw;
+    margin:0;
+    border-radius:0;
+    border-left:0;
+    border-right:0;
+}
+
+body.reader-fullscreen .pdf-area{
+    width:100vw;
+    height:calc(100vh - 126px);
+    min-height:0;
+    max-width:none;
+    padding:6px;
+    border-radius:0;
+}
+
+body.reader-fullscreen .pdf-toolbar{
+    width:100%;
+    max-width:none;
+}
+
+body.reader-fullscreen .canvas-wrapper{
+    width:100%;
+    max-width:none;
+    flex:1;
+    min-height:0;
+    padding:5px;
+    border-radius:0;
+}
+
+body.reader-fullscreen .bottom-controls{
+    width:100%;
+    max-width:none;
+}
+
+body.reader-fullscreen .footer{
+    display:none;
+}
+
+
 @media(max-width:700px){
 
     .header-inner{
@@ -382,6 +549,32 @@ button{
 
     .status-bar{
         padding:8px;
+    }
+
+    :fullscreen .reader,
+    body.reader-fullscreen .reader{
+        padding-top:125px;
+    }
+
+    :fullscreen .pdf-area,
+    body.reader-fullscreen .pdf-area{
+        height:calc(100vh - 173px);
+    }
+
+    :fullscreen .pdf-toolbar,
+    body.reader-fullscreen .pdf-toolbar{
+        gap:4px;
+    }
+
+    :fullscreen .pdf-toolbar button,
+    body.reader-fullscreen .pdf-toolbar button{
+        padding:6px 8px;
+        font-size:12px;
+    }
+
+    :fullscreen .bottom-controls,
+    body.reader-fullscreen .bottom-controls{
+        margin-top:4px;
     }
 }
 </style>
@@ -910,6 +1103,25 @@ async function(){
 
 
     resetInactivity();
+
+
+    /*
+       Setelah fullscreen aktif dan PDF selesai
+       dimuat, sesuaikan PDF dengan lebar layar.
+    */
+
+    setTimeout(
+        function(){
+
+            if(pdfDoc){
+
+                fitWidth();
+
+            }
+
+        },
+        350
+    );
 };
 
 
@@ -1349,7 +1561,7 @@ function(){
 
             const available =
                 wrapper.clientWidth -
-                25;
+                20;
 
 
             scale =
@@ -1397,10 +1609,35 @@ async function(){
                 .requestFullscreen();
 
 
+            document.body.classList.add(
+                "reader-fullscreen"
+            );
+
+
             aktifkanPembaca();
 
 
             resetInactivity();
+
+
+            /*
+               Tunggu browser menyelesaikan
+               perubahan layout fullscreen.
+            */
+
+            setTimeout(
+                function(){
+
+                    if(pdfDoc){
+
+                        fitWidth();
+
+                    }
+
+                },
+                350
+            );
+
 
         }else{
 
@@ -1415,6 +1652,7 @@ async function(){
             error
         );
     }
+
 };
 
 
@@ -1430,15 +1668,46 @@ document.addEventListener(
             document.fullscreenElement
         ){
 
+            document.body.classList.add(
+                "reader-fullscreen"
+            );
+
+
             aktifkanPembaca();
 
             resetInactivity();
 
+
+            /*
+               Setelah fullscreen aktif,
+               PDF otomatis menyesuaikan lebar.
+            */
+
+            setTimeout(
+                function(){
+
+                    if(pdfDoc){
+
+                        fitWidth();
+
+                    }
+
+                },
+                350
+            );
+
+
         }else{
+
+            document.body.classList.remove(
+                "reader-fullscreen"
+            );
+
 
             hentikanTimerAktif();
 
             clearInactivity();
+
 
             /*
                Kalau belum 5 menit:
@@ -2331,9 +2600,24 @@ window.addEventListener(
             ).style.display !== "none"
         ){
 
-            renderPage(
-                halamanSekarang
-            );
+            /*
+               Dalam fullscreen gunakan fitWidth
+               agar PDF mengikuti ukuran layar.
+            */
+
+            if(
+                document.fullscreenElement
+            ){
+
+                fitWidth();
+
+            }else{
+
+                renderPage(
+                    halamanSekarang
+                );
+
+            }
         }
 
     }
